@@ -9,8 +9,8 @@ export default {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cdn.shopify.com",
-        pathname: "/s/files/**",
+        hostname: "**.supabase.co",
+        pathname: "/storage/v1/object/public/**",
       },
     ],
   },
