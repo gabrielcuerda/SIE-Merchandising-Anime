@@ -8,6 +8,7 @@ const accountLinks = [
   { href: "/account/profile", label: "Perfil" },
   { href: "/account/addresses", label: "Direcciones" },
   { href: "/account/orders", label: "Pedidos" },
+  { href: "/account/wishlist", label: "Deseos" },
 ];
 
 export default async function AccountLayout({

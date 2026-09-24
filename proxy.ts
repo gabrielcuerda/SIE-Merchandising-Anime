@@ -11,6 +11,12 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
+  if (pathname === "/wishlist" && !user) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("next", `${pathname}${request.nextUrl.search}`);
+    return NextResponse.redirect(loginUrl);
+  }
+
   if (pathname === "/admin" || pathname.startsWith("/admin/")) {
     if (!user) {
       const loginUrl = new URL("/login", request.url);
