@@ -1,4 +1,4 @@
-import { UserIcon } from "@heroicons/react/24/outline";
+import { HeartIcon, UserIcon } from "@heroicons/react/24/outline";
 import CartModal from "components/cart/modal";
 import LogoSquare from "components/logo-square";
 import { getMenu } from "lib/shopify";
@@ -55,13 +55,22 @@ export async function Navbar() {
         </div>
         <div className="flex items-center justify-end md:w-1/3">
           <Link
-            href="/login"
+            href="/account"
             prefetch={true}
-            aria-label="Iniciar sesión"
-            title="Iniciar sesión"
+            aria-label="Mi cuenta"
+            title="Mi cuenta"
             className="mr-3 rounded-md p-2 text-neutral-500 transition hover:text-black dark:text-neutral-400 dark:hover:text-white"
           >
             <UserIcon className="h-5 w-5" aria-hidden="true" />
+          </Link>
+          <Link
+            href="/wishlist"
+            prefetch={true}
+            aria-label="Lista de deseos"
+            title="Lista de deseos"
+            className="mr-2 rounded-md p-2 text-neutral-500 transition hover:text-rose-500 dark:text-neutral-400"
+          >
+            <HeartIcon className="h-5 w-5" aria-hidden="true" />
           </Link>
           <CartModal />
         </div>

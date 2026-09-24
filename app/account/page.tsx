@@ -24,6 +24,11 @@ const accountCards = [
     title: "Pedidos",
     description: "Revisa el historial de tus compras.",
   },
+  {
+    href: "/account/wishlist",
+    title: "Deseos",
+    description: "Consulta tus productos favoritos.",
+  },
 ];
 
 export default async function AccountPage() {
