@@ -1,12 +1,30 @@
-import SignOutButton from "@/components/auth/sign-out-button";
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Mi cuenta",
   description: "Gestiona tu cuenta de SIE Merchandising.",
 };
+
+const accountCards = [
+  {
+    href: "/account/profile",
+    title: "Perfil",
+    description: "Actualiza tu nombre y teléfono.",
+  },
+  {
+    href: "/account/addresses",
+    title: "Direcciones",
+    description: "Gestiona tu dirección de envío.",
+  },
+  {
+    href: "/account/orders",
+    title: "Pedidos",
+    description: "Revisa el historial de tus compras.",
+  },
+];
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -18,37 +36,39 @@ export default async function AccountPage() {
     redirect("/login?next=/account");
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("full_nombre")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  if (!profile) {
-    await supabase.from("profiles").insert({
-      id: user.id,
-      full_nombre: user.user_metadata?.full_nombre ?? null,
-    });
-  }
-
-  const fullName =
-    profile?.full_nombre ?? user.user_metadata?.full_nombre ?? "Cliente";
+  const { count: orderCount } = await supabase
+    .from("pedidos")
+    .select("id", { count: "exact", head: true })
+    .eq("usuario_id", user.id);
 
   return (
-    <div className="mx-auto min-h-[70vh] w-full max-w-2xl px-4 py-12">
-      <div className="rounded-lg border border-neutral-200 bg-white p-6 shadow-sm md:p-8 dark:border-neutral-800 dark:bg-black">
-        <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          Mi cuenta
+    <section>
+      <div className="mb-6">
+        <h2 className="text-xl font-bold">Resumen de tu cuenta</h2>
+        <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+          Gestiona tus datos, direcciones y compras desde aquí.
         </p>
-        <h1 className="mt-2 text-3xl font-bold">Hola, {fullName}</h1>
-        <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-          {user.email}
-        </p>
-
-        <div className="mt-8 flex flex-wrap gap-3">
-          <SignOutButton />
-        </div>
       </div>
-    </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {accountCards.map((card) => (
+          <Link
+            key={card.href}
+            href={card.href}
+            className="rounded-lg border border-neutral-200 bg-white p-6 transition hover:-translate-y-0.5 hover:border-blue-500 hover:shadow-md dark:border-neutral-800 dark:bg-black"
+          >
+            <h3 className="font-semibold">{card.title}</h3>
+            <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+              {card.description}
+            </p>
+            {card.href === "/account/orders" && orderCount !== null ? (
+              <p className="mt-4 text-sm font-medium text-blue-600 dark:text-blue-400">
+                {orderCount} {orderCount === 1 ? "pedido" : "pedidos"}
+              </p>
+            ) : null}
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }
