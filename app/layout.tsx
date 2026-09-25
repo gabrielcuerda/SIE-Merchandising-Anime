@@ -1,6 +1,5 @@
 import { CartProvider } from "components/cart/cart-context";
 import { Navbar } from "components/layout/navbar";
-import { WelcomeToast } from "components/welcome-toast";
 import { GeistSans } from "geist/font/sans";
 import { getCart } from "@/lib/commerce/placeholders";
 import { ReactNode } from "react";
@@ -31,14 +30,13 @@ export default async function RootLayout({
   const cart = getCart();
 
   return (
-    <html lang="en" className={GeistSans.variable}>
+    <html lang="es" className={GeistSans.variable}>
       <body className="bg-[#f7fbff] text-slate-900 selection:bg-sky-200 selection:text-slate-950">
         <CartProvider cartPromise={cart}>
           <Navbar />
           <main>
             {children}
             <Toaster closeButton />
-            <WelcomeToast />
           </main>
         </CartProvider>
       </body>

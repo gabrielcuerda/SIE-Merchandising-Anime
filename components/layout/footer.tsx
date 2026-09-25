@@ -41,6 +41,14 @@ export default async function Footer() {
         >
           <FooterMenu menu={menu} />
         </Suspense>
+        <nav aria-label="Enlaces legales" className="flex flex-col gap-2">
+          <Link
+            className="block p-2 underline-offset-4 hover:text-black hover:underline dark:hover:text-neutral-300"
+            href="/privacidad"
+          >
+            Política de privacidad
+          </Link>
+        </nav>
         <div className="md:ml-auto">
           <a
             className="flex h-8 w-max flex-none items-center justify-center rounded-md border border-neutral-200 bg-white text-xs text-black dark:border-neutral-700 dark:bg-black dark:text-white"

@@ -4,3 +4,7 @@ node_modules/
 
 .env*
 !.env.example
+
+.agents
+
+skills-lock.json

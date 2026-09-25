@@ -296,6 +296,18 @@ export default function AuthForm({
           </button>
         </form>
 
+        <p className="mt-4 text-xs leading-5 text-neutral-500 dark:text-neutral-400">
+          Tratamos tus datos para gestionar tu cuenta y el servicio solicitado.
+          Consulta nuestra{" "}
+          <Link
+            className="text-blue-600 hover:underline dark:text-blue-400"
+            href="/privacidad"
+          >
+            política de privacidad
+          </Link>
+          .
+        </p>
+
         <div className="mt-6 flex flex-col gap-2 text-sm text-neutral-500 dark:text-neutral-400">
           {mode === "login" ? (
             <>

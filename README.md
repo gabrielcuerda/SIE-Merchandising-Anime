@@ -23,6 +23,9 @@ pnpm install
 NEXT_PUBLIC_SUPABASE_URL=https://TU-PROYECTO.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=TU_CLAVE_PUBLICA
 ADMIN_EMAILS=admin@ejemplo.com
+PRIVACY_CONTROLLER_ADDRESS=TU_DIRECCION_POSTAL
+PRIVACY_CONTROLLER_TAX_ID=TU_NIF_O_CIF
+PRIVACY_EMAIL=privacidad@ejemplo.com
 ```
 
 `ADMIN_EMAILS` es opcional y se utiliza para autorizar el acceso a `/admin`.
