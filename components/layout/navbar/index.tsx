@@ -1,7 +1,9 @@
+
+import { HeartIcon, UserIcon } from "@heroicons/react/24/outline";
 import CartModal from "components/cart/modal";
 import LogoSquare from "components/logo-square";
-import { getMenu } from "lib/shopify";
-import { Menu } from "lib/shopify/types";
+import { getMenu } from "@/lib/commerce/placeholders";
+import { Menu } from "@/lib/commerce/types";
 import Link from "next/link";
 import { Suspense } from "react";
 import MobileMenu from "./mobile-menu";
@@ -52,7 +54,26 @@ export async function Navbar() {
             <Search />
           </Suspense>
         </div>
-        <div className="flex justify-end md:w-1/3">
+
+        <div className="flex items-center justify-end md:w-1/3">
+          <Link
+            href="/account"
+            prefetch={true}
+            aria-label="Mi cuenta"
+            title="Mi cuenta"
+            className="mr-3 rounded-md p-2 text-neutral-500 transition hover:text-black dark:text-neutral-400 dark:hover:text-white"
+          >
+            <UserIcon className="h-5 w-5" aria-hidden="true" />
+          </Link>
+          <Link
+            href="/wishlist"
+            prefetch={true}
+            aria-label="Lista de deseos"
+            title="Lista de deseos"
+            className="mr-2 rounded-md p-2 text-neutral-500 transition hover:text-rose-500 dark:text-neutral-400"
+          >
+            <HeartIcon className="h-5 w-5" aria-hidden="true" />
+          </Link>
           <CartModal />
         </div>
       </div>

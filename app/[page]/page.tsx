@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 
 import Prose from "components/prose";
-import { getPage } from "lib/shopify";
+
+import { getPage } from "@/lib/commerce/placeholders";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata(props: {

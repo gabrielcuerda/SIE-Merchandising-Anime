@@ -5,7 +5,7 @@ import type {
   CartItem,
   Product,
   ProductVariant,
-} from "lib/shopify/types";
+} from "@/lib/commerce/types";
 import React, {
   createContext,
   use,

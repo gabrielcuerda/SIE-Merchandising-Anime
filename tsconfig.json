@@ -20,6 +20,10 @@
     "jsx": "react-jsx",
     "incremental": true,
     "baseUrl": ".",
+
+    "paths": {
+      "@/*": ["./*"]
+    },
     "noUncheckedIndexedAccess": true,
     "plugins": [
       {
