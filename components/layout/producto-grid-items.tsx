@@ -40,7 +40,7 @@ export default function ProductoGridItems({
                   amount: producto.precio.toString(),
                   currencyCode: "EUR",
                 }}
-                src={getMainImage(producto) ?? ""}
+                src={getMainImage(producto) ?? "/placeholder.svg"}
                 fill
                 sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
               />

@@ -114,12 +114,85 @@ export async function getProductosPreVenta() {
   return (data || []) as ProductoConImagen[]
 }
 
-export async function getProductosMasVendidos() {
+/**
+ * Los más vendidos = suma de unidades vendidas en items_pedido,
+ * excluyendo los pedidos cancelados (regla de negocio).
+ * Si todavía no hay ventas reales, hace fallback:
+ *   1) productos destacados  2) los que más stock tienen.
+ */
+export async function getProductosMasVendidos(limit = 8) {
+  // 1) Pedidos que sí cuentan como venta (regla: se excluye 'cancelled')
+  const { data: pedidos, error: pedidosError } = await supabase
+    .from('pedidos')
+    .select('id')
+    .neq('status', 'cancelled')
+
+  if (pedidosError) throw pedidosError
+  const pedidoIds = (pedidos || []).map((pedido) => pedido.id)
+
+  if (pedidoIds.length > 0) {
+    // 2) Líneas de esos pedidos (producto y cantidad comprada)
+    const { data: items, error: itemsError } = await supabase
+      .from('items_pedido')
+      .select('producto_id, cantidad')
+      .in('pedido_id', pedidoIds)
+
+    if (itemsError) throw itemsError
+
+    // 3) Agregamos en memoria: producto -> unidades vendidas
+    const unidades = new Map<string, number>()
+    for (const item of items || []) {
+      if (!item.producto_id) continue
+      unidades.set(
+        item.producto_id,
+        (unidades.get(item.producto_id) ?? 0) + (item.cantidad ?? 0)
+      )
+    }
+
+    if (unidades.size > 0) {
+      // 4) Ranking de ids y descarga de esos productos
+      const ranking = [...unidades.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .map(([id]) => id)
+        .slice(0, limit)
+
+      const { data, error } = await supabase
+        .from('productos')
+        .select('*, producto_imagenes(*)')
+        .in('id', ranking)
+
+      if (error) throw error
+
+      // 5) Reordenamos los productos según el ranking de ventas
+      const posicion = new Map(ranking.map((id, index) => [id, index]))
+      return ((data || []) as ProductoConImagen[]).sort(
+        (a, b) => (posicion.get(a.id) ?? 0) - (posicion.get(b.id) ?? 0)
+      )
+    }
+  }
+
+  // 6) FALLBACK: sin ventas reales mostramos los destacados...
+  const destacados = await getProductosDestacados()
+  if (destacados.length > 0) return destacados.slice(0, limit)
+
+  // 7) ...y si tampoco hay destacados, los que más stock tienen
   const { data, error } = await supabase
     .from('productos')
     .select('*, producto_imagenes(*)')
     .order('stock', { ascending: false })
-    .limit(8)
+    .limit(limit)
+
+  if (error) throw error
+  return (data || []) as ProductoConImagen[]
+}
+
+/** Novedades: los productos con fecha de alta más reciente */
+export async function getProductosNuevos(limit = 8) {
+  const { data, error } = await supabase
+    .from('productos')
+    .select('*, producto_imagenes(*)')
+    .order('created_at', { ascending: false })
+    .limit(limit)
 
   if (error) throw error
   return (data || []) as ProductoConImagen[]

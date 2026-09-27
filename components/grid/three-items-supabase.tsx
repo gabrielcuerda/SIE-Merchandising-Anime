@@ -26,7 +26,7 @@ function ThreeItemGridItem({
         prefetch={true}
       >
         <GridTileImage
-          src={getMainImage(item) ?? ''}
+          src={getMainImage(item) ?? "/placeholder.svg"}
           fill
           sizes={
             size === 'full'
