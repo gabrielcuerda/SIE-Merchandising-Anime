@@ -45,3 +45,9 @@ export function getSupabaseEnv() {
 
   return { url: values[0]!, key: values[1]! };
 }
+
+export function requireSupabaseEnv(): [string, string] {
+  const { url, key } = getSupabaseEnv();
+
+  return [url, key];
+}
