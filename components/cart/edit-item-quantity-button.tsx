@@ -6,57 +6,30 @@ import { updateItemQuantity } from "components/cart/actions";
 
 import type { CartItem } from "@/lib/commerce/types";
 import { useActionState } from "react";
+import { updateItemQuantity } from "./actions";
+import { useFormStatus } from "react-dom";
+import type { CarritoItem } from "@/lib/supabase/types";
 
-function SubmitButton({ type }: { type: "plus" | "minus" }) {
-  return (
-    <button
-      type="submit"
-      aria-label={
-        type === "plus" ? "Increase item quantity" : "Reduce item quantity"
-      }
-      className={clsx(
-        "ease flex h-full min-w-[36px] max-w-[36px] flex-none items-center justify-center rounded-full p-2 transition-all duration-200 hover:border-neutral-800 hover:opacity-80",
-        {
-          "ml-auto": type === "minus",
-        },
-      )}
-    >
-      {type === "plus" ? (
-        <PlusIcon className="h-4 w-4 dark:text-neutral-500" />
-      ) : (
-        <MinusIcon className="h-4 w-4 dark:text-neutral-500" />
-      )}
-    </button>
-  );
-}
-
-export function EditItemQuantityButton({
-  item,
-  type,
-  optimisticUpdate,
-}: {
-  item: CartItem;
-  type: "plus" | "minus";
-  optimisticUpdate: any;
-}) {
-  const [message, formAction] = useActionState(updateItemQuantity, null);
-  const payload = {
-    merchandiseId: item.merchandise.id,
-    quantity: type === "plus" ? item.quantity + 1 : item.quantity - 1,
-  };
-  const updateItemQuantityAction = formAction.bind(null, payload);
+export function EditItemQuantityButton({ item, type, optimisticUpdate }: { item: CarritoItem; type: "plus" | "minus"; optimisticUpdate: (itemId: string, updateType: "plus" | "minus") => void }) {
+  const { pending } = useFormStatus();
+  const itemId = item.id;
 
   return (
-    <form
-      action={async () => {
-        optimisticUpdate(payload.merchandiseId, type);
-        updateItemQuantityAction();
-      }}
-    >
-      <SubmitButton type={type} />
-      <p aria-live="polite" className="sr-only" role="status">
-        {message}
-      </p>
+    <form action={async () => {
+      const newCantidad = type === "plus" ? item.cantidad + 1 : item.cantidad - 1;
+      optimisticUpdate(itemId, type);
+      await updateItemQuantity(null, { itemId, cantidad: newCantidad });
+    }}>
+      <button
+        type="submit"
+        aria-label={type === "plus" ? "Increase item quantity" : "Decrease item quantity"}
+        className={clsx(
+          "flex h-full w-7 items-center justify-center rounded-full transition-all ease-in-out hover:scale-110 hover:bg-neutral-100 dark:hover:bg-neutral-800",
+          { "cursor-not-allowed opacity-50": pending }
+        )}
+      >
+        {type === "plus" ? <PlusIcon className="h-3 w-3" /> : <MinusIcon className="h-3 w-3" />}
+      </button>
     </form>
   );
 }
