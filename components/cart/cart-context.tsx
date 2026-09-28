@@ -14,7 +14,6 @@ import React, {
   useOptimistic,
 } from "react";
 import type { Carrito, CarritoItem } from "@/lib/supabase/types";
-import React, { createContext, use, useContext, useMemo, useOptimistic } from "react";
 
 type UpdateType = "plus" | "minus" | "delete";
 

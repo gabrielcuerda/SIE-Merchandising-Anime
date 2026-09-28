@@ -23,8 +23,6 @@
 
     "paths": {
       "@/*": ["./*"]
-    "paths": {
-    "@/*": ["./*"]
     },
     "noUncheckedIndexedAccess": true,
     "plugins": [

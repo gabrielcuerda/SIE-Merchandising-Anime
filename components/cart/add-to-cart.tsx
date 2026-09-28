@@ -4,8 +4,6 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { addItem } from "components/cart/actions";
 import { Product, ProductVariant } from "@/lib/commerce/types";
-import { addItem } from "@/components/cart/actions";
-import { Product, ProductVariant } from "@/lib/shopify/types";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { useCart } from "./cart-context";
@@ -19,7 +17,7 @@ function SubmitButton({ availableForSale, selectedVariantId }: { availableForSal
 
   return (
     <button aria-label="Add to cart" className={clsx(buttonClasses, "hover:opacity-90")}>
-      <div className="absolute left-0 ml-4"><PlusIcon className="h-5" /></div>
+      <div className="absolute left-0 ml-4"><PlusIcon className="h-5 w-5" /></div>
       Add To Cart
     </button>
   );

@@ -3,26 +3,15 @@
 import { TAGS } from "lib/constants";
 import {
   addToCart,
-  createCart,
   getCart,
   removeFromCart,
   updateCart,
 } from "@/lib/commerce/placeholders";
-import { updateTag } from "next/cache";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-
-export async function addItem(
-  prevState: any,
-  selectedVariantId: string | undefined,
-) {
-  if (!selectedVariantId) {
-    return "Error adding item to cart";
-  }
+import { revalidateTag } from "next/cache";
 
 export async function addItem(prevState: any, payload: { productoId: string; varianteId: string; cantidad: number }) {
   try {
-    await addToCartDB(payload);
+    await addToCart([{ merchandiseId: payload.varianteId, quantity: payload.cantidad }]);
     revalidateTag(TAGS.cart, "seconds");
   } catch (e) {
     console.error(e);
@@ -39,16 +28,15 @@ export async function removeItem(prevState: any, itemId: string) {
     }
 
     const lineItem = cart.lines.find(
-      (line) => line.merchandise.id === merchandiseId,
+      (line) => line.merchandise.id === itemId,
     );
 
     if (lineItem && lineItem.id) {
       await removeFromCart([lineItem.id]);
-      updateTag(TAGS.cart);
     } else {
       return "Item not found in cart";
     }
-    await removeCartItemDB(itemId);
+
     revalidateTag(TAGS.cart, "seconds");
   } catch (e) {
     console.error(e);
@@ -73,7 +61,6 @@ export async function updateItemQuantity(
     }
 
     const lineItem = cart.lines.find(
-
       (line) => line.merchandise.id === merchandiseId,
     );
 
@@ -90,14 +77,9 @@ export async function updateItemQuantity(
         ]);
       }
     } else if (quantity > 0) {
-      // If the item doesn't exist in the cart and quantity > 0, add it
       await addToCart([{ merchandiseId, quantity }]);
     }
 
-    updateTag(TAGS.cart);
-export async function updateItemQuantity(prevState: any, payload: { itemId: string; cantidad: number }) {
-  try {
-    await updateCartItemDB(payload.itemId, payload.cantidad);
     revalidateTag(TAGS.cart, "seconds");
   } catch (e) {
     console.error(e);
@@ -107,7 +89,6 @@ export async function updateItemQuantity(prevState: any, payload: { itemId: stri
 
 export async function clearCartAction() {
   try {
-    await clearCartDB();
     revalidateTag(TAGS.cart, "seconds");
   } catch (e) {
     console.error(e);

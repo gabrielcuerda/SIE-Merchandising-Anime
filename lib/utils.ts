@@ -14,3 +14,7 @@ export const createUrl = (
   return `${pathname}${queryString}`;
 };
 
+export function ensureStartsWith(str: string, prefix: string): string {
+  return str.startsWith(prefix) ? str : `${prefix}${str}`;
+}
+
