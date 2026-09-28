@@ -1,6 +1,5 @@
 "use client";
 
-import clsx from "clsx";
 import { Dialog, Transition } from "@headlessui/react";
 import { ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import LoadingDots from "components/loading-dots";
@@ -49,7 +48,11 @@ export default function CartModal() {
 
   return (
     <>
-      <button aria-label="Open cart" onClick={openCart}>
+      <button
+        aria-label="Abrir carrito"
+        onClick={openCart}
+        className="rounded-md"
+      >
         <OpenCart quantity={cart?.totalQuantity} />
       </button>
       <Transition show={isOpen}>
@@ -74,22 +77,32 @@ export default function CartModal() {
             leaveFrom="translate-x-0"
             leaveTo="translate-x-full"
           >
-            <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white">
-              <div className="flex items-center justify-between">
-                <p className="text-lg font-semibold">My Cart</p>
-                <button aria-label="Close cart" onClick={closeCart}>
-                  <CloseCart />
+            <Dialog.Panel className="fixed right-0 bottom-0 top-0 flex h-full w-full flex-col border-l border-ink-200 bg-white text-ink-950 md:w-[400px]">
+              <div className="flex items-center justify-between bg-brand-500 px-6 py-4 text-white">
+                <p className="text-lg font-extrabold uppercase tracking-wide">
+                  Tu carrito
+                </p>
+                <button
+                  aria-label="Cerrar carrito"
+                  onClick={closeCart}
+                  className="rounded-md p-1 text-white transition hover:bg-ink-950/20"
+                >
+                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
 
-              {!cart || cart.lines.length === 0 ? (
-                <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
-                  <ShoppingCartIcon className="h-16" />
-                  <p className="mt-6 text-center text-2xl font-bold">
-                    Your cart is empty.
-                  </p>
-                </div>
-              ) : (
+              <div className="p-6">
+                {!cart || cart.lines.length === 0 ? (
+                  <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
+                    <ShoppingCartIcon className="h-16 text-ink-200" />
+                    <p className="mt-6 text-center text-2xl font-extrabold">
+                      Tu carrito está vacío
+                    </p>
+                    <p className="mt-2 text-center text-sm text-ink-500">
+                      Añade merchandising y empieza tu colección.
+                    </p>
+                  </div>
+                ) : (
                 <div className="flex h-full flex-col justify-between overflow-hidden p-1">
                   <ul className="grow overflow-auto py-4">
                     {cart.lines
@@ -119,7 +132,7 @@ export default function CartModal() {
                         return (
                           <li
                             key={i}
-                            className="flex w-full flex-col border-b border-neutral-300 dark:border-neutral-700"
+                            className="flex w-full flex-col border-b border-ink-200"
                           >
                             <div className="relative flex w-full flex-row justify-between px-1 py-4">
                               <div className="absolute z-40 -ml-1 -mt-2">
@@ -129,7 +142,7 @@ export default function CartModal() {
                                 />
                               </div>
                               <div className="flex flex-row">
-                                <div className="relative h-16 w-16 overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:hover:bg-neutral-800">
+                                <div className="relative h-16 w-16 overflow-hidden rounded-md border border-ink-200 bg-ink-50">
                                   <Image
                                     className="h-full w-full object-cover"
                                     width={64}
@@ -155,7 +168,7 @@ export default function CartModal() {
                                     </span>
                                     {item.merchandise.title !==
                                     DEFAULT_OPTION ? (
-                                      <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                                      <p className="text-sm text-ink-500">
                                         {item.merchandise.title}
                                       </p>
                                     ) : null}
@@ -170,7 +183,7 @@ export default function CartModal() {
                                     item.cost.totalAmount.currencyCode
                                   }
                                 />
-                                <div className="ml-auto flex h-9 flex-row items-center rounded-full border border-neutral-200 dark:border-neutral-700">
+                                <div className="ml-auto flex h-9 flex-row items-center rounded-full border border-ink-200">
                                   <EditItemQuantityButton
                                     item={item}
                                     type="minus"
@@ -193,23 +206,23 @@ export default function CartModal() {
                         );
                       })}
                   </ul>
-                  <div className="py-4 text-sm text-neutral-500 dark:text-neutral-400">
-                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
-                      <p>Taxes</p>
+                  <div className="py-4 text-sm text-ink-500">
+                    <div className="mb-3 flex items-center justify-between border-b border-ink-200 pb-1">
+                      <p>Impuestos</p>
                       <Price
-                        className="text-right text-base text-black dark:text-white"
+                        className="text-right text-base text-ink-950"
                         amount={cart.cost.totalTaxAmount.amount}
                         currencyCode={cart.cost.totalTaxAmount.currencyCode}
                       />
                     </div>
-                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
-                      <p>Shipping</p>
-                      <p className="text-right">Calculated at checkout</p>
+                    <div className="mb-3 flex items-center justify-between border-b border-ink-200 pt-1 pb-1">
+                      <p>Envío</p>
+                      <p className="text-right">Se calcula al finalizar</p>
                     </div>
-                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
-                      <p>Total</p>
+                    <div className="mb-3 flex items-center justify-between border-b border-ink-200 pt-1 pb-1">
+                      <p className="font-bold text-ink-950">Total</p>
                       <Price
-                        className="text-right text-base text-black dark:text-white"
+                        className="text-right text-base font-bold text-ink-950"
                         amount={cart.cost.totalAmount.amount}
                         currencyCode={cart.cost.totalAmount.currencyCode}
                       />
@@ -219,7 +232,8 @@ export default function CartModal() {
                     <CheckoutButton />
                   </form>
                 </div>
-              )}
+                )}
+              </div>
             </Dialog.Panel>
           </Transition.Child>
         </Dialog>
@@ -228,29 +242,16 @@ export default function CartModal() {
   );
 }
 
-function CloseCart({ className }: { className?: string }) {
-  return (
-    <div className="relative flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:text-white">
-      <XMarkIcon
-        className={clsx(
-          "h-6 transition-all ease-in-out hover:scale-110",
-          className,
-        )}
-      />
-    </div>
-  );
-}
-
 function CheckoutButton() {
   const { pending } = useFormStatus();
 
   return (
     <button
-      className="block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
+      className="block w-full rounded-md bg-ink-950 p-3 text-center text-sm font-extrabold tracking-wide text-white uppercase transition hover:bg-brand-500 disabled:opacity-70"
       type="submit"
       disabled={pending}
     >
-      {pending ? <LoadingDots className="bg-white" /> : "Proceed to Checkout"}
+      {pending ? <LoadingDots className="bg-white" /> : "Finalizar compra"}
     </button>
   );
 }

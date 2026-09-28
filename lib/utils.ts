@@ -14,3 +14,8 @@ export const createUrl = (
   return `${pathname}${queryString}`;
 };
 
+/** Solo lo usa la capa heredada de Shopify (lib/shopify). */
+export const ensureStartsWith = (target: string, prefix: string) => {
+  return target.startsWith(prefix) ? target : `${prefix}${target}`;
+};
+
