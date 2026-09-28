@@ -2,7 +2,8 @@ import { CartProvider } from "components/cart/cart-context";
 import { Navbar } from "components/layout/navbar";
 import { WelcomeToast } from "components/welcome-toast";
 import { GeistSans } from "geist/font/sans";
-import { getCart } from "lib/cart";
+
+import { getCart } from "@/lib/commerce/placeholders";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -32,7 +33,8 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={GeistSans.variable}>
-      <body className="bg-neutral-50 text-black selection:bg-teal-300 dark:bg-neutral-900 dark:text-white dark:selection:bg-pink-500 dark:selection:text-white">
+
+      <body className="bg-[#f7fbff] text-slate-900 selection:bg-sky-200 selection:text-slate-950">
         <CartProvider cartPromise={cart}>
           <Navbar />
           <main>

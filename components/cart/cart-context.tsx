@@ -1,5 +1,18 @@
 "use client";
 
+import type {
+  Cart,
+  CartItem,
+  Product,
+  ProductVariant,
+} from "@/lib/commerce/types";
+import React, {
+  createContext,
+  use,
+  useContext,
+  useMemo,
+  useOptimistic,
+} from "react";
 import type { Carrito, CarritoItem } from "@/lib/supabase/types";
 import React, { createContext, use, useContext, useMemo, useOptimistic } from "react";
 
