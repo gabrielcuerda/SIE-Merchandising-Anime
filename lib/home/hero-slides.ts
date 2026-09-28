@@ -1,12 +1,12 @@
 export type HeroSlide = {
   id: string;
-  eyebrow: string;      // texto pequeño superior (badge)
-  title: string;        // titular grande
-  description: string;  // párrafo
-  ctaLabel: string;     // texto del botón
-  ctaHref: string;      // a dónde lleva el botón
-  background: string;   // clases de Tailwind del degradado
-  accent: string;       // clases del badge
+  eyebrow: string; // texto pequeño superior (badge)
+  title: string; // titular grande
+  description: string; // párrafo
+  ctaLabel: string; // texto del botón
+  ctaHref: string; // a dónde lleva el botón
+  background: string; // clases de Tailwind del degradado
+  accent: string; // clases del badge
 };
 
 /** Cada cuánto cambia la diapositiva sola (ms) */

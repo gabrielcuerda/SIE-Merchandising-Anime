@@ -21,7 +21,10 @@ export default function AnnouncementBar() {
           </span>
         ))}
         <span className="hidden flex-none items-center gap-1.5 whitespace-nowrap xl:flex">
-          <SparklesIcon className="h-3.5 w-3.5 text-brand-400" aria-hidden="true" />
+          <SparklesIcon
+            className="h-3.5 w-3.5 text-brand-400"
+            aria-hidden="true"
+          />
           <span className="text-brand-400">Importación directa</span>
           <span className="font-medium normal-case tracking-normal text-ink-300">
             desde Japón

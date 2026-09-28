@@ -3,7 +3,11 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { HERO_INTERVAL_MS, heroSlides, type HeroSlide } from "@/lib/home/hero-slides";
+import {
+  HERO_INTERVAL_MS,
+  heroSlides,
+  type HeroSlide,
+} from "@/lib/home/hero-slides";
 
 function Slide({ slide, isActive }: { slide: HeroSlide; isActive: boolean }) {
   return (
@@ -49,14 +53,19 @@ export default function HeroCarousel() {
 
   // Si el sistema operativo tiene desactivadas las animaciones, no autoplay:
   useEffect(() => {
-    setReduceMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    setReduceMotion(
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
   }, []);
 
   // Autoplay: se detiene al pasar el ratón, al enfocar con el tabulador
   // o si el usuario tiene reducida la animación.
   useEffect(() => {
     if (paused || reduceMotion) return;
-    const id = setInterval(() => setActive((i) => (i + 1) % total), HERO_INTERVAL_MS);
+    const id = setInterval(
+      () => setActive((i) => (i + 1) % total),
+      HERO_INTERVAL_MS,
+    );
     return () => clearInterval(id); // limpieza: evita fugas de temporizadores
   }, [paused, reduceMotion, total]);
 

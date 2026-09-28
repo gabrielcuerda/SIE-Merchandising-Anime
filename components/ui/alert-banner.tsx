@@ -69,7 +69,10 @@ export default function AlertBanner({
       )}
     >
       {icon ? (
-        <Icon className={clsx("h-5 w-5 flex-none", styles.icon)} aria-hidden="true" />
+        <Icon
+          className={clsx("h-5 w-5 flex-none", styles.icon)}
+          aria-hidden="true"
+        />
       ) : null}
 
       <div className="flex-1 text-sm">

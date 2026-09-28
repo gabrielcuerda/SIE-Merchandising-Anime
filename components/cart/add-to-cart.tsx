@@ -8,16 +8,38 @@ import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { useCart } from "./cart-context";
 
-function SubmitButton({ availableForSale, selectedVariantId }: { availableForSale: boolean; selectedVariantId: string | undefined }) {
-  const buttonClasses = "relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white";
+function SubmitButton({
+  availableForSale,
+  selectedVariantId,
+}: {
+  availableForSale: boolean;
+  selectedVariantId: string | undefined;
+}) {
+  const buttonClasses =
+    "relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white";
   const disabledClasses = "cursor-not-allowed opacity-60 hover:opacity-60";
 
-  if (!availableForSale) return <button disabled className={clsx(buttonClasses, disabledClasses)}>Out Of Stock</button>;
-  if (!selectedVariantId) return <button disabled className={clsx(buttonClasses, disabledClasses)}>Add To Cart</button>;
+  if (!availableForSale)
+    return (
+      <button disabled className={clsx(buttonClasses, disabledClasses)}>
+        Out Of Stock
+      </button>
+    );
+  if (!selectedVariantId)
+    return (
+      <button disabled className={clsx(buttonClasses, disabledClasses)}>
+        Add To Cart
+      </button>
+    );
 
   return (
-    <button aria-label="Add to cart" className={clsx(buttonClasses, "hover:opacity-90")}>
-      <div className="absolute left-0 ml-4"><PlusIcon className="h-5" /></div>
+    <button
+      aria-label="Add to cart"
+      className={clsx(buttonClasses, "hover:opacity-90")}
+    >
+      <div className="absolute left-0 ml-4">
+        <PlusIcon className="h-5" />
+      </div>
       Add To Cart
     </button>
   );
@@ -30,7 +52,9 @@ export function AddToCart({ product }: { product: Product }) {
   const [message, formAction] = useActionState(addItem, null);
 
   const variant = variants.find((v: ProductVariant) =>
-    v.selectedOptions.every((option) => option.value === searchParams.get(option.name.toLowerCase()))
+    v.selectedOptions.every(
+      (option) => option.value === searchParams.get(option.name.toLowerCase()),
+    ),
   );
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
   const selectedVariantId = variant?.id || defaultVariantId;
@@ -43,19 +67,26 @@ export function AddToCart({ product }: { product: Product }) {
   });
 
   return (
-    <form action={async () => {
-      addCartItem({
-        productoId: product.id,
-        varianteId: finalVariant.id,
-        titulo: product.title,
-        imagen: product.featuredImage?.url || null,
-        varianteTitulo: finalVariant.title,
-        precio: Number(finalVariant.price.amount),
-      });
-      addItemAction();
-    }}>
-      <SubmitButton availableForSale={availableForSale} selectedVariantId={selectedVariantId} />
-      <p aria-live="polite" className="sr-only" role="status">{message}</p>
+    <form
+      action={async () => {
+        addCartItem({
+          productoId: product.id,
+          varianteId: finalVariant.id,
+          titulo: product.title,
+          imagen: product.featuredImage?.url || null,
+          varianteTitulo: finalVariant.title,
+          precio: Number(finalVariant.price.amount),
+        });
+        addItemAction();
+      }}
+    >
+      <SubmitButton
+        availableForSale={availableForSale}
+        selectedVariantId={selectedVariantId}
+      />
+      <p aria-live="polite" className="sr-only" role="status">
+        {message}
+      </p>
     </form>
   );
 }

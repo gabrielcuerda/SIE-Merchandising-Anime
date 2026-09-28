@@ -1,4 +1,8 @@
-import { EnvelopeIcon, MapPinIcon, PhoneIcon } from "@heroicons/react/24/outline";
+import {
+  EnvelopeIcon,
+  MapPinIcon,
+  PhoneIcon,
+} from "@heroicons/react/24/outline";
 import SocialIcon from "components/icons/social";
 import { siteConfig, type SiteSocial } from "@/lib/site";
 import clsx from "clsx";

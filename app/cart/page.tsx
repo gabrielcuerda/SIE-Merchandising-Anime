@@ -19,8 +19,15 @@ export default async function CartPage() {
       <div className="flex min-h-[60vh] flex-col items-center justify-center">
         <ShoppingCartIcon className="h-16 w-16 text-neutral-400" />
         <h1 className="mt-6 text-2xl font-bold">Your cart is empty</h1>
-        <p className="mt-2 text-neutral-500">Looks like you haven&apos;t added anything yet.</p>
-        <Link href="/search" className="mt-6 rounded-full bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:opacity-90">Continue Shopping</Link>
+        <p className="mt-2 text-neutral-500">
+          Looks like you haven&apos;t added anything yet.
+        </p>
+        <Link
+          href="/search"
+          className="mt-6 rounded-full bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:opacity-90"
+        >
+          Continue Shopping
+        </Link>
       </div>
     );
   }
@@ -32,27 +39,67 @@ export default async function CartPage() {
         <div className="flex-1">
           <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
             {cart.items.map((item) => {
-              const merchandiseUrl = createUrl(`/product/${item.productos?.slug || ""}`, new URLSearchParams({}));
+              const merchandiseUrl = createUrl(
+                `/product/${item.productos?.slug || ""}`,
+                new URLSearchParams({}),
+              );
               return (
                 <li key={item.id} className="flex gap-4 py-4">
                   <div className="relative h-24 w-24 overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900">
-                    <Image className="h-full w-full object-cover" width={96} height={96} alt={item.productos?.producto_imagenes?.[0]?.alt_text || item.productos?.titulo || ""} src={item.productos?.producto_imagenes?.[0]?.url || ""} />
+                    <Image
+                      className="h-full w-full object-cover"
+                      width={96}
+                      height={96}
+                      alt={
+                        item.productos?.producto_imagenes?.[0]?.alt_text ||
+                        item.productos?.titulo ||
+                        ""
+                      }
+                      src={item.productos?.producto_imagenes?.[0]?.url || ""}
+                    />
                   </div>
                   <div className="flex flex-1 flex-col">
                     <div className="flex justify-between">
                       <div>
-                        <Link href={merchandiseUrl} className="text-base font-medium hover:underline">{item.productos?.titulo}</Link>
-                        {item.producto_variantes?.titulo !== DEFAULT_OPTION && <p className="text-sm text-neutral-500 dark:text-neutral-400">{item.producto_variantes?.titulo}</p>}
+                        <Link
+                          href={merchandiseUrl}
+                          className="text-base font-medium hover:underline"
+                        >
+                          {item.productos?.titulo}
+                        </Link>
+                        {item.producto_variantes?.titulo !== DEFAULT_OPTION && (
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                            {item.producto_variantes?.titulo}
+                          </p>
+                        )}
                       </div>
-                      <Price amount={((item.producto_variantes?.precio || 0) * item.cantidad).toFixed(2)} currencyCode="EUR" />
+                      <Price
+                        amount={(
+                          (item.producto_variantes?.precio || 0) * item.cantidad
+                        ).toFixed(2)}
+                        currencyCode="EUR"
+                      />
                     </div>
                     <div className="mt-auto flex items-center justify-between">
                       <div className="flex h-9 flex-row items-center rounded-full border border-neutral-200 dark:border-neutral-700">
-                        <EditItemQuantityButton item={item} type="minus" optimisticUpdate={async () => {}} />
-                        <p className="w-6 text-center text-sm">{item.cantidad}</p>
-                        <EditItemQuantityButton item={item} type="plus" optimisticUpdate={async () => {}} />
+                        <EditItemQuantityButton
+                          item={item}
+                          type="minus"
+                          optimisticUpdate={async () => {}}
+                        />
+                        <p className="w-6 text-center text-sm">
+                          {item.cantidad}
+                        </p>
+                        <EditItemQuantityButton
+                          item={item}
+                          type="plus"
+                          optimisticUpdate={async () => {}}
+                        />
                       </div>
-                      <DeleteItemButton item={item} optimisticUpdate={async () => {}} />
+                      <DeleteItemButton
+                        item={item}
+                        optimisticUpdate={async () => {}}
+                      />
                     </div>
                   </div>
                 </li>
@@ -60,7 +107,12 @@ export default async function CartPage() {
             })}
           </ul>
           <form action={clearCartAction} className="mt-4">
-            <button type="submit" className="text-sm text-neutral-500 underline hover:text-neutral-800 dark:hover:text-neutral-300">Clear cart</button>
+            <button
+              type="submit"
+              className="text-sm text-neutral-500 underline hover:text-neutral-800 dark:hover:text-neutral-300"
+            >
+              Clear cart
+            </button>
           </form>
         </div>
         <div className="w-full lg:w-80">
@@ -68,15 +120,21 @@ export default async function CartPage() {
             <h2 className="mb-4 text-lg font-semibold">Order Summary</h2>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-neutral-500 dark:text-neutral-400">Subtotal</span>
+                <span className="text-neutral-500 dark:text-neutral-400">
+                  Subtotal
+                </span>
                 <Price amount={cart.subtotal.toFixed(2)} currencyCode="EUR" />
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-500 dark:text-neutral-400">Shipping</span>
+                <span className="text-neutral-500 dark:text-neutral-400">
+                  Shipping
+                </span>
                 <span>Calculated at checkout</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-neutral-500 dark:text-neutral-400">Taxes</span>
+                <span className="text-neutral-500 dark:text-neutral-400">
+                  Taxes
+                </span>
                 <span>Calculated at checkout</span>
               </div>
               <div className="flex justify-between border-t border-neutral-200 pt-3 text-base font-semibold dark:border-neutral-700">
@@ -84,8 +142,18 @@ export default async function CartPage() {
                 <Price amount={cart.subtotal.toFixed(2)} currencyCode="EUR" />
               </div>
             </div>
-            <Link href="/checkout" className="mt-6 block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100">Proceed to Checkout</Link>
-            <Link href="/search" className="mt-3 block text-center text-sm text-neutral-500 hover:underline">Continue Shopping</Link>
+            <Link
+              href="/checkout"
+              className="mt-6 block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
+            >
+              Proceed to Checkout
+            </Link>
+            <Link
+              href="/search"
+              className="mt-3 block text-center text-sm text-neutral-500 hover:underline"
+            >
+              Continue Shopping
+            </Link>
           </div>
         </div>
       </div>

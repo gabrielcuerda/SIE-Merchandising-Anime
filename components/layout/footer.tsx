@@ -5,10 +5,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Logo from "components/logo";
 import FooterMenu from "components/layout/footer-menu";
-import {
-  ContactDetails,
-  SocialLinks,
-} from "components/layout/social-links";
+import { ContactDetails, SocialLinks } from "components/layout/social-links";
 import {
   siteConfig,
   footerColumns,
@@ -26,7 +23,13 @@ const highlightIcons: Record<
   card: CreditCardIcon,
 };
 
-const paymentMethods = ["Visa", "Mastercard", "Bizum", "PayPal", "Transferencia"];
+const paymentMethods = [
+  "Visa",
+  "Mastercard",
+  "Bizum",
+  "PayPal",
+  "Transferencia",
+];
 
 export default function Footer() {
   const year = new Date().getFullYear();

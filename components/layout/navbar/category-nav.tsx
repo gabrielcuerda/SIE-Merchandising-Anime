@@ -119,7 +119,8 @@ export default function CategoryNav({
           className="ml-auto flex items-center gap-2 pl-4 text-xs font-bold tracking-[0.1em] text-ink-300 uppercase transition hover:text-brand-400"
         >
           <TruckIcon className="h-4 w-4 text-brand-400" aria-hidden="true" />
-          {siteConfig.freeShippingLabel} desde {siteConfig.freeShippingThreshold} €
+          {siteConfig.freeShippingLabel} desde{" "}
+          {siteConfig.freeShippingThreshold} €
         </Link>
       </div>
     </nav>

@@ -1,4 +1,3 @@
-
 import { getCategoria } from "@/lib/db/categorias";
 import { getProductosByCategoria } from "@/lib/db/productos";
 import { Metadata } from "next";
@@ -34,7 +33,6 @@ export default async function CategoryPage(props: {
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
 
-
   const categoria = await getCategoria(params.collection);
   if (!categoria) return notFound();
 
@@ -45,7 +43,6 @@ export default async function CategoryPage(props: {
 
   return (
     <section>
-
       {productos.length === 0 ? (
         <p className="py-3 text-lg">{`No hay productos en esta categoría`}</p>
       ) : (
@@ -55,5 +52,4 @@ export default async function CategoryPage(props: {
       )}
     </section>
   );
-
 }

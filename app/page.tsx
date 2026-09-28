@@ -1,22 +1,22 @@
-import Grid from 'components/grid'
-import { ThreeItemGrid } from 'components/grid/three-items-supabase'
-import HeroCarousel from 'components/home/hero-carousel'
-import ProductSection from 'components/home/product-section'
-import ProductoGridItems from 'components/layout/producto-grid-items'
+import Grid from "components/grid";
+import { ThreeItemGrid } from "components/grid/three-items-supabase";
+import HeroCarousel from "components/home/hero-carousel";
+import ProductSection from "components/home/product-section";
+import ProductoGridItems from "components/layout/producto-grid-items";
 import {
   getProductos,
   getProductosMasVendidos,
   getProductosNuevos,
   getProductosOferta,
-} from '@/lib/db/productos'
+} from "@/lib/db/productos";
 
 export const metadata = {
   description:
-    'Tienda de merchandising de anime y manga importado directamente desde Japón.',
+    "Tienda de merchandising de anime y manga importado directamente desde Japón.",
   openGraph: {
-    type: 'website',
+    type: "website",
   },
-}
+};
 
 export default async function HomePage() {
   // Las 3 consultas se lanzan a la vez (no una detrás de otra) => más rápido
@@ -25,7 +25,7 @@ export default async function HomePage() {
     getProductosMasVendidos(4),
     getProductosNuevos(4),
     getProductosOferta(),
-  ])
+  ]);
 
   return (
     <>
@@ -66,5 +66,5 @@ export default async function HomePage() {
         </Grid>
       </section>
     </>
-  )
+  );
 }

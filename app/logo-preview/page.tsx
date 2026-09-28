@@ -36,9 +36,9 @@ export default function LogoPreviewPage() {
           Opciones de logo
         </h1>
         <p className="mt-2 max-w-2xl text-ink-600">
-          Cuatro direcciones distintas. Cada una se muestra en tamano grande,
-          en tamano real de cabecera (48px), a 32px y a 16px, y sobre fondo
-          claro y oscuro.
+          Cuatro direcciones distintas. Cada una se muestra en tamano grande, en
+          tamano real de cabecera (48px), a 32px y a 16px, y sobre fondo claro y
+          oscuro.
         </p>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">

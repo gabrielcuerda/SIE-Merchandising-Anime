@@ -26,21 +26,17 @@ export function CardTitle({ className, ...props }: ComponentProps<"h3">) {
   );
 }
 
-export function CardDescription({
-  className,
-  ...props
-}: ComponentProps<"p">) {
-  return <p {...props} className={clsx("mt-1 text-sm text-ink-500", className)} />;
+export function CardDescription({ className, ...props }: ComponentProps<"p">) {
+  return (
+    <p {...props} className={clsx("mt-1 text-sm text-ink-500", className)} />
+  );
 }
 
 export function CardContent({ className, ...props }: ComponentProps<"div">) {
   return <div {...props} className={clsx("p-5", className)} />;
 }
 
-export function CardFooter({
-  className,
-  ...props
-}: ComponentProps<"div">) {
+export function CardFooter({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       {...props}

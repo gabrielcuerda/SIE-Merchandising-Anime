@@ -17,15 +17,17 @@ export default async function SearchPage(props: {
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
 
-
-  const productos = await getProductos({ sortKey, reverse, query: searchValue });
+  const productos = await getProductos({
+    sortKey,
+    reverse,
+    query: searchValue,
+  });
   const resultsText = productos.length > 1 ? "resultados" : "resultado";
 
   return (
     <>
       {searchValue ? (
         <p className="mb-4">
-
           {productos.length === 0
             ? "No hay productos que coincidan con "
             : `Mostrando ${productos.length} ${resultsText} para `}
@@ -39,5 +41,4 @@ export default async function SearchPage(props: {
       ) : null}
     </>
   );
-
 }

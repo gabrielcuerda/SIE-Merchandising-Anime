@@ -19,4 +19,3 @@ export const createUrl = (
 
   return `${pathname}${queryString}`;
 };
-
