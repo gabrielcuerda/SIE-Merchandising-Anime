@@ -1,13 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
+import { loadStripe, type Stripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import type { Carrito } from "@/lib/supabase/types";
 import Price from "@/components/price";
 import LoadingDots from "@/components/loading-dots";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+let stripePromise: Promise<Stripe | null> | undefined;
+
+function getStripePromise(): Promise<Stripe | null> {
+  if (!stripePromise) {
+    const publishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
+
+    if (!publishableKey) {
+      throw new Error(
+        "Falta la variable de entorno NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY. " +
+          "Añádela en Vercel → Settings → Environment Variables " +
+          "(entornos Production y Preview) y vuelve a desplegar."
+      );
+    }
+
+    stripePromise = loadStripe(publishableKey);
+  }
+
+  return stripePromise;
+}
 
 export default function CheckoutForm({ cart }: { cart: Carrito }) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -50,7 +68,7 @@ export default function CheckoutForm({ cart }: { cart: Carrito }) {
 
   if (clientSecret) {
     return (
-      <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: "stripe", variables: { colorPrimary: "#2563eb" } } }}>
+      <Elements stripe={getStripePromise()} options={{ clientSecret, appearance: { theme: "stripe", variables: { colorPrimary: "#2563eb" } } }}>
         <PaymentForm cart={cart} />
       </Elements>
     );

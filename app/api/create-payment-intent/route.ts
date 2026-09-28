@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getCart } from "@/lib/cart";
-
-let stripeClient: Stripe | undefined;
-
-function getStripe(): Stripe {
-  if (!stripeClient) {
-    stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!);
-  }
-  return stripeClient;
-}
+import { getStripe } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   try {
