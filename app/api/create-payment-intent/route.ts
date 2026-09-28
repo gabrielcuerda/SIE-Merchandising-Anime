@@ -3,7 +3,14 @@ import Stripe from "stripe";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getCart } from "@/lib/cart";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+let stripeClient: Stripe | undefined;
+
+function getStripe(): Stripe {
+  if (!stripeClient) {
+    stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  }
+  return stripeClient;
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,6 +19,8 @@ export async function POST(req: NextRequest) {
     if (!amount || !currency || !direccion) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
+
+    const stripe = getStripe();
 
     const supabase = await createSupabaseServerClient();
     const { data: { user } } = await supabase.auth.getUser();

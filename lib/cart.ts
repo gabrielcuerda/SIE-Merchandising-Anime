@@ -2,22 +2,22 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { randomUUID } from "crypto";
 import type { Carrito, CarritoItem, Pedido } from "@/lib/supabase/types";
-import { CartItem } from "./shopify/types";
 
-async function getSessionId(): Promise<string> {
+async function getSessionId(options?: { readOnly?: boolean }): Promise<string | undefined> {
   const cookieStore = await cookies();
-  let sessionId = cookieStore.get("cart_session_id")?.value;
+  const sessionId = cookieStore.get("cart_session_id")?.value;
 
-  if (!sessionId) {
-    sessionId = randomUUID();
-    cookieStore.set("cart_session_id", sessionId, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-      sameSite: "lax",
-    });
-  }
+  if (sessionId) return sessionId;
+  if (options?.readOnly) return undefined;
 
-  return sessionId;
+  const newSessionId = randomUUID();
+  cookieStore.set("cart_session_id", newSessionId, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30,
+    sameSite: "lax",
+  });
+
+  return newSessionId;
 }
 
 export async function getCart(): Promise<Carrito | undefined> {
@@ -31,7 +31,8 @@ export async function getCart(): Promise<Carrito | undefined> {
   if (user) {
     query = query.eq("user_id", user.id);
   } else {
-    const sessionId = await getSessionId();
+    const sessionId = await getSessionId({ readOnly: true });
+    if (!sessionId) return undefined;
     query = query.eq("session_id", sessionId);
   }
 

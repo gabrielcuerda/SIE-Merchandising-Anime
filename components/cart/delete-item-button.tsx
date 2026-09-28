@@ -1,10 +1,6 @@
 "use client";
 
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { removeItem } from "components/cart/actions";
-
-import type { CartItem } from "@/lib/commerce/types";
-import { useActionState } from "react";
 import clsx from "clsx";
 import { removeItem } from "./actions";
 import { useFormStatus } from "react-dom";

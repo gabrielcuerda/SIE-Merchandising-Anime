@@ -3,7 +3,7 @@ import { Navbar } from "components/layout/navbar";
 import { WelcomeToast } from "components/welcome-toast";
 import { GeistSans } from "geist/font/sans";
 
-import { getCart } from "@/lib/commerce/placeholders";
+import { getCart } from "lib/cart";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
