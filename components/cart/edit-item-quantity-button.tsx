@@ -2,9 +2,9 @@
 
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { updateItemQuantity } from "components/cart/actions";
 
-import type { CartItem } from "@/lib/commerce/types";
+
+
 import { useActionState } from "react";
 import { updateItemQuantity } from "./actions";
 import { useFormStatus } from "react-dom";

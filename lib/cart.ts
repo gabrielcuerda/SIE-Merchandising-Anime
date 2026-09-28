@@ -2,7 +2,6 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { randomUUID } from "crypto";
 import type { Carrito, CarritoItem, Pedido } from "@/lib/supabase/types";
-import { CartItem } from "./shopify/types";
 
 async function getSessionId(): Promise<string> {
   const cookieStore = await cookies();
