@@ -6,10 +6,12 @@ export function GridTileImage({
   isInteractive = true,
   active,
   label,
+  badge,
   ...props
 }: {
   isInteractive?: boolean;
   active?: boolean;
+  badge?: React.ReactNode;
   label?: {
     title: string;
     amount: string;
@@ -22,7 +24,7 @@ export function GridTileImage({
       className={clsx(
         "group flex h-full w-full items-center justify-center overflow-hidden rounded-lg border bg-white hover:border-blue-600 dark:bg-black",
         {
-          relative: label,
+          relative: Boolean(label || badge),
           "border-2 border-blue-600": active,
           "border-neutral-200 dark:border-neutral-800": !active,
         },
@@ -37,6 +39,8 @@ export function GridTileImage({
           {...props}
         />
       ) : null}
+       {badge ? (
+        <div className="absolute left-2 top-2 z-10">{badge}</div>) : null}
       {label ? (
         <Label
           title={label.title}

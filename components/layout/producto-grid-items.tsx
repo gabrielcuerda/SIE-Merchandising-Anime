@@ -1,5 +1,6 @@
 import Grid from "components/grid";
 import { GridTileImage } from "components/grid/tile";
+import StatusBadge from "components/grid/status-badge";
 import WishlistToggle from "@/components/wishlist/wishlist-toggle";
 import type { Producto, ProductoImagen } from "@/lib/db/types";
 import Link from "next/link";
@@ -35,6 +36,7 @@ export default function ProductoGridItems({
             >
               <GridTileImage
                 alt={producto.titulo}
+                badge={<StatusBadge status={producto.status} />}
                 label={{
                   title: producto.titulo,
                   amount: producto.precio.toString(),
