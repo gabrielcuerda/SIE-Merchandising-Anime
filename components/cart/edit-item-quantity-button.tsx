@@ -2,7 +2,7 @@
 
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { updateItemQuantity } from "components/cart/actions";
+import { updateItemQuantity } from "@/components/cart/actions";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import type { CarritoItem } from "@/lib/supabase/types";

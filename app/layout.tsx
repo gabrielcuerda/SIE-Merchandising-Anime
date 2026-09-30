@@ -1,13 +1,13 @@
-import { CartProvider } from "components/cart/cart-context";
-import { Navbar } from "components/layout/navbar";
-import { WelcomeToast } from "components/welcome-toast";
+import { CartProvider } from "@/components/cart/cart-context";
+import { Navbar } from "@/components/layout/navbar";
+import { WelcomeToast } from "@/components/welcome-toast";
 import { GeistSans } from "geist/font/sans";
 
 import { getCart } from "@/lib/cart";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
-import { baseUrl } from "lib/utils";
+import { baseUrl } from "@/lib/utils";
 
 const { SITE_NAME } = process.env;
 

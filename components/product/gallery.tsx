@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
-import { GridTileImage } from "components/grid/tile";
+import { GridTileImage } from "@/components/grid/tile";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 

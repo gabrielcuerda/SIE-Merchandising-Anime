@@ -1,5 +1,5 @@
-import Grid from "components/grid";
-import ProductoGridItems from "components/layout/producto-grid-items";
+import Grid from "@/components/grid";
+import ProductoGridItems from "@/components/layout/producto-grid-items";
 import Link from "next/link";
 import { getWishlistProductos } from "@/lib/db/wishlist";
 

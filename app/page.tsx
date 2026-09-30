@@ -1,9 +1,9 @@
-import Grid from 'components/grid'
-import { ThreeItemGrid } from 'components/grid/three-items-supabase'
-import HeroCarousel from 'components/home/hero-carousel'
-import ProductSection from 'components/home/product-section'
-import Footer from 'components/layout/footer'
-import ProductoGridItems from 'components/layout/producto-grid-items'
+import Grid from '@/components/grid'
+import { ThreeItemGrid } from '@/components/grid/three-items-supabase'
+import HeroCarousel from '@/components/home/hero-carousel'
+import ProductSection from '@/components/home/product-section'
+import Footer from '@/components/layout/footer'
+import ProductoGridItems from '@/components/layout/producto-grid-items'
 import {
   getProductos,
   getProductosMasVendidos,

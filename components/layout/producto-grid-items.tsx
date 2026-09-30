@@ -1,5 +1,5 @@
-import Grid from "components/grid";
-import { GridTileImage } from "components/grid/tile";
+import Grid from "@/components/grid";
+import { GridTileImage } from "@/components/grid/tile";
 import WishlistToggle from "@/components/wishlist/wishlist-toggle";
 import type { Producto, ProductoImagen } from "@/lib/db/types";
 import Link from "next/link";

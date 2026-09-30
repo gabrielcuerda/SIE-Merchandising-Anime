@@ -4,10 +4,10 @@ import { getProductosByCategoria } from "@/lib/db/productos";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import Grid from "components/grid";
+import Grid from "@/components/grid";
 
-import ProductoGridItems from "components/layout/producto-grid-items";
-import { defaultSort, sorting } from "lib/constants";
+import ProductoGridItems from "@/components/layout/producto-grid-items";
+import { defaultSort, sorting } from "@/lib/constants";
 
 export async function generateMetadata(props: {
   params: Promise<{ collection: string }>;

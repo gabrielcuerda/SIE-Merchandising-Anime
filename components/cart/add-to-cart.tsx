@@ -2,7 +2,7 @@
 
 import { PlusIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { addItem } from "components/cart/actions";
+import { addItem } from "@/components/cart/actions";
 import { Product, ProductVariant } from "@/lib/commerce/types";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";

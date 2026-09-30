@@ -1,8 +1,8 @@
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
-import Grid from "components/grid";
+import Grid from "@/components/grid";
 import ProductoGridItems, {
   type ProductoConImagen,
-} from "components/layout/producto-grid-items";
+} from "@/components/layout/producto-grid-items";
 import Link from "next/link";
 
 type ProductSectionProps = {

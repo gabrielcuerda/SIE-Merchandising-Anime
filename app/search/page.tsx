@@ -1,7 +1,7 @@
-import Grid from "components/grid";
+import Grid from "@/components/grid";
 
-import ProductoGridItems from "components/layout/producto-grid-items";
-import { defaultSort, sorting } from "lib/constants";
+import ProductoGridItems from "@/components/layout/producto-grid-items";
+import { defaultSort, sorting } from "@/lib/constants";
 import { getProductos } from "@/lib/db/productos";
 
 export const metadata = {

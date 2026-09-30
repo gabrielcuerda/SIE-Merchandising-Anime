@@ -1,7 +1,7 @@
-import { GridTileImage } from 'components/grid/tile'
+import { GridTileImage } from '@/components/grid/tile'
 import Link from 'next/link'
 import { getProductosDestacados } from '@/lib/db/productos'
-import { getMainImage, type ProductoConImagen } from 'components/layout/producto-grid-items'
+import { getMainImage, type ProductoConImagen } from '@/components/layout/producto-grid-items'
 
 function ThreeItemGridItem({
   item,

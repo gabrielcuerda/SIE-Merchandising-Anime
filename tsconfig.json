@@ -6,7 +6,6 @@
       "dom.iterable",
       "esnext"
     ],
-    "downlevelIteration": true,
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,7 +18,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "baseUrl": ".",
+    "ignoreDeprecations": "5.0",
 
     "paths": {
       "@/*": ["./*"]

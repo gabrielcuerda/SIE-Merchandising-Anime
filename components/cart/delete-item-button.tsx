@@ -1,7 +1,7 @@
 "use client";
 
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { removeItem } from "components/cart/actions";
+import { removeItem } from "@/components/cart/actions";
 import { useActionState } from "react";
 import clsx from "clsx";
 import { useFormStatus } from "react-dom";

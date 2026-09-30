@@ -1,6 +1,6 @@
 "use server";
 
-import { TAGS } from "lib/constants";
+import { TAGS } from "@/lib/constants";
 import {
   addToCart,
   getCart,

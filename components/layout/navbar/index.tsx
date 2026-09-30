@@ -1,7 +1,7 @@
 
 import { HeartIcon, UserIcon } from "@heroicons/react/24/outline";
-import CartModal from "components/cart/modal";
-import LogoSquare from "components/logo-square";
+import CartModal from "@/components/cart/modal";
+import LogoSquare from "@/components/logo-square";
 import { getMenu } from "@/lib/commerce/placeholders";
 import { Menu } from "@/lib/commerce/types";
 import Link from "next/link";
