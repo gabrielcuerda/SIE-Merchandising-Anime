@@ -60,7 +60,7 @@ export default async function CategoryPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const params = await props.params;
-  const { sort } = searchParams as { [key: string]: string };
+  const { sort, estado, precio } = searchParams as { [key: string]: string };
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
 
@@ -70,6 +70,8 @@ export default async function CategoryPage(props: {
   const productos = await getProductosByCategoria(params.collection, {
     sortKey,
     reverse,
+    estado,
+    precio,
   });
 
   const descripcion =
@@ -111,9 +113,22 @@ export default async function CategoryPage(props: {
           </div>
         </div>
       </header>
-
-      {productos.length === 0 ? (
-        <p className="py-3 text-lg">{`No hay productos en esta categoría`}</p>
+{productos.length === 0 ? (
+        <div className="flex flex-col items-start gap-3 py-3">
+          <p className="m-0 text-lg">
+            {estado || precio
+              ? "No hay productos que coincidan con los filtros."
+              : "No hay productos en esta categoría"}
+          </p>
+          {estado || precio ? (
+            <Link
+              href={`/search/${params.collection}`}
+              className="text-sm text-blue-600 underline underline-offset-4 hover:opacity-80"
+            >
+              Limpiar filtros
+            </Link>
+          ) : null}
+        </div>
       ) : (
         <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <ProductoGridItems productos={productos} />

@@ -22,14 +22,30 @@ function orderProductos(
   }
 }
 
+const ESTADOS_VALIDOS = ["stock", "pre-venta", "a-pedido", "oferta"];
+
+function parseRangoPrecio(rango: string): { min?: number; max?: number } {
+  const [a, b] = rango.split("-");
+  const min = a ? Number(a) : NaN;
+  const max = b ? Number(b) : NaN;
+  return {
+    ...(Number.isFinite(min) && { min }),
+    ...(Number.isFinite(max) && { max }),
+  };
+}
+
 export async function getProductos({
   query,
   sortKey,
   reverse,
+  estado,
+  precio,
 }: {
   query?: string
   sortKey?: string
   reverse?: boolean
+  estado?: string
+  precio?: string
 } = {}) {
   let queryBuilder = supabase
     .from('productos')
@@ -39,6 +55,16 @@ export async function getProductos({
     queryBuilder = queryBuilder.or(
       `titulo.ilike.%${query}%,descripcion.ilike.%${query}%,tags.cs.{${query}}`
     )
+  }
+
+  if (estado && ESTADOS_VALIDOS.includes(estado)) {
+    queryBuilder = queryBuilder.eq('status', estado)
+  }
+
+  if (precio) {
+    const { min, max } = parseRangoPrecio(precio)
+    if (min !== undefined) queryBuilder = queryBuilder.gte('precio', min)
+    if (max !== undefined) queryBuilder = queryBuilder.lte('precio', max)
   }
 
   queryBuilder = orderProductos(queryBuilder, sortKey, reverse)
@@ -68,12 +94,32 @@ export async function getProducto(slug: string) {
 
 export async function getProductosByCategoria(
   categoriaSlug: string,
-  { sortKey, reverse }: { sortKey?: string; reverse?: boolean } = {}
+  {
+    sortKey,
+    reverse,
+    estado,
+    precio,
+  }: {
+    sortKey?: string
+    reverse?: boolean
+    estado?: string
+    precio?: string
+  } = {}
 ) {
   let queryBuilder = supabase
     .from('productos')
     .select('*, producto_imagenes(*), categorias!inner(id, nombre, slug)')
     .eq('categorias.slug', categoriaSlug)
+
+  if (estado && ESTADOS_VALIDOS.includes(estado)) {
+    queryBuilder = queryBuilder.eq('status', estado)
+  }
+
+  if (precio) {
+    const { min, max } = parseRangoPrecio(precio)
+    if (min !== undefined) queryBuilder = queryBuilder.gte('precio', min)
+    if (max !== undefined) queryBuilder = queryBuilder.lte('precio', max)
+  }
 
   queryBuilder = orderProductos(queryBuilder, sortKey, reverse)
 
