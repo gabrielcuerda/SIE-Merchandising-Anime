@@ -52,7 +52,9 @@ export async function getProductos({
 export async function getProducto(slug: string) {
   const { data, error } = await supabase
     .from('productos')
-    .select('*, producto_imagenes(*, orden_cat), producto_variantes(*)')
+    .select(
+      '*, producto_imagenes(*, orden_cat), producto_variantes(*), categorias(nombre, slug)'
+    )
     .eq('slug', slug)
     .single()
 
@@ -60,6 +62,7 @@ export async function getProducto(slug: string) {
   return data as Producto & {
     producto_imagenes: ProductoImagen[]
     producto_variantes: import('./types').ProductoVariante[]
+    categorias: { nombre: string; slug: string } | null
   }
 }
 

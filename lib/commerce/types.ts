@@ -1,3 +1,6 @@
+import type { Producto } from "@/lib/db/types";
+
+
 export type Money = {
   amount: string;
   currencyCode: string;
@@ -41,6 +44,9 @@ export type Product = {
   description: string;
   descriptionHtml: string;
   availableForSale: boolean;
+  status: Producto["status"];
+  stock: number;
+  categoria: { nombre: string; slug: string } | null;
   featuredImage: Image;
   images: Image[];
   options: ProductOption[];
