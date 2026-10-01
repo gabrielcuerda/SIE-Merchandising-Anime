@@ -4,6 +4,12 @@ export const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
   : "http://localhost:3000";
 
+/** Solo lo usa la capa heredada de Shopify (lib/shopify). */
+export const ensureStartsWith = (stringToCheck: string, startsWith: string) =>
+  stringToCheck.startsWith(startsWith)
+    ? stringToCheck
+    : `${startsWith}${stringToCheck}`;
+
 export const createUrl = (
   pathname: string,
   params: URLSearchParams | ReadonlyURLSearchParams,
@@ -13,8 +19,3 @@ export const createUrl = (
 
   return `${pathname}${queryString}`;
 };
-
-export function ensureStartsWith(str: string, prefix: string): string {
-  return str.startsWith(prefix) ? str : `${prefix}${str}`;
-}
-

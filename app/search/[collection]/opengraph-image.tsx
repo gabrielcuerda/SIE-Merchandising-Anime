@@ -7,7 +7,6 @@ export default async function Image({
 }: {
   params: { collection: string };
 }) {
-
   const categoria = await getCategoria(params.collection);
   const title = categoria?.nombre || params.collection;
 

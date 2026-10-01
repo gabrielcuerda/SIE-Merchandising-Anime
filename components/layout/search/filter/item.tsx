@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import type { SortFilterItem } from "@/lib/constants";
+import type { ParamFilterItem, SortFilterItem } from "@/lib/constants";
 import { createUrl } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -65,10 +65,34 @@ function SortFilterItem({ item }: { item: SortFilterItem }) {
   );
 }
 
-export function FilterItem({ item }: { item: ListItem }) {
-  return "path" in item ? (
-    <PathFilterItem item={item} />
-  ) : (
-    <SortFilterItem item={item} />
+function ParamFilterItem({ item }: { item: ParamFilterItem }) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const active = searchParams.get(item.param) === item.value;
+  const newParams = new URLSearchParams(searchParams.toString());
+
+  if (active) newParams.delete(item.param);
+  else newParams.set(item.param, item.value);
+
+  const href = createUrl(pathname, newParams);
+
+  return (
+    <li className="mt-2 flex text-sm text-black dark:text-white" key={item.title}>
+      <Link
+        href={href}
+        prefetch={false}
+        className={clsx("w-full hover:underline hover:underline-offset-4", {
+          "underline underline-offset-4": active,
+        })}
+      >
+        {item.title}
+      </Link>
+    </li>
   );
+}
+
+export function FilterItem({ item }: { item: ListItem }) {
+  if ("path" in item) return <PathFilterItem item={item} />;
+  if ("param" in item) return <ParamFilterItem item={item} />;
+  return <SortFilterItem item={item} />;
 }

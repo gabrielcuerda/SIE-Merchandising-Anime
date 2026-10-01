@@ -2,36 +2,43 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
 import { randomUUID } from "crypto";
 import type { Carrito, CarritoItem, Pedido } from "@/lib/supabase/types";
-import { CartItem } from "./shopify/types";
 
-async function getSessionId(): Promise<string> {
+async function getSessionId(options?: {
+  readOnly?: boolean;
+}): Promise<string | undefined> {
   const cookieStore = await cookies();
-  let sessionId = cookieStore.get("cart_session_id")?.value;
+  const sessionId = cookieStore.get("cart_session_id")?.value;
 
-  if (!sessionId) {
-    sessionId = randomUUID();
-    cookieStore.set("cart_session_id", sessionId, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 30,
-      sameSite: "lax",
-    });
-  }
+  if (sessionId) return sessionId;
+  if (options?.readOnly) return undefined;
 
-  return sessionId;
+  const newSessionId = randomUUID();
+  cookieStore.set("cart_session_id", newSessionId, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30,
+    sameSite: "lax",
+  });
+
+  return newSessionId;
 }
 
 export async function getCart(): Promise<Carrito | undefined> {
   const supabase = await createSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   let query = supabase
     .from("carrito_items")
-    .select(`*, productos:titulo, slug, producto_imagenes(url, alt_text), producto_variantes:titulo, precio`);
+    .select(
+      `*, productos:titulo, slug, producto_imagenes(url, alt_text), producto_variantes:titulo, precio`,
+    );
 
   if (user) {
     query = query.eq("user_id", user.id);
   } else {
-    const sessionId = await getSessionId();
+    const sessionId = await getSessionId({ readOnly: true });
+    if (!sessionId) return undefined;
     query = query.eq("session_id", sessionId);
   }
 
@@ -39,10 +46,14 @@ export async function getCart(): Promise<Carrito | undefined> {
 
   if (!items || items.length === 0) return undefined;
 
-  const totalItems = items.reduce((sum: number, item: CarritoItem) => sum + item.cantidad, 0);
+  const totalItems = items.reduce(
+    (sum: number, item: CarritoItem) => sum + item.cantidad,
+    0,
+  );
   const subtotal = items.reduce(
-    (sum: number, item: CarritoItem) => sum + (item.producto_variantes?.precio || 0) * item.cantidad,
-    0
+    (sum: number, item: CarritoItem) =>
+      sum + (item.producto_variantes?.precio || 0) * item.cantidad,
+    0,
   );
 
   return {
@@ -59,7 +70,9 @@ export async function addToCart(payload: {
   cantidad: number;
 }): Promise<Carrito> {
   const supabase = await createSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const sessionId = await getSessionId();
 
@@ -98,11 +111,17 @@ export async function addToCart(payload: {
   return getCart() as Promise<Carrito>;
 }
 
-export async function updateCartItem(itemId: string, cantidad: number): Promise<Carrito> {
+export async function updateCartItem(
+  itemId: string,
+  cantidad: number,
+): Promise<Carrito> {
   const supabase = await createSupabaseServerClient();
 
   if (cantidad <= 0) {
-    const { error } = await supabase.from("carrito_items").delete().eq("id", itemId);
+    const { error } = await supabase
+      .from("carrito_items")
+      .delete()
+      .eq("id", itemId);
     if (error) throw error;
   } else {
     const { error } = await supabase
@@ -118,7 +137,10 @@ export async function updateCartItem(itemId: string, cantidad: number): Promise<
 export async function removeCartItem(itemId: string): Promise<Carrito> {
   const supabase = await createSupabaseServerClient();
 
-  const { error } = await supabase.from("carrito_items").delete().eq("id", itemId);
+  const { error } = await supabase
+    .from("carrito_items")
+    .delete()
+    .eq("id", itemId);
   if (error) throw error;
 
   return getCart() as Promise<Carrito>;
@@ -126,7 +148,9 @@ export async function removeCartItem(itemId: string): Promise<Carrito> {
 
 export async function clearCart(): Promise<void> {
   const supabase = await createSupabaseServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (user) {
     await supabase.from("carrito_items").delete().eq("user_id", user.id);

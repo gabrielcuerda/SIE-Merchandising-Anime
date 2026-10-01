@@ -1,23 +1,22 @@
-import Grid from '@/components/grid'
-import { ThreeItemGrid } from '@/components/grid/three-items-supabase'
-import HeroCarousel from '@/components/home/hero-carousel'
-import ProductSection from '@/components/home/product-section'
-import Footer from '@/components/layout/footer'
-import ProductoGridItems from '@/components/layout/producto-grid-items'
+import Grid from "@/components/grid";
+import { ThreeItemGrid } from "@/components/grid/three-items-supabase";
+import HeroCarousel from "@/components/home/hero-carousel";
+import ProductSection from "@/components/home/product-section";
+import ProductoGridItems from "@/components/layout/producto-grid-items";
 import {
   getProductos,
   getProductosMasVendidos,
   getProductosNuevos,
   getProductosOferta,
-} from '@/lib/db/productos'
+} from "@/lib/db/productos";
 
 export const metadata = {
   description:
-    'Tienda de merchandising de anime y manga importado directamente desde Japón.',
+    "Tienda de merchandising de anime y manga importado directamente desde Japón.",
   openGraph: {
-    type: 'website',
+    type: "website",
   },
-}
+};
 
 export default async function HomePage() {
   // Las 3 consultas se lanzan a la vez (no una detrás de otra) => más rápido
@@ -26,7 +25,7 @@ export default async function HomePage() {
     getProductosMasVendidos(4),
     getProductosNuevos(4),
     getProductosOferta(),
-  ])
+  ]);
 
   return (
     <>
@@ -58,13 +57,14 @@ export default async function HomePage() {
         emptyMessage="Ahora mismo no hay ofertas activas. ¡Vuelve pronto!"
       />
 
-      <section className="mx-auto max-w-(--breakpoint-2xl) px-4 pb-8 pt-4">
-        <h2 className="mb-4 text-2xl font-bold">Todos los productos</h2>
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="page-container pb-8 pt-4">
+        <h2 className="mb-4 text-2xl font-extrabold uppercase tracking-tight">
+          Todos los productos
+        </h2>
+        <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
           <ProductoGridItems productos={productos} />
         </Grid>
       </section>
-      <Footer />
     </>
-  )
+  );
 }
