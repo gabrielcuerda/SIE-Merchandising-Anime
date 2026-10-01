@@ -3,7 +3,11 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { HERO_INTERVAL_MS, heroSlides, type HeroSlide } from "@/lib/home/hero-slides";
+import {
+  HERO_INTERVAL_MS,
+  heroSlides,
+  type HeroSlide,
+} from "@/lib/home/hero-slides";
 
 function Slide({ slide, isActive }: { slide: HeroSlide; isActive: boolean }) {
   return (
@@ -19,20 +23,20 @@ function Slide({ slide, isActive }: { slide: HeroSlide; isActive: boolean }) {
       ].join(" ")}
     >
       <span
-        className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${slide.accent}`}
+        className={`inline-flex w-fit rounded-sm px-3 py-1 text-xs font-bold uppercase tracking-wide ${slide.accent}`}
       >
         {slide.eyebrow}
       </span>
-      <h2 className="max-w-2xl text-3xl font-bold leading-tight text-slate-900 md:text-5xl">
+      <h2 className="max-w-2xl text-3xl font-extrabold leading-tight tracking-tight text-ink-950 uppercase md:text-5xl">
         {slide.title}
       </h2>
-      <p className="max-w-xl text-sm text-slate-700 md:text-base">
+      <p className="max-w-xl text-sm text-ink-800 md:text-base">
         {slide.description}
       </p>
       <Link
         href={slide.ctaHref}
         tabIndex={isActive ? undefined : -1} // el tabulador salta los enlaces ocultos
-        className="mt-2 inline-flex w-fit items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 md:text-base"
+        className="mt-2 inline-flex w-fit items-center gap-2 rounded-md bg-ink-950 px-6 py-3 text-sm font-extrabold tracking-wide text-white uppercase transition hover:bg-brand-500 focus-visible:ring-ink-950 md:text-base"
       >
         {slide.ctaLabel}
         <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
@@ -49,14 +53,19 @@ export default function HeroCarousel() {
 
   // Si el sistema operativo tiene desactivadas las animaciones, no autoplay:
   useEffect(() => {
-    setReduceMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    setReduceMotion(
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
   }, []);
 
   // Autoplay: se detiene al pasar el ratón, al enfocar con el tabulador
   // o si el usuario tiene reducida la animación.
   useEffect(() => {
     if (paused || reduceMotion) return;
-    const id = setInterval(() => setActive((i) => (i + 1) % total), HERO_INTERVAL_MS);
+    const id = setInterval(
+      () => setActive((i) => (i + 1) % total),
+      HERO_INTERVAL_MS,
+    );
     return () => clearInterval(id); // limpieza: evita fugas de temporizadores
   }, [paused, reduceMotion, total]);
 
@@ -72,7 +81,7 @@ export default function HeroCarousel() {
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
     >
-      <div className="relative overflow-hidden rounded-2xl border border-neutral-200 bg-white">
+      <div className="relative overflow-hidden rounded-card border border-ink-200 bg-white">
         <div className="relative min-h-[340px] sm:min-h-[400px] md:min-h-[460px]">
           {heroSlides.map((slide, i) => (
             <Slide key={slide.id} slide={slide} isActive={i === active} />
@@ -84,7 +93,7 @@ export default function HeroCarousel() {
           type="button"
           onClick={() => go(active - 1)}
           aria-label="Diapositiva anterior"
-          className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full border border-neutral-200 bg-white/90 p-2 text-slate-800 shadow-sm transition hover:bg-white focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-900"
+          className="absolute left-3 top-1/2 -translate-y-1/2 rounded-md border border-ink-200 bg-white/90 p-2 text-ink-950 shadow-card transition hover:bg-brand-500 hover:text-white"
         >
           <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
         </button>
@@ -92,7 +101,7 @@ export default function HeroCarousel() {
           type="button"
           onClick={() => go(active + 1)}
           aria-label="Diapositiva siguiente"
-          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full border border-neutral-200 bg-white/90 p-2 text-slate-800 shadow-sm transition hover:bg-white focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-900"
+          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md border border-ink-200 bg-white/90 p-2 text-ink-950 shadow-card transition hover:bg-brand-500 hover:text-white"
         >
           <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
         </button>
@@ -108,7 +117,9 @@ export default function HeroCarousel() {
               aria-current={i === active}
               className={[
                 "h-2.5 rounded-full transition-all motion-reduce:transition-none",
-                i === active ? "w-7 bg-slate-900" : "w-2.5 bg-slate-400 hover:bg-slate-600",
+                i === active
+                  ? "w-7 bg-brand-500"
+                  : "w-2.5 bg-ink-400 hover:bg-ink-700",
               ].join(" ")}
             />
           ))}

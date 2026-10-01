@@ -3,14 +3,95 @@
 @plugin "@tailwindcss/container-queries";
 @plugin "@tailwindcss/typography";
 
-
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ==========================================================================
+   Tema visual
+   Paleta y tipografía inspiradas en animefan.es: naranja de marca (#ee7639),
+   rojo de aviso (#d63031), negro puro para bloques de peso y fondos blancos.
+   ========================================================================== */
 @theme {
-  /* Tira de banners con desplazamiento continuo.
-     La lista sale duplicada en el DOM, por eso el viaje es -50%:
-     al llegar a la mitad ya hay otra copia entrando y el bucle no tiene costura. */
-  --animate-marquee: marquee 45s linear infinite;
+  --font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-display:
+    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+
+  /* Naranja de marca */
+  --color-brand-50: #fff6f0;
+  --color-brand-100: #ffe9d9;
+  --color-brand-200: #ffcfaf;
+  --color-brand-300: #ffad78;
+  --color-brand-400: #ff8a45;
+  --color-brand-500: #ee7639;
+  --color-brand-600: #d95d22;
+  --color-brand-700: #b34918;
+  --color-brand-800: #8c3a17;
+  --color-brand-900: #733015;
+  --color-brand-950: #3d1708;
+
+  /* Rojo de avisos: stock agotado, errores */
+  --color-alert-50: #fef3f2;
+  --color-alert-100: #fee4e2;
+  --color-alert-200: #fecdcb;
+  --color-alert-300: #fda9a5;
+  --color-alert-400: #f97370;
+  --color-alert-500: #d63031;
+  --color-alert-600: #b02526;
+  --color-alert-700: #8a1d1e;
+  --color-alert-800: #691819;
+  --color-alert-900: #561617;
+
+  /* Escala de tinta (grises neutros ligeramente fríos) */
+  --color-ink-50: #f6f6f7;
+  --color-ink-100: #e7e7ea;
+  --color-ink-200: #d1d1d6;
+  --color-ink-300: #b0b0b8;
+  --color-ink-400: #86868f;
+  --color-ink-500: #6b6b74;
+  --color-ink-600: #55555d;
+  --color-ink-700: #45454c;
+  --color-ink-800: #2b2b31;
+  --color-ink-900: #131317;
+  --color-ink-950: #08080a;
+
+  --radius-card: 0.75rem;
+
+  --shadow-card:
+    0 1px 2px rgb(0 0 0 / 0.05), 0 10px 30px -14px rgb(0 0 0 / 0.18);
+  --shadow-float: 0 12px 32px -12px rgb(0 0 0 / 0.35);
+
+  --animate-fadeIn: fade-in 0.4s ease-out both;
+  --animate-blink: blink 1s steps(2, start) infinite;
+  --animate-carousel: carousel 30s linear infinite;
+  --animate-marquee: marquee 34s linear infinite;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes carousel {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
 
   @keyframes marquee {
     from {
@@ -32,19 +113,59 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--color-ink-200);
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white font-sans text-ink-900 antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-extrabold tracking-tight text-ink-950;
+  }
+
+  @supports (font: -apple-system-body) and (-webkit-appearance: none) {
+    img[loading="lazy"] {
+      clip-path: inset(0.6px);
+    }
   }
 }
 
+@layer components {
+  /* Contenedor de página: mismo ancho en toda la tienda */
+  .page-container {
+    @apply mx-auto w-full max-w-(--breakpoint-2xl) px-4 lg:px-6;
+  }
 
-@supports (font: -apple-system-body) and (-webkit-appearance: none) {
-  img[loading="lazy"] {
-    clip-path: inset(0.6px);
+  /* Etiqueta de sección al estilo animefan: texto en mayúsculas con filete naranja */
+  .section-eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-brand-600;
   }
 }
 
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Foco visible coherente con la paleta de marca */
 a,
 input,
-button {
-  @apply focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-neutral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 dark:focus-visible:ring-neutral-600 dark:focus-visible:ring-offset-neutral-900;
+button,
+select,
+textarea,
+summary {
+  @apply focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-hidden focus-visible:ring-2;
 }
