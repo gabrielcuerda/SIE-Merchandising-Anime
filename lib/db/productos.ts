@@ -22,14 +22,30 @@ function orderProductos(
   }
 }
 
+const ESTADOS_VALIDOS = ["stock", "pre-venta", "a-pedido", "oferta"];
+
+function parseRangoPrecio(rango: string): { min?: number; max?: number } {
+  const [a, b] = rango.split("-");
+  const min = a ? Number(a) : NaN;
+  const max = b ? Number(b) : NaN;
+  return {
+    ...(Number.isFinite(min) && { min }),
+    ...(Number.isFinite(max) && { max }),
+  };
+}
+
 export async function getProductos({
   query,
   sortKey,
   reverse,
+  estado,
+  precio,
 }: {
-  query?: string;
-  sortKey?: string;
-  reverse?: boolean;
+  query?: string
+  sortKey?: string
+  reverse?: boolean
+  estado?: string
+  precio?: string
 } = {}) {
   let queryBuilder = supabase
     .from("productos")
@@ -41,7 +57,17 @@ export async function getProductos({
     );
   }
 
-  queryBuilder = orderProductos(queryBuilder, sortKey, reverse);
+  if (estado && ESTADOS_VALIDOS.includes(estado)) {
+    queryBuilder = queryBuilder.eq('status', estado)
+  }
+
+  if (precio) {
+    const { min, max } = parseRangoPrecio(precio)
+    if (min !== undefined) queryBuilder = queryBuilder.gte('precio', min)
+    if (max !== undefined) queryBuilder = queryBuilder.lte('precio', max)
+  }
+
+  queryBuilder = orderProductos(queryBuilder, sortKey, reverse)
 
   const { data, error } = await queryBuilder.limit(100);
 
@@ -51,28 +77,51 @@ export async function getProductos({
 
 export async function getProducto(slug: string) {
   const { data, error } = await supabase
-    .from("productos")
-    .select("*, producto_imagenes(*, orden_cat), producto_variantes(*)")
-    .eq("slug", slug)
-    .single();
+    .from('productos')
+    .select(
+      '*, producto_imagenes(*, orden_cat), producto_variantes(*), categorias(nombre, slug)'
+    )
+    .eq('slug', slug)
+    .single()
 
   if (error) return null;
   return data as Producto & {
-    producto_imagenes: ProductoImagen[];
-    producto_variantes: import("./types").ProductoVariante[];
-  };
+    producto_imagenes: ProductoImagen[]
+    producto_variantes: import('./types').ProductoVariante[]
+    categorias: { nombre: string; slug: string } | null
+  }
 }
 
 export async function getProductosByCategoria(
   categoriaSlug: string,
-  { sortKey, reverse }: { sortKey?: string; reverse?: boolean } = {},
+  {
+    sortKey,
+    reverse,
+    estado,
+    precio,
+  }: {
+    sortKey?: string
+    reverse?: boolean
+    estado?: string
+    precio?: string
+  } = {}
 ) {
   let queryBuilder = supabase
     .from("productos")
     .select("*, producto_imagenes(*), categorias!inner(id, nombre, slug)")
     .eq("categorias.slug", categoriaSlug);
 
-  queryBuilder = orderProductos(queryBuilder, sortKey, reverse);
+  if (estado && ESTADOS_VALIDOS.includes(estado)) {
+    queryBuilder = queryBuilder.eq('status', estado)
+  }
+
+  if (precio) {
+    const { min, max } = parseRangoPrecio(precio)
+    if (min !== undefined) queryBuilder = queryBuilder.gte('precio', min)
+    if (max !== undefined) queryBuilder = queryBuilder.lte('precio', max)
+  }
+
+  queryBuilder = orderProductos(queryBuilder, sortKey, reverse)
 
   const { data, error } = await queryBuilder;
 

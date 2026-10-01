@@ -4,11 +4,49 @@ import { ProductDescription } from "components/product/product-description";
 import { HIDDEN_PRODUCT_TAG } from "lib/constants";
 
 import { getProduct, getProductRecommendations } from "@/lib/commerce/products";
-import type { Image } from "@/lib/commerce/types";
+import type { Image, Product } from "@/lib/commerce/types";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+
+function Breadcrumb({ product }: { product: Product }) {
+  const migas = [
+    { nombre: "Inicio", href: "/" },
+    { nombre: "Categorías", href: "/search" },
+  ];
+
+  if (product.categoria) {
+    migas.push({
+      nombre: product.categoria.nombre,
+      href: `/search/${product.categoria.slug}`,
+    });
+  }
+
+  return (
+    <nav aria-label="Breadcrumb" className="mb-4">
+      <ol className="flex flex-wrap items-center gap-1.5 text-sm text-neutral-500 dark:text-neutral-400">
+        {migas.map((miga) => (
+          <li key={miga.href} className="flex items-center gap-1.5">
+            <Link
+              href={miga.href}
+              className="transition hover:text-blue-600 hover:underline"
+            >
+              {miga.nombre}
+            </Link>
+            <span aria-hidden="true">›</span>
+          </li>
+        ))}
+        <li
+          aria-current="page"
+          className="min-w-0 truncate font-medium text-neutral-900 dark:text-neutral-100"
+        >
+          {product.title}
+        </li>
+      </ol>
+    </nav>
+  );
+}
 
 export async function generateMetadata(props: {
   params: Promise<{ handle: string }>;
@@ -80,8 +118,9 @@ export default async function ProductPage(props: {
           __html: JSON.stringify(productJsonLd),
         }}
       />
-      <div className="page-container">
-        <div className="flex flex-col rounded-card border border-ink-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8">
+      <div className="mx-auto max-w-(--breakpoint-2xl) px-4">
+        <Breadcrumb product={product} />
+        <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
           <div className="h-full w-full basis-full lg:basis-4/6">
             <Suspense
               fallback={

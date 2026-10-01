@@ -48,11 +48,9 @@ function updateCartItem(
   return { ...item, cantidad: newCantidad };
 }
 
-function createOrUpdateCartItem(
-  existingItem: CarritoItem | undefined,
-  payload: any,
-): CarritoItem {
-  const cantidad = existingItem ? existingItem.cantidad + 1 : 1;
+function createOrUpdateCartItem(existingItem: CarritoItem | undefined, payload: any): CarritoItem {
+  const unidades = payload.cantidad || 1;
+  const cantidad = existingItem ? existingItem.cantidad + unidades : unidades;
   return {
     id: existingItem?.id || "",
     user_id: null,

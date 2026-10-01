@@ -40,6 +40,25 @@ export const sorting: SortFilterItem[] = [
   },
 ];
 
+export type ParamFilterItem = {
+  title: string;
+  param: string;
+  value: string;
+};
+
+export const estados: ParamFilterItem[] = [
+  { title: "En stock", param: "estado", value: "stock" },
+  { title: "Pre-venta", param: "estado", value: "pre-venta" },
+  { title: "Bajo pedido", param: "estado", value: "a-pedido" },
+  { title: "Oferta", param: "estado", value: "oferta" },
+];
+
+export const precios: ParamFilterItem[] = [
+  { title: "Menos de 150 €", param: "precio", value: "0-150" },
+  { title: "150 € – 200 €", param: "precio", value: "150-200" },
+  { title: "Más de 200 €", param: "precio", value: "200-" },
+];
+
 export const TAGS = {
   collections: "collections",
   products: "products",

@@ -2,9 +2,12 @@ import Grid from "components/grid";
 
 import ProductoGridItems from "components/layout/producto-grid-items";
 import { defaultSort, sorting } from "lib/constants";
+import { createUrl } from "lib/utils";
 import { getProductos } from "@/lib/db/productos";
+import Link from "next/link";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Search",
   description: "Busca productos en la tienda.",
 };
@@ -13,7 +16,10 @@ export default async function SearchPage(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
-  const { sort, q: searchValue } = searchParams as { [key: string]: string };
+  const { sort, q: searchValue, estado, precio } = searchParams as Record<
+    string,
+    string
+  >;
   const { sortKey, reverse } =
     sorting.find((item) => item.slug === sort) || defaultSort;
 
@@ -34,8 +40,8 @@ export default async function SearchPage(props: {
           <span className="font-bold">&quot;{searchValue}&quot;</span>
         </p>
       ) : null}
-      {productos.length > 0 ? (
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      {total > 0 ? (
+        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <ProductoGridItems productos={productos} />
         </Grid>
       ) : null}
