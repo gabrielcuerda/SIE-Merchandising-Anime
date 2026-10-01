@@ -36,24 +36,11 @@ export function AddToCart({ product }: { product: Product }) {
   const selectedVariantId = variant?.id || defaultVariantId;
   const finalVariant = variants.find((v) => v.id === selectedVariantId)!;
 
-  const addItemAction = formAction.bind(null, {
-    productoId: product.id,
-    varianteId: finalVariant.id,
-    cantidad: 1,
-  });
-
   return (
-    <form action={async () => {
-      addCartItem({
-        productoId: product.id,
-        varianteId: finalVariant.id,
-        titulo: product.title,
-        imagen: product.featuredImage?.url || null,
-        varianteTitulo: finalVariant.title,
-        precio: Number(finalVariant.price.amount),
-      });
-      addItemAction();
-    }}>
+    <form action={formAction}>
+      <input type="hidden" name="productoId" value={product.id} />
+      <input type="hidden" name="varianteId" value={finalVariant.id} />
+      <input type="hidden" name="cantidad" value={1} />
       <SubmitButton availableForSale={availableForSale} selectedVariantId={selectedVariantId} />
       <p aria-live="polite" className="sr-only" role="status">{message}</p>
     </form>

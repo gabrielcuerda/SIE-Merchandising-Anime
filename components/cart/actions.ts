@@ -4,14 +4,23 @@ import { TAGS } from "@/lib/constants";
 import {
   addToCart,
   getCart,
-  removeFromCart,
-  updateCart,
-} from "@/lib/commerce/placeholders";
+  removeCartItem,
+  updateCartItem,
+  clearCart,
+} from "@/lib/cart";
 import { revalidateTag } from "next/cache";
 
-export async function addItem(prevState: any, payload: { productoId: string; varianteId: string; cantidad: number }) {
+export async function addItem(prevState: any, formData: FormData) {
   try {
-    await addToCart([{ merchandiseId: payload.varianteId, quantity: payload.cantidad }]);
+    const productoId = formData.get("productoId") as string;
+    const varianteId = formData.get("varianteId") as string;
+    const cantidad = Number(formData.get("cantidad")) || 1;
+
+    await addToCart({
+      productoId,
+      varianteId,
+      cantidad,
+    });
     revalidateTag(TAGS.cart, "seconds");
   } catch (e) {
     console.error(e);
@@ -21,22 +30,7 @@ export async function addItem(prevState: any, payload: { productoId: string; var
 
 export async function removeItem(prevState: any, itemId: string) {
   try {
-    const cart = await getCart();
-
-    if (!cart) {
-      return "Error fetching cart";
-    }
-
-    const lineItem = cart.lines.find(
-      (line) => line.merchandise.id === itemId,
-    );
-
-    if (lineItem && lineItem.id) {
-      await removeFromCart([lineItem.id]);
-    } else {
-      return "Item not found in cart";
-    }
-
+    await removeCartItem(itemId);
     revalidateTag(TAGS.cart, "seconds");
   } catch (e) {
     console.error(e);
@@ -47,39 +41,14 @@ export async function removeItem(prevState: any, itemId: string) {
 export async function updateItemQuantity(
   prevState: any,
   payload: {
-    merchandiseId: string;
+    itemId: string;
     quantity: number;
   },
 ) {
-  const { merchandiseId, quantity } = payload;
+  const { itemId, quantity } = payload;
 
   try {
-    const cart = await getCart();
-
-    if (!cart) {
-      return "Error fetching cart";
-    }
-
-    const lineItem = cart.lines.find(
-      (line) => line.merchandise.id === merchandiseId,
-    );
-
-    if (lineItem && lineItem.id) {
-      if (quantity === 0) {
-        await removeFromCart([lineItem.id]);
-      } else {
-        await updateCart([
-          {
-            id: lineItem.id,
-            merchandiseId,
-            quantity,
-          },
-        ]);
-      }
-    } else if (quantity > 0) {
-      await addToCart([{ merchandiseId, quantity }]);
-    }
-
+    await updateCartItem(itemId, quantity);
     revalidateTag(TAGS.cart, "seconds");
   } catch (e) {
     console.error(e);
@@ -89,6 +58,7 @@ export async function updateItemQuantity(
 
 export async function clearCartAction() {
   try {
+    await clearCart();
     revalidateTag(TAGS.cart, "seconds");
   } catch (e) {
     console.error(e);

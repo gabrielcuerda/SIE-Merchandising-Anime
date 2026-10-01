@@ -15,7 +15,7 @@ export function EditItemQuantityButton({ item, type, optimisticUpdate }: { item:
     <form action={async () => {
       const newCantidad = type === "plus" ? item.cantidad + 1 : item.cantidad - 1;
       optimisticUpdate(itemId, type);
-      await updateItemQuantity(null, { merchandiseId: itemId, quantity: newCantidad });
+      await updateItemQuantity(null, { itemId, quantity: newCantidad });
     }}>
       <button
         type="submit"
