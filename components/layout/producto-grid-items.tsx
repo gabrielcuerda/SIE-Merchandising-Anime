@@ -3,7 +3,7 @@ import { GridTileImage } from "components/grid/tile";
 import StatusBadge from "components/grid/status-badge";
 import WishlistToggle from "@/components/wishlist/wishlist-toggle";
 import type { Producto, ProductoImagen } from "@/lib/db/types";
-import ProductStatusBadge from "@/components/ui/product-status-badge";
+import { ProductStatusBadge } from "@/components/ui/product-status-badge";
 import Link from "next/link";
 
 export type ProductoConImagen = Producto & {
