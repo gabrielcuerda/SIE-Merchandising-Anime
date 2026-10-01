@@ -27,7 +27,19 @@ export default async function SearchPage(props: {
     sortKey,
     reverse,
     query: searchValue,
+     estado,
+    precio,
   });
+
+  const hayFiltros = Boolean(searchValue || estado || precio);
+  const total = productos.length;
+  const resultsText = total === 1 ? "resultado" : "resultados";
+
+  const limpiarHref = createUrl(
+    "/search",
+    new URLSearchParams({ ...(searchValue && { q: searchValue }) }),
+  );
+  
   const resultsText = productos.length > 1 ? "resultados" : "resultado";
 
   return (
