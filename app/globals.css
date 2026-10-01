@@ -6,6 +6,22 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  /* Tira de banners con desplazamiento continuo.
+     La lista sale duplicada en el DOM, por eso el viaje es -50%:
+     al llegar a la mitad ya hay otra copia entrando y el bucle no tiene costura. */
+  --animate-marquee: marquee 45s linear infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
 @layer base {
   :root {
     color-scheme: light;

@@ -1,6 +1,7 @@
 import Grid from 'components/grid'
 import { ThreeItemGrid } from 'components/grid/three-items-supabase'
 import HeroCarousel from 'components/home/hero-carousel'
+import PromoCarousel from 'components/home/promo-carousel'
 import ProductSection from 'components/home/product-section'
 import Footer from 'components/layout/footer'
 import ProductoGridItems from 'components/layout/producto-grid-items'
@@ -31,6 +32,7 @@ export default async function HomePage() {
   return (
     <>
       <HeroCarousel />
+      <PromoCarousel />
       <ThreeItemGrid />
 
       <ProductSection
