@@ -162,6 +162,7 @@ export function useCart() {
     updateOptimisticCart({ type: "ADD_ITEM", payload });
   };
 
+  return useMemo(() => ({ cart: optimisticCart, updateCartItem, addCartItem }), [optimisticCart]);
   return useMemo(
     () => ({ cart: optimisticCart, updateCartItem, addCartItem }),
     [optimisticCart],

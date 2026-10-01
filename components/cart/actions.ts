@@ -3,24 +3,18 @@
 import { TAGS } from "@/lib/constants";
 import {
   addToCart,
-  getCart,
+  clearCart,
   removeCartItem,
   updateCartItem,
-  clearCart,
 } from "@/lib/cart";
 import { revalidateTag } from "next/cache";
 
-export async function addItem(prevState: any, formData: FormData) {
+export async function addItem(
+  prevState: any,
+  payload: { productoId: string; varianteId: string; cantidad: number },
+) {
   try {
-    const productoId = formData.get("productoId") as string;
-    const varianteId = formData.get("varianteId") as string;
-    const cantidad = Number(formData.get("cantidad")) || 1;
-
-    await addToCart({
-      productoId,
-      varianteId,
-      cantidad,
-    });
+    await addToCart(payload);
     revalidateTag(TAGS.cart, "seconds");
   } catch (e) {
     console.error(e);
@@ -40,15 +34,10 @@ export async function removeItem(prevState: any, itemId: string) {
 
 export async function updateItemQuantity(
   prevState: any,
-  payload: {
-    itemId: string;
-    quantity: number;
-  },
+  payload: { itemId: string; cantidad: number },
 ) {
-  const { itemId, quantity } = payload;
-
   try {
-    await updateCartItem(itemId, quantity);
+    await updateCartItem(payload.itemId, payload.cantidad);
     revalidateTag(TAGS.cart, "seconds");
   } catch (e) {
     console.error(e);

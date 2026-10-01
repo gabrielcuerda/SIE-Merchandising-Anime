@@ -33,10 +33,7 @@ function SubmitButton({
     );
 
   return (
-    <button
-      aria-label="Añadir al carrito"
-      className={clsx(buttonClasses, "hover:opacity-90")}
-    >
+    <button aria-label="Add to cart" className={clsx(buttonClasses, "hover:opacity-90")}>
       <div className="absolute left-0 ml-4">
         <PlusIcon className="h-5 w-5" />
       </div>
@@ -108,13 +105,32 @@ export function AddToCart({ product }: { product: Product }) {
   const selectedVariantId = variant?.id || defaultVariantId;
   const finalVariant = variants.find((v) => v.id === selectedVariantId)!;
 
+  if (!finalVariant) return null;
+
   const actualizarCantidad = (valor: number) => {
     if (Number.isNaN(valor)) return;
     setCantidad(Math.min(99, Math.max(1, valor)));
   };
 
   return (
-    <form action={formAction}>
+    <form
+      action={async () => {
+        addCartItem({
+          productoId: product.id,
+          varianteId: finalVariant.id,
+          titulo: product.title,
+          imagen: product.featuredImage?.url || null,
+          varianteTitulo: finalVariant.title,
+          precio: Number(finalVariant.price.amount),
+          cantidad,
+        });
+        formAction({
+          productoId: product.id,
+          varianteId: finalVariant.id,
+          cantidad,
+        });
+      }}
+    >
       <input type="hidden" name="productoId" value={product.id} />
       <input type="hidden" name="varianteId" value={finalVariant.id} />
       <input type="hidden" name="cantidad" value={cantidad} />
