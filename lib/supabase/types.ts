@@ -28,7 +28,7 @@ export type Carrito = {
 export type Pedido = {
   id: string;
   usuario_id: string | null;
-  status: "pending" | "paid" | "shipped" | "delivered" | "cancelled";
+  status: 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled';
   subtotal: number;
   coste_envio: number;
   total: number;

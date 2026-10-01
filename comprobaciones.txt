@@ -1,5 +1,0 @@
-[x] P2 — UI Core: Rediseñar navbar estilo animefan.es (logo, menú categorías, iconos, menú hamburguesa móvil)
-[x] P2 — UI Core: Rediseñar footer con enlaces, info envío, redes sociales
-[x] P2 — UI Core: Modificar app/layout.tsx con estructura correcta
-[x] P2 — UI Core: Definir tema visual (colores, tipografía, variables CSS) y actualizar globals.css
-[x] P2 — UI Core: Crear componentes reutilizables (Badge, Card, Separator, AlertBanner)

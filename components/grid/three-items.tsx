@@ -36,7 +36,7 @@ function ThreeItemGridItem({
           priority={priority}
           alt={item.title}
           label={{
-            position: "bottom",
+            position: size === "full" ? "center" : "bottom",
             title: item.title as string,
             amount: item.priceRange.maxVariantPrice.amount,
             currencyCode: item.priceRange.maxVariantPrice.currencyCode,

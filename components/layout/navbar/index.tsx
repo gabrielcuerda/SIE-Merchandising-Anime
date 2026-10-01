@@ -1,75 +1,82 @@
+
 import { HeartIcon, UserIcon } from "@heroicons/react/24/outline";
 import CartModal from "components/cart/modal";
-import { LogoBadge, LogoWordmark } from "components/logo";
-import { getNavCategorias } from "@/lib/navigation";
+import LogoSquare from "components/logo-square";
+import { getMenu } from "@/lib/commerce/placeholders";
+import { Menu } from "@/lib/commerce/types";
 import Link from "next/link";
 import { Suspense } from "react";
-import AnnouncementBar from "./announcement-bar";
-import CategoryNav from "./category-nav";
 import MobileMenu from "./mobile-menu";
-import MobileSearch from "./mobile-search";
 import Search, { SearchSkeleton } from "./search";
 
+const { SITE_NAME } = process.env;
+
 export async function Navbar() {
-  const categorias = await getNavCategorias();
+  const menu = await getMenu("next-js-frontend-header-menu");
 
   return (
-    <header className="sticky top-0 z-40">
-      <AnnouncementBar />
-
-      <div className="relative border-b border-ink-200 bg-white">
-        <div className="page-container flex h-16 items-center gap-2 lg:h-20 lg:gap-6">
-          <Suspense fallback={null}>
-            <MobileMenu categorias={categorias} />
-          </Suspense>
-
+    <nav className="relative flex items-center justify-between p-4 lg:px-6">
+      <div className="block flex-none md:hidden">
+        <Suspense fallback={null}>
+          <MobileMenu menu={menu} />
+        </Suspense>
+      </div>
+      <div className="flex w-full items-center">
+        <div className="flex w-full md:w-1/3">
           <Link
             href="/"
             prefetch={true}
-            className="flex items-center gap-2.5 lg:mr-2"
-            aria-label="SIE Merchandising, ir al inicio"
+            className="mr-2 flex w-full items-center justify-center md:w-auto lg:mr-6"
           >
-            <LogoBadge size="lg" />
-            <LogoWordmark className="hidden sm:flex" />
-          </Link>
-
-          <div className="hidden flex-1 lg:flex lg:justify-center">
-            <div className="w-full max-w-xl">
-              <Suspense fallback={<SearchSkeleton />}>
-                <Search />
-              </Suspense>
+            <LogoSquare />
+            <div className="ml-2 flex-none text-sm font-medium uppercase md:hidden lg:block">
+              {SITE_NAME}
             </div>
-          </div>
+          </Link>
+          {menu.length ? (
+            <ul className="hidden gap-6 text-sm md:flex md:items-center">
+              {menu.map((item: Menu) => (
+                <li key={item.title}>
+                  <Link
+                    href={item.path}
+                    prefetch={true}
+                    className="text-neutral-500 underline-offset-4 hover:text-black hover:underline dark:text-neutral-400 dark:hover:text-neutral-300"
+                  >
+                    {item.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+        <div className="hidden justify-center md:flex md:w-1/3">
+          <Suspense fallback={<SearchSkeleton />}>
+            <Search />
+          </Suspense>
+        </div>
 
-          <div className="ml-auto flex items-center gap-1.5 lg:ml-0 lg:gap-2">
-            <MobileSearch />
-
-            <Link
-              href="/account"
-              prefetch={true}
-              aria-label="Mi cuenta"
-              title="Mi cuenta"
-              className="flex h-10 w-10 items-center justify-center rounded-md text-ink-800 transition hover:bg-ink-50 hover:text-brand-600"
-            >
-              <UserIcon className="h-5 w-5" aria-hidden="true" />
-            </Link>
-
-            <Link
-              href="/wishlist"
-              prefetch={true}
-              aria-label="Lista de deseos"
-              title="Lista de deseos"
-              className="hidden h-10 w-10 items-center justify-center rounded-md text-ink-800 transition hover:bg-ink-50 hover:text-brand-600 sm:flex"
-            >
-              <HeartIcon className="h-5 w-5" aria-hidden="true" />
-            </Link>
-
-            <CartModal />
-          </div>
+        <div className="flex items-center justify-end md:w-1/3">
+          <Link
+            href="/account"
+            prefetch={true}
+            aria-label="Mi cuenta"
+            title="Mi cuenta"
+            className="mr-3 rounded-md p-2 text-neutral-500 transition hover:text-black dark:text-neutral-400 dark:hover:text-white"
+          >
+            <UserIcon className="h-5 w-5" aria-hidden="true" />
+          </Link>
+          <Link
+            href="/wishlist"
+            prefetch={true}
+            aria-label="Lista de deseos"
+            title="Lista de deseos"
+            className="mr-2 rounded-md p-2 text-neutral-500 transition hover:text-rose-500 dark:text-neutral-400"
+          >
+            <HeartIcon className="h-5 w-5" aria-hidden="true" />
+          </Link>
+          <CartModal />
         </div>
       </div>
-
-      <CategoryNav categorias={categorias} />
-    </header>
+    </nav>
   );
 }

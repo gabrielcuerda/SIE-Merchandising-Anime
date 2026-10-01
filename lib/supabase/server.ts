@@ -25,3 +25,4 @@ export async function createClient() {
 export async function createSupabaseServerClient() {
   return createClient();
 }
+

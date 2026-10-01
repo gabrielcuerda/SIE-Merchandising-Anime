@@ -1,12 +1,12 @@
 export type HeroSlide = {
   id: string;
-  eyebrow: string; // texto pequeño superior (badge)
-  title: string; // titular grande
-  description: string; // párrafo
-  ctaLabel: string; // texto del botón
-  ctaHref: string; // a dónde lleva el botón
-  background: string; // clases de Tailwind del degradado
-  accent: string; // clases del badge
+  eyebrow: string;      // texto pequeño superior (badge)
+  title: string;        // titular grande
+  description: string;  // párrafo
+  ctaLabel: string;     // texto del botón
+  ctaHref: string;      // a dónde lleva el botón
+  background: string;   // clases de Tailwind del degradado
+  accent: string;       // clases del badge
 };
 
 /** Cada cuánto cambia la diapositiva sola (ms) */
@@ -21,8 +21,8 @@ export const heroSlides: HeroSlide[] = [
       "Figuras y coleccionables de tus franquicias favoritas, seleccionados uno a uno y enviados desde Japón.",
     ctaLabel: "Ver catálogo",
     ctaHref: "/search",
-    background: "from-brand-200 via-brand-100 to-brand-50",
-    accent: "bg-brand-500 text-white",
+    background: "from-sky-200 via-sky-100 to-indigo-200",
+    accent: "bg-sky-700 text-white",
   },
   {
     id: "novedades",
@@ -32,8 +32,8 @@ export const heroSlides: HeroSlide[] = [
       "Los últimos lanzamientos de Dragon Ball, One Piece, Attack on Titan, Naruto y muchas más franquicias.",
     ctaLabel: "Ver novedades",
     ctaHref: "/search?sort=latest-desc",
-    background: "from-brand-100 via-brand-50 to-orange-100",
-    accent: "bg-ink-950 text-white",
+    background: "from-violet-200 via-fuchsia-100 to-sky-100",
+    accent: "bg-violet-700 text-white",
   },
   {
     id: "franquicias",
@@ -43,7 +43,7 @@ export const heroSlides: HeroSlide[] = [
       "Dragon Ball, One Piece, Attack on Titan, Naruto, Jujutsu Kaisen, Demon Slayer y Chainsaw Man, organizados por franquicia.",
     ctaLabel: "Explorar Dragon Ball",
     ctaHref: "/search/dragon-ball",
-    background: "from-brand-300 via-brand-100 to-brand-50",
-    accent: "bg-brand-600 text-white",
+    background: "from-emerald-200 via-teal-100 to-sky-100",
+    accent: "bg-emerald-700 text-white",
   },
 ];

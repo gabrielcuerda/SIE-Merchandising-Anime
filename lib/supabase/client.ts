@@ -1,6 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
-import { requireSupabaseEnv } from "@/lib/supabase/env";
+import { createClient } from '@supabase/supabase-js'
+import { requireSupabaseEnv } from '@/lib/supabase/env'
 
-const [supabaseUrl, supabaseKey] = requireSupabaseEnv();
+const [supabaseUrl, supabaseKey] = requireSupabaseEnv()
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseKey)

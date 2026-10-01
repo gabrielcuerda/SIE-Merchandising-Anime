@@ -3,19 +3,32 @@
 import { useEffect } from "react";
 import { toast } from "sonner";
 
-export default function WelcomeToast() {
+export function WelcomeToast() {
   useEffect(() => {
-    // En pantallas pequeñas el toast molesta, así que no se muestra
+    // ignore if screen height is too small
     if (window.innerHeight < 650) return;
     if (!document.cookie.includes("welcome-toast=2")) {
-      toast("¡Bienvenido a SIE Merchandising! 🛍️", {
+      toast("🛍️ Welcome to Next.js Commerce!", {
         id: "welcome-toast",
         duration: Infinity,
         onDismiss: () => {
           document.cookie = "welcome-toast=2; max-age=31536000; path=/";
         },
-        description:
-          "Merchandising de anime y manga importado de Japón, con envío rastreable y devolución en 30 días.",
+        description: (
+          <>
+
+            This is a high-performance, SSR storefront powered by Next.js,
+            Supabase, and Vercel.{" "}
+            <a
+              href="https://vercel.com/templates/next.js/nextjs-commerce"
+              className="text-blue-600 hover:underline"
+              target="_blank"
+            >
+              Deploy your own
+            </a>
+            .
+          </>
+        ),
       });
     }
   }, []);

@@ -27,12 +27,8 @@ export async function POST(req: NextRequest) {
       const direccion = JSON.parse(paymentIntent.metadata.direccion || "{}");
 
       // Get cart items
-      let cartQuery = supabase
-        .from("carrito_items")
-        .select(
-          `*, productos:titulo, slug, producto_imagenes(url, alt_text), producto_variantes:titulo, precio`,
-        );
-
+      let cartQuery = supabase.from("carrito_items").select(`*, productos:titulo, slug, producto_imagenes(url, alt_text), producto_variantes:titulo, precio`);
+      
       if (userId !== "guest") {
         cartQuery = cartQuery.eq("user_id", userId);
       }
@@ -40,11 +36,7 @@ export async function POST(req: NextRequest) {
       const { data: cartItems } = await cartQuery;
 
       if (cartItems && cartItems.length > 0) {
-        const subtotal = cartItems.reduce(
-          (sum: number, item: any) =>
-            sum + (item.producto_variantes?.precio || 0) * item.cantidad,
-          0,
-        );
+        const subtotal = cartItems.reduce((sum: number, item: any) => sum + (item.producto_variantes?.precio || 0) * item.cantidad, 0);
         const costeEnvio = 0;
         const total = subtotal + costeEnvio;
 

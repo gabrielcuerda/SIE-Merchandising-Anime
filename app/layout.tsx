@@ -1,37 +1,26 @@
 import { CartProvider } from "components/cart/cart-context";
-import Footer from "components/layout/footer";
 import { Navbar } from "components/layout/navbar";
-import WelcomeToast from "components/welcome-toast";
+import { WelcomeToast } from "components/welcome-toast";
 import { GeistSans } from "geist/font/sans";
 
-import { siteConfig } from "@/lib/site";
-import { baseUrl } from "@/lib/utils";
 import { getCart } from "lib/cart";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { baseUrl } from "lib/utils";
+
+const { SITE_NAME } = process.env;
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  applicationName: siteConfig.name,
-  openGraph: {
-    type: "website",
-    locale: siteConfig.locale,
-    siteName: siteConfig.name,
+    default: SITE_NAME!,
+    template: `%s | ${SITE_NAME}`,
   },
   robots: {
     follow: true,
     index: true,
   },
-};
-
-export const viewport = {
-  themeColor: "#ee7639",
 };
 
 export default async function RootLayout({
@@ -44,19 +33,16 @@ export default async function RootLayout({
 
   return (
     <html lang="es" className={GeistSans.variable}>
-      <body className="flex min-h-screen flex-col bg-white text-ink-950 selection:bg-brand-200 selection:text-ink-950">
+
+      <body className="bg-[#f7fbff] text-slate-900 selection:bg-sky-200 selection:text-slate-950">
         <CartProvider cartPromise={cart}>
           <Navbar />
-
-          <main id="contenido" className="flex-1">
+          <main>
             {children}
+            <Toaster closeButton />
+            <WelcomeToast />
           </main>
-
-          <Footer />
         </CartProvider>
-
-        <Toaster position="bottom-right" closeButton richColors />
-        <WelcomeToast />
       </body>
     </html>
   );

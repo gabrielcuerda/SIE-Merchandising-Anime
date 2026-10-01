@@ -1,3 +1,4 @@
+
 import { getCategorias } from "@/lib/db/categorias";
 import { getProductos } from "@/lib/db/productos";
 import { baseUrl } from "@/lib/utils";

@@ -16,7 +16,6 @@ const placeholderImage: Image = {
 type ProductoConDetalle = Producto & {
   producto_imagenes: ProductoImagen[];
   producto_variantes: ProductoVariante[];
-  categorias: { nombre: string; slug: string } | null;
 };
 
 function mapImages(producto: ProductoConDetalle): Image[] {
@@ -90,9 +89,6 @@ function mapProduct(producto: ProductoConDetalle): Product {
     description: producto.descripcion || "",
     descriptionHtml: producto.descripcion || "",
     availableForSale: producto.stock > 0 || producto.status !== "stock",
-    status: producto.status,
-    stock: producto.stock,
-    categoria: producto.categorias ?? null,
     featuredImage: images[0] || placeholderImage,
     images,
     options,
@@ -127,7 +123,6 @@ export async function getProductRecommendations(
       mapProduct({
         ...producto,
         producto_variantes: [],
-        categorias: null,
       } as ProductoConDetalle),
     );
 }

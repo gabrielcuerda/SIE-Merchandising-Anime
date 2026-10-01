@@ -1,127 +1,82 @@
-import {
-  ArrowPathRoundedSquareIcon,
-  CreditCardIcon,
-  TruckIcon,
-} from "@heroicons/react/24/outline";
-import Logo from "components/logo";
-import FooterMenu from "components/layout/footer-menu";
-import { ContactDetails, SocialLinks } from "components/layout/social-links";
-import {
-  siteConfig,
-  footerColumns,
-  shippingHighlights,
-  type ShippingHighlight,
-} from "@/lib/site";
 import Link from "next/link";
 
-const highlightIcons: Record<
-  ShippingHighlight["icon"],
-  React.ComponentType<React.ComponentProps<typeof TruckIcon>>
-> = {
-  truck: TruckIcon,
-  return: ArrowPathRoundedSquareIcon,
-  card: CreditCardIcon,
-};
+import FooterMenu from "components/layout/footer-menu";
+import LogoSquare from "components/logo-square";
 
-const paymentMethods = [
-  "Visa",
-  "Mastercard",
-  "Bizum",
-  "PayPal",
-  "Transferencia",
+import { getMenu } from "@/lib/commerce/placeholders";
+import { Suspense } from "react";
+
+const { COMPANY_NAME, SITE_NAME } = process.env;
+
+/**
+ * Enlaces legales. Deben ser accesibles desde CUALQUIER página del sitio:
+ * el RGPD (art. 13) exige que la política sea de fácil acceso, y no puede
+ * depender de que el visitante navegue hasta el final del catálogo.
+ */
+const legalLinks = [
+  { href: "/privacidad", label: "Política de privacidad" },
+  { href: "/contacto", label: "Contacto" },
+  { href: "/about", label: "Sobre nosotros" },
 ];
 
-export default function Footer() {
-  const year = new Date().getFullYear();
+export default async function Footer() {
+  const currentYear = new Date().getFullYear();
+  const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : "");
+  const skeleton =
+    "w-full h-6 animate-pulse rounded-sm bg-neutral-200 dark:bg-neutral-700";
+  const menu = await getMenu("next-js-frontend-footer-menu");
+  const copyrightName = COMPANY_NAME || SITE_NAME || "";
 
   return (
-    <footer className="mt-16 bg-ink-950 text-ink-300">
-      {/* Información de envío */}
-      <div className="border-b border-ink-800">
-        <div className="page-container grid gap-6 py-8 sm:grid-cols-2 lg:grid-cols-4">
-          {shippingHighlights.map((item) => {
-            const Icon = highlightIcons[item.icon];
-
-            return (
-              <div key={item.title} className="flex items-start gap-3">
-                <span className="flex h-10 w-10 flex-none items-center justify-center rounded-md bg-ink-800 text-brand-400">
-                  <Icon className="h-5 w-5" aria-hidden="true" />
-                </span>
-                <div>
-                  <p className="text-sm font-extrabold tracking-wide text-white uppercase">
-                    {item.title}
-                  </p>
-                  <p className="mt-1 text-sm text-ink-400">{item.text}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Enlaces y datos de contacto */}
-      <div className="page-container grid gap-10 py-12 lg:grid-cols-12">
-        <div className="lg:col-span-4">
+    <footer className="text-sm text-neutral-500 dark:text-neutral-400">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 border-t border-neutral-200 px-6 py-12 text-sm md:flex-row md:gap-12 md:px-4 min-[1320px]:px-0 dark:border-neutral-700">
+        <div>
           <Link
+            className="flex items-center gap-2 text-black md:pt-1 dark:text-white"
             href="/"
-            className="inline-flex rounded-lg transition hover:opacity-80"
-            aria-label="SIE Merchandising, ir al inicio"
           >
-            <Logo size="lg" tone="light" />
+            <LogoSquare size="sm" />
+            <span className="uppercase">{SITE_NAME}</span>
           </Link>
-
-          <p className="mt-5 max-w-sm text-sm text-ink-400">
-            {siteConfig.claim}. Piezas originales con garantía y envío
-            rastreable desde nuestro almacén en Madrid.
-          </p>
-
-          <ContactDetails className="mt-6" />
-
-          <SocialLinks tone="light" className="mt-6" />
         </div>
-
-        <div className="grid gap-8 sm:grid-cols-2 lg:col-span-8 lg:grid-cols-4">
-          {footerColumns.map((column) => (
-            <nav key={column.title} aria-label={column.title}>
-              <h2 className="text-xs font-extrabold tracking-[0.2em] text-white uppercase">
-                {column.title}
-              </h2>
-              <FooterMenu links={column.links} className="mt-4" />
-            </nav>
-          ))}
-        </div>
+        <Suspense
+          fallback={
+            <div className="flex h-[188px] w-[200px] flex-col gap-2">
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+              <div className={skeleton} />
+            </div>
+          }
+        >
+          <FooterMenu menu={menu} />
+        </Suspense>
       </div>
-
-      {/* Barra legal */}
-      <div className="border-t border-ink-800">
-        <div className="page-container flex flex-col gap-4 py-5 text-xs sm:flex-row sm:items-center sm:justify-between">
+      <div className="border-t border-neutral-200 py-6 text-sm dark:border-neutral-700">
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-3 px-4 md:flex-row md:gap-0 md:px-4 min-[1320px]:px-0">
           <p>
-            © {year} {siteConfig.name}. Todos los derechos reservados.{" "}
-            <Link
-              href="/privacidad"
-              className="underline underline-offset-4 transition hover:text-brand-400"
-            >
-              Privacidad
-            </Link>{" "}
-            ·{" "}
-            <Link
-              href="/cookies"
-              className="underline underline-offset-4 transition hover:text-brand-400"
-            >
-              Cookies
-            </Link>
+            &copy; {copyrightDate} {copyrightName}
+            {copyrightName.length && !copyrightName.endsWith(".")
+              ? "."
+              : ""}{" "}
+            Todos los derechos reservados.
           </p>
-
-          <ul className="flex flex-wrap items-center gap-2">
-            {paymentMethods.map((method) => (
-              <li
-                key={method}
-                className="rounded-sm bg-ink-800 px-2 py-1 font-bold tracking-wide text-ink-300 uppercase"
+          <nav
+            aria-label="Enlaces legales"
+            className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 md:ml-6"
+          >
+            {legalLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="transition hover:text-black dark:hover:text-white"
               >
-                {method}
-              </li>
+                {link.label}
+              </Link>
             ))}
-          </ul>
+          </nav>
         </div>
       </div>
     </footer>
