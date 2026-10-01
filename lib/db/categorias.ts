@@ -13,6 +13,39 @@ export async function getCategorias() {
   return (data || []) as Categoria[];
 }
 
+export type CategoriaDestacada = Categoria & {
+  totalProductos: number;
+  totalOfertas: number;
+};
+
+/**
+ * Categorías con el número de figuras de cada una.
+ */
+export async function getCategoriasDestacadas(): Promise<CategoriaDestacada[]> {
+  // Las dos consultas van a la vez: no hay por qué esperar a la primera
+  const [categorias, productos] = await Promise.all([
+    getCategorias(),
+    supabase.from('productos').select('categoria_id, status'),
+  ]);
+
+  if (productos.error) throw productos.error;
+
+  const filas = (productos.data ?? []) as {
+    categoria_id: string | null;
+    status: string;
+  }[];
+
+  return categorias.map((categoria) => {
+    const propias = filas.filter((p) => p.categoria_id === categoria.id);
+
+    return {
+      ...categoria,
+      totalProductos: propias.length,
+      totalOfertas: propias.filter((p) => p.status === 'oferta').length,
+    };
+  });
+}
+
 export async function getCategoriasJerarquicas() {
   const categorias = await getCategorias();
 

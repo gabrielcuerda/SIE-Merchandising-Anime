@@ -39,7 +39,7 @@ function ThreeItemGridItem({
           priority={priority}
           alt={item.titulo}
           label={{
-            position: "bottom",
+             position: size === "full" ? "center" : "bottom",
             title: item.titulo,
             amount: item.precio.toString(),
             currencyCode: "EUR",
