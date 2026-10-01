@@ -37,9 +37,13 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-function updateCartItem(item: CarritoItem, updateType: UpdateType): CarritoItem | null {
+function updateCartItem(
+  item: CarritoItem,
+  updateType: UpdateType,
+): CarritoItem | null {
   if (updateType === "delete") return null;
-  const newCantidad = updateType === "plus" ? item.cantidad + 1 : item.cantidad - 1;
+  const newCantidad =
+    updateType === "plus" ? item.cantidad + 1 : item.cantidad - 1;
   if (newCantidad === 0) return null;
   return { ...item, cantidad: newCantidad };
 }
@@ -58,7 +62,9 @@ function createOrUpdateCartItem(existingItem: CarritoItem | undefined, payload: 
     productos: {
       titulo: payload.titulo,
       slug: "",
-      producto_imagenes: payload.imagen ? [{ url: payload.imagen, alt_text: payload.titulo }] : [],
+      producto_imagenes: payload.imagen
+        ? [{ url: payload.imagen, alt_text: payload.titulo }]
+        : [],
     },
     producto_variantes: {
       titulo: payload.varianteTitulo,
@@ -67,11 +73,13 @@ function createOrUpdateCartItem(existingItem: CarritoItem | undefined, payload: 
   };
 }
 
-function updateCartTotals(items: CarritoItem[]): Pick<Carrito, "totalItems" | "subtotal" | "moneda"> {
+function updateCartTotals(
+  items: CarritoItem[],
+): Pick<Carrito, "totalItems" | "subtotal" | "moneda"> {
   const totalItems = items.reduce((sum, item) => sum + item.cantidad, 0);
   const subtotal = items.reduce(
     (sum, item) => sum + (item.producto_variantes?.precio || 0) * item.cantidad,
-    0
+    0,
   );
   return { totalItems, subtotal, moneda: "EUR" };
 }
@@ -87,41 +95,75 @@ function cartReducer(state: Carrito | undefined, action: CartAction): Carrito {
     case "UPDATE_ITEM": {
       const { itemId, updateType } = action.payload;
       const updatedItems = currentCart.items
-        .map((item) => (item.id === itemId ? updateCartItem(item, updateType) : item))
+        .map((item) =>
+          item.id === itemId ? updateCartItem(item, updateType) : item,
+        )
         .filter(Boolean) as CarritoItem[];
-      return { ...currentCart, ...updateCartTotals(updatedItems), items: updatedItems };
+      return {
+        ...currentCart,
+        ...updateCartTotals(updatedItems),
+        items: updatedItems,
+      };
     }
     case "ADD_ITEM": {
-      const existingItem = currentCart.items.find((item) => item.variante_id === action.payload.varianteId);
+      const existingItem = currentCart.items.find(
+        (item) => item.variante_id === action.payload.varianteId,
+      );
       const updatedItem = createOrUpdateCartItem(existingItem, action.payload);
       const updatedItems = existingItem
-        ? currentCart.items.map((item) => (item.variante_id === action.payload.varianteId ? updatedItem : item))
+        ? currentCart.items.map((item) =>
+            item.variante_id === action.payload.varianteId ? updatedItem : item,
+          )
         : [...currentCart.items, updatedItem];
-      return { ...currentCart, ...updateCartTotals(updatedItems), items: updatedItems };
+      return {
+        ...currentCart,
+        ...updateCartTotals(updatedItems),
+        items: updatedItems,
+      };
     }
     default:
       return currentCart;
   }
 }
 
-export function CartProvider({ children, cartPromise }: { children: React.ReactNode; cartPromise: Promise<Carrito | undefined> }) {
-  return <CartContext.Provider value={{ cartPromise }}>{children}</CartContext.Provider>;
+export function CartProvider({
+  children,
+  cartPromise,
+}: {
+  children: React.ReactNode;
+  cartPromise: Promise<Carrito | undefined>;
+}) {
+  return (
+    <CartContext.Provider value={{ cartPromise }}>
+      {children}
+    </CartContext.Provider>
+  );
 }
 
 export function useCart() {
   const context = useContext(CartContext);
-  if (context === undefined) throw new Error("useCart must be used within a CartProvider");
+  if (context === undefined)
+    throw new Error("useCart must be used within a CartProvider");
 
   const initialCart = use(context.cartPromise);
-  const [optimisticCart, updateOptimisticCart] = useOptimistic(initialCart, cartReducer);
+  const [optimisticCart, updateOptimisticCart] = useOptimistic(
+    initialCart,
+    cartReducer,
+  );
 
   const updateCartItem = (itemId: string, updateType: UpdateType) => {
-    updateOptimisticCart({ type: "UPDATE_ITEM", payload: { itemId, updateType } });
+    updateOptimisticCart({
+      type: "UPDATE_ITEM",
+      payload: { itemId, updateType },
+    });
   };
 
   const addCartItem = (payload: any) => {
     updateOptimisticCart({ type: "ADD_ITEM", payload });
   };
 
-  return useMemo(() => ({ cart: optimisticCart, updateCartItem, addCartItem }), [optimisticCart]);
+  return useMemo(
+    () => ({ cart: optimisticCart, updateCartItem, addCartItem }),
+    [optimisticCart],
+  );
 }

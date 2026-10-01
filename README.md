@@ -1,4 +1,3 @@
-
 # SIE Merchandising Anime
 
 Tienda de merchandising de anime y manga importado directamente desde Japón.
@@ -67,15 +66,15 @@ En Vercel añade las mismas variables de entorno para los entornos Production y 
 Vercel no lee `.env.local`, así que hay que declararlas en el dashboard:
 **Project → Settings → Environment Variables**, en los entornos **Production** y **Preview**.
 
-| Variable | Necesaria para |
-| --- | --- |
-| `NEXT_PUBLIC_SUPABASE_URL` | toda la app |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | toda la app |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | checkout |
-| `STRIPE_SECRET_KEY` | checkout |
-| `STRIPE_WEBHOOK_SECRET` | webhook de pagos |
-| `SITE_NAME` | nombre mostrado en la interfaz |
-| `ADMIN_EMAILS` | acceso a `/admin` |
+| Variable                               | Necesaria para                 |
+| -------------------------------------- | ------------------------------ |
+| `NEXT_PUBLIC_SUPABASE_URL`             | toda la app                    |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | toda la app                    |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`   | checkout                       |
+| `STRIPE_SECRET_KEY`                    | checkout                       |
+| `STRIPE_WEBHOOK_SECRET`                | webhook de pagos               |
+| `SITE_NAME`                            | nombre mostrado en la interfaz |
+| `ADMIN_EMAILS`                         | acceso a `/admin`              |
 
 > **Importante:** `NEXT_PUBLIC_*` se sustituye por su valor **durante el build**.
 > Si cambias o añades una de estas variables, tienes que **hacer un redeploy**;

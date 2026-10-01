@@ -1,5 +1,4 @@
 import { GridTileImage } from "components/grid/tile";
-import Footer from "components/layout/footer";
 import { Gallery } from "components/product/gallery";
 import { ProductDescription } from "components/product/product-description";
 import { HIDDEN_PRODUCT_TAG } from "lib/constants";
@@ -145,7 +144,6 @@ export default async function ProductPage(props: {
         </div>
         <RelatedProducts id={product.id} />
       </div>
-      <Footer />
     </>
   );
 }
@@ -157,7 +155,9 @@ async function RelatedProducts({ id }: { id: string }) {
 
   return (
     <div className="py-8">
-      <h2 className="mb-4 text-2xl font-bold">Related Products</h2>
+      <h2 className="mb-4 text-2xl font-extrabold uppercase tracking-tight">
+        Productos relacionados
+      </h2>
       <ul className="flex w-full gap-4 overflow-x-auto pt-1">
         {relatedProducts.map((product) => (
           <li
