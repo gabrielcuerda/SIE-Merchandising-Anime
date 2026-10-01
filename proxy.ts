@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { isAdminUser } from "@/lib/supabase/roles";
-import { updateSession } from "@/lib/supabase/middleware";
+import { isAdminUser, updateSession } from "@/lib/supabase/middleware";
 
 export async function proxy(request: NextRequest) {
   const { response, user } = await updateSession(request);
