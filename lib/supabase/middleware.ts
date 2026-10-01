@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import type { User } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
+import { getSupabaseEnv, isSupabaseConfigured } from "./env";
 
 export function isAdminUser(user: User | null) {
   if (!user) return false;
@@ -18,12 +19,11 @@ export function isAdminUser(user: User | null) {
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-
-  if (!supabaseUrl || !supabaseKey) {
+  if (!isSupabaseConfigured()) {
     return { response, user: null };
   }
+
+  const { url: supabaseUrl, key: supabaseKey } = getSupabaseEnv();
 
   const supabase = createServerClient(supabaseUrl, supabaseKey, {
     cookies: {
