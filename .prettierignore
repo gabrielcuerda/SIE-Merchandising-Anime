@@ -1,0 +1,9 @@
+# Tooling local de agentes (no forma parte del proyecto)
+.agents/
+skills-lock.json
+
+# Ficheros generados
+.next/
+pnpm-lock.yaml
+package-lock.json
+tsconfig.tsbuildinfo

@@ -1,9 +1,9 @@
-import { SortFilterItem } from "lib/constants";
+import { ParamFilterItem, SortFilterItem } from "lib/constants";
 import { Suspense } from "react";
 import FilterItemDropdown from "./dropdown";
 import { FilterItem } from "./item";
 
-export type ListItem = SortFilterItem | PathFilterItem;
+export type ListItem = SortFilterItem | PathFilterItem | ParamFilterItem;
 export type PathFilterItem = { title: string; path: string };
 
 function FilterItemList({ list }: { list: ListItem[] }) {

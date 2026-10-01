@@ -1,47 +1,50 @@
 "use client";
 
 import clsx from "clsx";
-
-import { Menu } from "@/lib/commerce/types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import type { SiteLink } from "@/lib/site";
 
-export function FooterMenuItem({ item }: { item: Menu }) {
+export function FooterLink({
+  link,
+  className,
+}: {
+  link: SiteLink;
+  className?: string;
+}) {
   const pathname = usePathname();
-  const [active, setActive] = useState(pathname === item.path);
-
-  useEffect(() => {
-    setActive(pathname === item.path);
-  }, [pathname, item.path]);
+  const isActive = pathname === link.href;
 
   return (
     <li>
       <Link
-        href={item.path}
+        href={link.href}
         className={clsx(
-          "block p-2 text-lg underline-offset-4 hover:text-black hover:underline md:inline-block md:text-sm dark:hover:text-neutral-300",
-          {
-            "text-black dark:text-neutral-300": active,
-          },
+          "inline-block py-1.5 text-sm transition hover:text-brand-400",
+          isActive && "font-bold text-brand-400",
+          className,
         )}
       >
-        {item.title}
+        {link.label}
       </Link>
     </li>
   );
 }
 
-export default function FooterMenu({ menu }: { menu: Menu[] }) {
-  if (!menu.length) return null;
+export default function FooterMenu({
+  links,
+  className,
+}: {
+  links: SiteLink[];
+  className?: string;
+}) {
+  if (!links.length) return null;
 
   return (
-    <nav>
-      <ul>
-        {menu.map((item: Menu) => {
-          return <FooterMenuItem key={item.title} item={item} />;
-        })}
-      </ul>
-    </nav>
+    <ul className={clsx("space-y-0.5", className)}>
+      {links.map((link) => (
+        <FooterLink key={link.href} link={link} />
+      ))}
+    </ul>
   );
 }
