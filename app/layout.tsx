@@ -13,6 +13,7 @@ export const dynamic = "force-dynamic";
 
 const { SITE_NAME } = process.env;
 
+
 export const metadata = {
   metadataBase: new URL(baseUrl),
   title: {
@@ -27,6 +28,7 @@ export const metadata = {
 
 export default async function RootLayout({
   children,
+  
 }: {
   children: ReactNode;
 }) {
