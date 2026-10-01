@@ -39,8 +39,6 @@ export default async function SearchPage(props: {
     "/search",
     new URLSearchParams({ ...(searchValue && { q: searchValue }) }),
   );
-  
-  const resultsText = productos.length > 1 ? "resultados" : "resultado";
 
   return (
     <>
