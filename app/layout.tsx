@@ -9,6 +9,8 @@ import { Toaster } from "sonner";
 import "./globals.css";
 import { baseUrl } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 const { SITE_NAME } = process.env;
 
 export const metadata = {
