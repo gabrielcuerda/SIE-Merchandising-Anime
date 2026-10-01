@@ -20,8 +20,16 @@ export default function SearchLayout({
         </Suspense>
       </div>
       <div className="order-none flex-none md:order-last md:w-[220px]">
-        <FilterList list={sorting} title="Ordenar" />
-      </div>
+          <FilterList list={sorting} title="Ordenar" />
+
+          <div className="mt-6">
+            <FilterList list={estados} title="Estado" />
+          </div>
+
+          <div className="mt-6">
+            <FilterList list={precios} title="Precio" />
+          </div>
+        </div>
     </div>
   );
 }

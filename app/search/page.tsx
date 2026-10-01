@@ -42,18 +42,26 @@ export default async function SearchPage(props: {
 
   return (
     <>
-      {searchValue ? (
-        <p className="mb-4">
-          {productos.length === 0
-            ? "No hay productos que coincidan con "
-            : `Mostrando ${productos.length} ${resultsText} para `}
-          <span className="font-bold">&quot;{searchValue}&quot;</span>
-        </p>
-      ) : null}
-      {total > 0 ? (
-        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <ProductoGridItems productos={productos} />
-        </Grid>
+      {hayFiltros ? (
+        <div className="mb-4 flex flex-wrap items-center gap-4">
+          <p className="m-0">
+            {total === 0
+              ? "No hay productos que coincidan con los filtros."
+              : `Mostrando ${total} ${resultsText}`}
+            {searchValue ? (
+              <>
+                {" para "}
+                <span className="font-bold">&quot;{searchValue}&quot;</span>
+              </>
+            ) : null}
+          </p>
+          <Link
+            href={limpiarHref}
+            className="text-sm text-blue-600 underline underline-offset-4 hover:opacity-80"
+          >
+            Limpiar filtros
+          </Link>
+        </div>
       ) : null}
     </>
   );
