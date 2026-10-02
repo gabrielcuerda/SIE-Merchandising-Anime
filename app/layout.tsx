@@ -10,6 +10,8 @@ import { getCart } from "lib/cart";
 import { ReactNode } from "react";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { LanguageProvider } from "@/components/i18n/language-context";
+import { getLang } from "@/lib/i18n/lang";
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
@@ -41,22 +43,25 @@ export default async function RootLayout({
 }) {
   // Don't await the fetch, pass the Promise to the context provider
   const cart = getCart();
+  const lang = await getLang();
 
   return (
-    <html lang="es" className={GeistSans.variable}>
-      <body className="flex min-h-screen flex-col bg-white text-ink-950 selection:bg-brand-200 selection:text-ink-950">
-        <CartProvider cartPromise={cart}>
-          <Navbar />
+    <html lang={lang} className={GeistSans.variable}>
+       <body className="flex min-h-screen flex-col bg-white text-ink-950 selection:bg-brand-200 selection:text-ink-950">
+        <LanguageProvider initialLang={lang}>
+          <CartProvider cartPromise={cart}>
+            <Navbar />
 
-          <main id="contenido" className="flex-1">
-            {children}
-          </main>
+            <main id="contenido" className="flex-1">
+              {children}
+            </main>
 
-          <Footer />
-        </CartProvider>
+            <Footer />
+          </CartProvider>
 
-        <Toaster position="bottom-right" closeButton richColors />
-        <WelcomeToast />
+          <Toaster position="bottom-right" closeButton richColors />
+          <WelcomeToast />
+        </LanguageProvider>
       </body>
     </html>
   );

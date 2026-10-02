@@ -9,9 +9,13 @@ import CategoryNav from "./category-nav";
 import MobileMenu from "./mobile-menu";
 import MobileSearch from "./mobile-search";
 import Search, { SearchSkeleton } from "./search";
+import LangToggle from "@/components/i18n/lang-toggle";
+import { translate } from "@/lib/i18n/dict";
+import { getLang } from "@/lib/i18n/lang";
 
 export async function Navbar() {
   const categorias = await getNavCategorias();
+  const lang = await getLang();
 
   return (
     <header className="sticky top-0 z-40">
@@ -27,7 +31,7 @@ export async function Navbar() {
             href="/"
             prefetch={true}
             className="flex items-center gap-2.5 lg:mr-2"
-            aria-label="SIE Merchandising, ir al inicio"
+            aria-label={translate(lang, "nav.home")}
           >
             <LogoBadge size="lg" />
             <LogoWordmark className="hidden sm:flex" />
@@ -44,11 +48,13 @@ export async function Navbar() {
           <div className="ml-auto flex items-center gap-1.5 lg:ml-0 lg:gap-2">
             <MobileSearch />
 
+            <LangToggle />
+
             <Link
               href="/account"
               prefetch={true}
-              aria-label="Mi cuenta"
-              title="Mi cuenta"
+              aria-label={translate(lang, "nav.account")}
+              title={translate(lang, "nav.account")}
               className="flex h-10 w-10 items-center justify-center rounded-md text-ink-800 transition hover:bg-ink-50 hover:text-brand-600"
             >
               <UserIcon className="h-5 w-5" aria-hidden="true" />
@@ -57,8 +63,8 @@ export async function Navbar() {
             <Link
               href="/wishlist"
               prefetch={true}
-              aria-label="Lista de deseos"
-              title="Lista de deseos"
+              aria-label={translate(lang, "nav.wishlist")}
+              title={translate(lang, "nav.wishlist")}
               className="hidden h-10 w-10 items-center justify-center rounded-md text-ink-800 transition hover:bg-ink-50 hover:text-brand-600 sm:flex"
             >
               <HeartIcon className="h-5 w-5" aria-hidden="true" />
