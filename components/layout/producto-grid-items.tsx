@@ -4,6 +4,8 @@ import StatusBadge from "components/grid/status-badge";
 import WishlistToggle from "@/components/wishlist/wishlist-toggle";
 import type { Producto, ProductoImagen } from "@/lib/db/types";
 import Link from "next/link";
+import { translate } from "@/lib/i18n/dict";
+import { getLang } from "@/lib/i18n/lang";
 
 export type ProductoConImagen = Producto & {
   producto_imagenes: ProductoImagen[];
@@ -17,13 +19,14 @@ export function getMainImage(producto: ProductoConImagen): string | undefined {
   return sorted[0]?.url;
 }
 
-export default function ProductoGridItems({
+export default async function ProductoGridItems({
   productos,
   wishlistProductIds = [],
 }: {
   productos: ProductoConImagen[];
   wishlistProductIds?: string[];
 }) {
+  const lang = await getLang();
   return (
     <>
       {productos.map((producto) => (
@@ -50,7 +53,7 @@ export default function ProductoGridItems({
             {producto.stock === 0 ? (
               <div className="pointer-events-none absolute left-2 top-9 z-10">
                 <span className="rounded-sm bg-alert-500 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase">
-                  Agotado
+                  {translate(lang, "status.agotado")}
                 </span>
               </div>
             ) : null}

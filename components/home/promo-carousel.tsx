@@ -4,7 +4,8 @@ import {
   getCategoriasDestacadas,
   type CategoriaDestacada,
 } from "@/lib/db/categorias";
-
+import { translate, type Lang } from "@/lib/i18n/dict";
+import { getLang } from "@/lib/i18n/lang";
 /**
  * Tira de banners promocionales por franquicia.
  */
@@ -24,11 +25,15 @@ const GRADIENTE_POR_DEFECTO = "from-slate-700 via-slate-800 to-slate-950";
 type BannerProps = {
   categoria: CategoriaDestacada;
   duplicado?: boolean;
+  lang: Lang;
 };
 
-function Banner({ categoria, duplicado = false }: BannerProps) {
+function Banner({ categoria, duplicado = false, lang }: BannerProps) {
   const degradado = GRADIENTES[categoria.slug] ?? GRADIENTE_POR_DEFECTO;
-  const etiqueta = categoria.totalProductos === 1 ? "figura" : "figuras";
+  const etiqueta = translate(
+    lang,
+    categoria.totalProductos === 1 ? "promo.figure.one" : "promo.figure.other",
+  );
 
   return (
     <Link
@@ -45,7 +50,7 @@ function Banner({ categoria, duplicado = false }: BannerProps) {
       </span>
 
       <span className="relative inline-flex w-fit rounded-full bg-black/25 px-2.5 py-1 text-[0.65rem] font-semibold tracking-widest uppercase">
-        Franquicia
+        {translate(lang, "promo.franchise")}
       </span>
 
       <div className="relative">
@@ -53,13 +58,13 @@ function Banner({ categoria, duplicado = false }: BannerProps) {
         <p className="mt-0.5 text-xs text-white/85">
           {categoria.totalProductos} {etiqueta}
           {categoria.totalOfertas > 0
-            ? ` · ${categoria.totalOfertas} en oferta`
+            ? ` · ${categoria.totalOfertas} ${translate(lang, "promo.onSale")}`
             : ""}
         </p>
       </div>
 
       <span className="relative inline-flex items-center gap-1 text-sm font-semibold">
-        Ver figuras
+        {translate(lang, "promo.viewFigures")}
         <ChevronRightIcon
           aria-hidden="true"
           className="h-4 w-4 transition-transform group-hover/banner:translate-x-1"
@@ -70,27 +75,30 @@ function Banner({ categoria, duplicado = false }: BannerProps) {
 }
 
 export default async function PromoCarousel() {
+  const lang = await getLang();
   const categorias = await getCategoriasDestacadas();
 
   if (categorias.length === 0) return null;
 
   return (
     <section
-      aria-label="Banners promocionales por franquicia"
+      aria-label={translate(lang, "promo.aria")}
       className="mx-auto max-w-(--breakpoint-2xl) px-4 pt-6"
     >
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold">Explora por franquicia</h2>
+          <h2 className="text-2xl font-bold">
+            {translate(lang, "promo.title")}
+          </h2>
           <p className="mt-1 text-sm text-slate-600">
-            Elige la serie que buscas y ve directo a sus figuras
+            {translate(lang, "promo.subtitle")}
           </p>
         </div>
         <Link
           href="/search"
           className="inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-slate-900 underline-offset-4 hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-900"
         >
-          Ver todo el catálogo
+          {translate(lang, "promo.viewAll")}
           <ChevronRightIcon aria-hidden="true" className="h-4 w-4" />
         </Link>
       </div>
@@ -105,7 +113,11 @@ export default async function PromoCarousel() {
                 key={`${categoria.id}-${indice}`}
                 aria-hidden={duplicado || undefined}
               >
-                <Banner categoria={categoria} duplicado={duplicado} />
+                <Banner
+                  categoria={categoria}
+                  duplicado={duplicado}
+                  lang={lang}
+                />
               </li>
             );
           })}

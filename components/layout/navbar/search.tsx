@@ -3,6 +3,8 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Form from "next/form";
 import { useSearchParams } from "next/navigation";
+import { translate } from "@/lib/i18n/dict";
+import { useLanguage } from "@/components/i18n/language-context";
 
 export default function Search({
   className = "",
@@ -13,6 +15,7 @@ export default function Search({
 }) {
   const searchParams = useSearchParams();
   const value = searchParams?.get("q") ?? "";
+  const { lang } = useLanguage();
 
   return (
     <Form
@@ -21,14 +24,14 @@ export default function Search({
       className={`relative w-full ${className}`}
     >
       <label htmlFor="site-search" className="sr-only">
-        Buscar productos
+        {translate(lang, "search.label")}
       </label>
       <input
         id="site-search"
         key={value}
         type="search"
         name="q"
-        placeholder="Busca figuras, manga, apparel..."
+        placeholder={translate(lang, "search.placeholder")}
         autoComplete="off"
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={autoFocus}
@@ -37,7 +40,7 @@ export default function Search({
       />
       <button
         type="submit"
-        aria-label="Buscar"
+        aria-label={translate(lang, "search.submit")}
         className="absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-sm bg-ink-950 text-white transition hover:bg-brand-500"
       >
         <MagnifyingGlassIcon className="h-4 w-4" aria-hidden="true" />

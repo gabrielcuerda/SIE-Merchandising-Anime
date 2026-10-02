@@ -47,3 +47,17 @@ export const heroSlides: HeroSlide[] = [
     accent: "bg-brand-600 text-white",
   },
 ];
+
+import { translate, type Lang } from "@/lib/i18n/dict";
+
+/** Devuelve las diapositivas traducidas al idioma pedido. */
+export function getHeroSlides(lang: Lang): HeroSlide[] {
+  return heroSlides.map((slide) => ({
+    ...slide,
+    eyebrow: translate(lang, `hero.${slide.id}.eyebrow`) || slide.eyebrow,
+    title: translate(lang, `hero.${slide.id}.title`) || slide.title,
+    description:
+      translate(lang, `hero.${slide.id}.description`) || slide.description,
+    ctaLabel: translate(lang, `hero.${slide.id}.ctaLabel`) || slide.ctaLabel,
+  }));
+}
