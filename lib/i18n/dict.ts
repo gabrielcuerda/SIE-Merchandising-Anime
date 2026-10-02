@@ -77,6 +77,48 @@ const es = {
   "status.aPedido": "Bajo pedido",
   "status.oferta": "Oferta",
   "status.agotado": "Agotado",
+
+  // ── Navbar ──
+  "nav.homeLink": "Inicio",
+  "nav.news": "Novedades",
+  "nav.bestSellers": "Más vendidos",
+  "nav.deals": "Ofertas",
+  "nav.allCategories": "Todas las categorías",
+  "nav.freeShippingFrom": "Envío gratis desde",
+  "nav.ariaCategories": "Categorías y navegación principal",
+  "nav.loadingCategories": "Estamos cargando las categorías. Mientras tanto,",
+  "nav.browseCatalog": "mira todo el catálogo",
+  "nav.viewFullCatalog": "Ver el catálogo completo →",
+
+  // ── Menú móvil ──
+  "menu.open": "Abrir menú",
+  "menu.close": "Cerrar menú",
+  "menu.title": "Menú",
+  "menu.ariaMobile": "Menú móvil",
+  "menu.viewSubcategories": "Ver subcategorías de",
+
+  // ── Cuenta ──
+  "account.myAccount": "Mi cuenta",
+  "account.orders": "Mis pedidos",
+  "account.wishlist": "Mi lista de deseos",
+  "account.signIn": "Iniciar sesión",
+  "account.register": "Crear cuenta",
+
+  // ── Footer ──
+  "footer.claim": "Merchandising de anime y manga importado de Japón. Piezas originales con garantía y envío rastreable desde nuestro almacén en Madrid.",
+  "footer.rights": "Todos los derechos reservados.",
+  "footer.col.info": "Información",
+  "footer.col.account": "Mi cuenta",
+  "footer.col.legal": "Legal",
+  "footer.info.about": "Sobre nosotros",
+  "footer.info.shipping": "Envíos y entregas",
+  "footer.info.returns": "Devoluciones",
+  "footer.info.faq": "Preguntas frecuentes",
+  "footer.legal.notice": "Aviso legal",
+  "footer.legal.privacy": "Política de privacidad",
+  "footer.legal.cookies": "Cookies",
+  "site.address": "Calle Mayor 1, 28013 Madrid, España",
+  
 } as const;
 
 export type DictKey = keyof typeof es;
@@ -155,6 +197,48 @@ const en: Record<DictKey, string> = {
   "status.aPedido": "Backorder",
   "status.oferta": "Deal",
   "status.agotado": "Sold out",
+
+  // Navbar
+  "nav.homeLink": "Home",
+  "nav.news": "New arrivals",
+  "nav.bestSellers": "Best sellers",
+  "nav.deals": "Deals",
+  "nav.allCategories": "All categories",
+  "nav.freeShippingFrom": "Free shipping from",
+  "nav.ariaCategories": "Categories and main navigation",
+  "nav.loadingCategories": "We are loading the categories. In the meantime,",
+  "nav.browseCatalog": "browse the full catalogue",
+  "nav.viewFullCatalog": "View the full catalogue →",
+
+  // Mobile menu
+  "menu.open": "Open menu",
+  "menu.close": "Close menu",
+  "menu.title": "Menu",
+  "menu.ariaMobile": "Mobile menu",
+  "menu.viewSubcategories": "View subcategories of",
+
+  // Account
+  "account.myAccount": "My account",
+  "account.orders": "My orders",
+  "account.wishlist": "My wishlist",
+  "account.signIn": "Sign in",
+  "account.register": "Create account",
+
+  // Footer
+  "footer.claim": "Anime and manga merchandise imported from Japan. Original pieces with warranty and tracked shipping from our Madrid warehouse.",
+  "footer.rights": "All rights reserved.",
+  "footer.col.info": "Information",
+  "footer.col.account": "My account",
+  "footer.col.legal": "Legal",
+  "footer.info.about": "About us",
+  "footer.info.shipping": "Shipping & delivery",
+  "footer.info.returns": "Returns",
+  "footer.info.faq": "FAQ",
+  "footer.legal.notice": "Legal notice",
+  "footer.legal.privacy": "Privacy policy",
+  "footer.legal.cookies": "Cookies",
+  "site.address": "Calle Mayor 1, 28013 Madrid, Spain",
+  
 };
 
 export const dict: Record<Lang, Record<DictKey, string>> = { es, en };

@@ -6,6 +6,8 @@ import {
 import SocialIcon from "components/icons/social";
 import { siteConfig, type SiteSocial } from "@/lib/site";
 import clsx from "clsx";
+import { translate } from "@/lib/i18n/dict";
+import { getLang } from "@/lib/i18n/lang";
 
 export function SocialLinks({
   socials = siteConfig.socials,
@@ -43,7 +45,8 @@ export function SocialLinks({
   );
 }
 
-export function ContactDetails({ className }: { className?: string }) {
+export async function ContactDetails({ className }: { className?: string }) {
+  const lang = await getLang();
   return (
     <ul className={clsx("space-y-3 text-sm", className)}>
       <li className="flex items-start gap-3">
@@ -75,7 +78,7 @@ export function ContactDetails({ className }: { className?: string }) {
           className="mt-0.5 h-4 w-4 flex-none text-brand-500"
           aria-hidden="true"
         />
-        <span>{siteConfig.address}</span>
+        <span>{translate(lang, "site.address")}</span>
       </li>
     </ul>
   );
