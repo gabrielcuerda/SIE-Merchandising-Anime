@@ -4,17 +4,21 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import type { NavCategoria } from "@/lib/navigation";
-import { mainNav } from "@/lib/site";
+import { getMainNav } from "@/lib/site";
+import { translate, type Lang } from "@/lib/i18n/dict";
+import { useLanguage } from "components/i18n/language-context";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Search from "./search";
 
-const accountLinks = [
-  { label: "Mi cuenta", href: "/account" },
-  { label: "Mis pedidos", href: "/account/orders" },
-  { label: "Mi lista de deseos", href: "/wishlist" },
-  { label: "Iniciar sesión", href: "/login" },
-];
+function getAccountLinks(lang: Lang) {
+  return [
+    { label: translate(lang, "account.myAccount"), href: "/account" },
+    { label: translate(lang, "account.orders"), href: "/account/orders" },
+    { label: translate(lang, "account.wishlist"), href: "/wishlist" },
+    { label: translate(lang, "account.signIn"), href: "/login" },
+  ];
+}
 
 export default function MobileMenu({
   categorias,
@@ -23,7 +27,7 @@ export default function MobileMenu({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
-
+  const { lang } = useLanguage();
   const close = () => setIsOpen(false);
 
   // Bloquea el scroll del body mientras el menú está abierto
@@ -41,7 +45,7 @@ export default function MobileMenu({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        aria-label="Abrir menú"
+        aria-label={translate(lang, "menu.open")}
         aria-expanded={isOpen}
         className="flex h-10 w-10 items-center justify-center rounded-md border border-ink-200 text-ink-950 transition hover:border-brand-500 hover:text-brand-600 lg:hidden"
       >
@@ -61,12 +65,12 @@ export default function MobileMenu({
           >
             <div className="flex items-center justify-between border-b border-ink-800 px-4 py-3">
               <DialogTitle className="text-sm font-extrabold tracking-[0.18em] uppercase">
-                Menú
+                {translate(lang, "menu.title")}
               </DialogTitle>
               <button
                 type="button"
                 onClick={close}
-                aria-label="Cerrar menú"
+                aria-label={translate(lang, "menu.close")}
                 className="flex h-10 w-10 items-center justify-center rounded-md border border-ink-800 transition hover:border-brand-500 hover:text-brand-400"
               >
                 <XMarkIcon className="h-5 w-5" aria-hidden="true" />
@@ -77,7 +81,7 @@ export default function MobileMenu({
               <Search />
             </div>
 
-            <nav aria-label="Menú móvil" className="flex-1 px-4 pb-8">
+            <nav aria-label={translate(lang, "menu.ariaMobile")} className="flex-1 px-4 pb-8">
               {categorias.length ? (
                 <ul className="border-b border-ink-800 pb-4">
                   {categorias.map((categoria) => {
@@ -97,7 +101,7 @@ export default function MobileMenu({
                             <button
                               type="button"
                               aria-expanded={isExpanded}
-                              aria-label={`Ver subcategorías de ${categoria.nombre}`}
+                              aria-label={`${translate(lang, "menu.viewSubcategories")} ${categoria.nombre}`}
                               onClick={() =>
                                 setExpanded(isExpanded ? null : categoria.id)
                               }
@@ -133,7 +137,7 @@ export default function MobileMenu({
               ) : null}
 
               <ul className="border-b border-ink-800 py-4">
-                {[{ label: "Inicio", href: "/" }, ...mainNav].map((item) => (
+                {[{ label: translate(lang, "nav.homeLink"), href: "/" }, ...getMainNav(lang)].map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
@@ -147,7 +151,7 @@ export default function MobileMenu({
               </ul>
 
               <ul className="py-4">
-                {accountLinks.map((item) => (
+                {getAccountLinks(lang).map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}

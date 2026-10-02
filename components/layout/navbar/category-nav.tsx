@@ -5,7 +5,9 @@ import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { TruckIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import type { NavCategoria } from "@/lib/navigation";
-import { mainNav, siteConfig } from "@/lib/site";
+import { getMainNav, siteConfig } from "@/lib/site";
+import { translate } from "@/lib/i18n/dict";
+import { useLanguage } from "components/i18n/language-context";
 import Link from "next/link";
 
 export default function CategoryNav({
@@ -13,9 +15,10 @@ export default function CategoryNav({
 }: {
   categorias: NavCategoria[];
 }) {
+  const { lang } = useLanguage();
   return (
     <nav
-      aria-label="Categorías y navegación principal"
+      aria-label={translate(lang, "nav.ariaCategories")}
       className="hidden bg-ink-950 text-white lg:block"
     >
       <div className="page-container flex h-12 items-stretch">
@@ -29,7 +32,7 @@ export default function CategoryNav({
                 )}
               >
                 <BarsIcon />
-                Todas las categorías
+                {translate(lang, "nav.allCategories")}
                 <ChevronDownIcon
                   className={clsx(
                     "h-3 w-3 transition-transform",
@@ -75,13 +78,13 @@ export default function CategoryNav({
                   </div>
                 ) : (
                   <p className="text-sm text-ink-500">
-                    Estamos cargando las categorías. Mientras tanto,{" "}
+                    {translate(lang, "nav.loadingCategories")}{" "}
                     <Link
                       href="/search"
                       onClick={close}
                       className="font-bold text-brand-600 hover:underline"
                     >
-                      mira todo el catálogo
+                       {translate(lang, "nav.browseCatalog")}
                     </Link>
                     .
                   </p>
@@ -93,7 +96,7 @@ export default function CategoryNav({
                     onClick={close}
                     className="text-sm font-bold tracking-wide text-brand-600 uppercase hover:underline"
                   >
-                    Ver el catálogo completo →
+                    {translate(lang, "nav.viewFullCatalog")}
                   </Link>
                 </div>
               </PopoverPanel>
@@ -102,7 +105,7 @@ export default function CategoryNav({
         </Popover>
 
         <ul className="flex items-stretch">
-          {[{ label: "Inicio", href: "/" }, ...mainNav].map((item) => (
+          {[{ label: translate(lang, "nav.homeLink"), href: "/" }, ...getMainNav(lang)].map((item) => (
             <li key={item.href} className="flex">
               <Link
                 href={item.href}
@@ -119,7 +122,7 @@ export default function CategoryNav({
           className="ml-auto flex items-center gap-2 pl-4 text-xs font-bold tracking-[0.1em] text-ink-300 uppercase transition hover:text-brand-400"
         >
           <TruckIcon className="h-4 w-4 text-brand-400" aria-hidden="true" />
-          {siteConfig.freeShippingLabel} desde{" "}
+          {translate(lang, "nav.freeShippingFrom")}{" "}
           {siteConfig.freeShippingThreshold} €
         </Link>
       </div>

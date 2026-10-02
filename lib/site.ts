@@ -1,3 +1,5 @@
+import { translate, type Lang } from "@/lib/i18n/dict";
+
 export type SiteSocial = {
   name: string;
   href: string;
@@ -5,6 +7,7 @@ export type SiteSocial = {
 };
 
 export type SiteLink = {
+  i18nKey?: string;
   label: string;
   href: string;
   description?: string;
@@ -60,36 +63,45 @@ export const siteConfig = {
 } as const;
 
 export const mainNav: SiteLink[] = [
-  { label: "Novedades", href: "/search?sort=latest-desc" },
-  { label: "Más vendidos", href: "/search?sort=trending-desc" },
-  { label: "Ofertas", href: "/search?sort=price-asc" },
+  { i18nKey: "nav.news", label: "Novedades", href: "/search?sort=latest-desc" },
+  { i18nKey: "nav.bestSellers", label: "Más vendidos", href: "/search?sort=trending-desc" },
+  { i18nKey: "nav.deals", label: "Ofertas", href: "/search?sort=price-asc" },
 ];
 
-export const footerColumns: { title: string; links: SiteLink[] }[] = [
+export type FooterColumn = {
+  i18nKey: string;
+  title: string;
+  links: SiteLink[];
+};
+
+export const footerColumns: FooterColumn[] = [
   {
+    i18nKey: "footer.col.info",
     title: "Información",
     links: [
-      { label: "Sobre nosotros", href: "/about" },
-      { label: "Envíos y entregas", href: "/envios" },
-      { label: "Devoluciones", href: "/devoluciones" },
-      { label: "Preguntas frecuentes", href: "/preguntas-frecuentes" },
+      { i18nKey: "footer.info.about", label: "Sobre nosotros", href: "/about" },
+      { i18nKey: "footer.info.shipping", label: "Envíos y entregas", href: "/envios" },
+      { i18nKey: "footer.info.returns", label: "Devoluciones", href: "/devoluciones" },
+      { i18nKey: "footer.info.faq", label: "Preguntas frecuentes", href: "/preguntas-frecuentes" },
     ],
   },
   {
+    i18nKey: "footer.col.account",
     title: "Mi cuenta",
     links: [
-      { label: "Iniciar sesión", href: "/login" },
-      { label: "Crear cuenta", href: "/register" },
-      { label: "Mis pedidos", href: "/account/orders" },
-      { label: "Mi lista de deseos", href: "/wishlist" },
+      { i18nKey: "account.signIn", label: "Iniciar sesión", href: "/login" },
+      { i18nKey: "account.register", label: "Crear cuenta", href: "/register" },
+      { i18nKey: "account.orders", label: "Mis pedidos", href: "/account/orders" },
+      { i18nKey: "account.wishlist", label: "Mi lista de deseos", href: "/wishlist" },
     ],
   },
   {
+    i18nKey: "footer.col.legal",
     title: "Legal",
     links: [
-      { label: "Aviso legal", href: "/aviso-legal" },
-      { label: "Política de privacidad", href: "/privacidad" },
-      { label: "Cookies", href: "/cookies" },
+      { i18nKey: "footer.legal.notice", label: "Aviso legal", href: "/aviso-legal" },
+      { i18nKey: "footer.legal.privacy", label: "Política de privacidad", href: "/privacidad" },
+      { i18nKey: "footer.legal.cookies", label: "Cookies", href: "/cookies" },
     ],
   },
 ];
@@ -130,3 +142,20 @@ export const paymentMethods = [
   "PayPal",
   "Transferencia",
 ];
+
+export function traducirLink(lang: Lang, link: SiteLink): SiteLink {
+  if (!link.i18nKey) return link;
+  return { ...link, label: translate(lang, link.i18nKey) || link.label };
+}
+
+export function getMainNav(lang: Lang): SiteLink[] {
+  return mainNav.map((link) => traducirLink(lang, link));
+}
+
+export function getFooterColumns(lang: Lang): FooterColumn[] {
+  return footerColumns.map((column) => ({
+    ...column,
+    title: translate(lang, column.i18nKey) || column.title,
+    links: column.links.map((link) => traducirLink(lang, link)),
+  }));
+}
