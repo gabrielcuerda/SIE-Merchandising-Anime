@@ -63,6 +63,11 @@ export default async function SearchPage(props: {
           </Link>
         </div>
       ) : null}
+      {total > 0 ? (
+        <Grid className="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <ProductoGridItems productos={productos} />
+        </Grid>
+      ) : null}
     </>
   );
 }
