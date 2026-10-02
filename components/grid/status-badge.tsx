@@ -1,18 +1,19 @@
 import clsx from "clsx";
 import type { Producto } from "@/lib/db/types";
+import { translate } from "@/lib/i18n/dict";
+import { getLang } from "@/lib/i18n/lang";
 
 type Status = Producto["status"];
 
-// Record<Status, ...> obliga a definir TODOS los estados:
-// si mañana añades uno nuevo en lib/db/types.ts, aquí te saltará un error.
-const ESTADOS: Record<Status, { texto: string; clases: string }> = {
-  stock: { texto: "En stock", clases: "bg-emerald-600 text-white" },
-  "pre-venta": { texto: "Pre-venta", clases: "bg-amber-400 text-black" },
-  "a-pedido": { texto: "Bajo pedido", clases: "bg-sky-600 text-white" },
-  oferta: { texto: "Oferta", clases: "bg-rose-600 text-white" },
+const ESTADOS: Record<Status, { key: string; clases: string }> = {
+  stock: { key: "status.stock", clases: "bg-emerald-600 text-white" },
+  "pre-venta": { key: "status.preVenta", clases: "bg-amber-400 text-black" },
+  "a-pedido": { key: "status.aPedido", clases: "bg-sky-600 text-white" },
+  oferta: { key: "status.oferta", clases: "bg-rose-600 text-white" },
 };
 
-export default function StatusBadge({ status }: { status: Status }) {
+export default async function StatusBadge({ status }: { status: Status }) {
+  const lang = await getLang();
   const estado = ESTADOS[status];
 
   return (
@@ -22,7 +23,7 @@ export default function StatusBadge({ status }: { status: Status }) {
         estado.clases,
       )}
     >
-      {estado.texto}
+      {translate(lang, estado.key)}
     </span>
   );
 }
