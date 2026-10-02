@@ -67,22 +67,12 @@ export const mainNav: SiteLink[] = [
 
 export const footerColumns: { title: string; links: SiteLink[] }[] = [
   {
-    title: "Tienda",
-    links: [
-      { label: "Todos los productos", href: "/search" },
-      { label: "Novedades", href: "/search?sort=latest-desc" },
-      { label: "Más vendidos", href: "/search?sort=trending-desc" },
-      { label: "Ofertas", href: "/search?sort=price-asc" },
-    ],
-  },
-  {
     title: "Información",
     links: [
       { label: "Sobre nosotros", href: "/about" },
       { label: "Envíos y entregas", href: "/envios" },
       { label: "Devoluciones", href: "/devoluciones" },
       { label: "Preguntas frecuentes", href: "/preguntas-frecuentes" },
-      { label: "Contacto", href: "/contacto" },
     ],
   },
   {
@@ -131,4 +121,12 @@ export const shippingHighlights: ShippingHighlight[] = [
     text: "Tarjeta, Bizum y transferencia",
     icon: "card",
   },
+];
+
+export const paymentMethods = [
+  "Visa",
+  "Mastercard",
+  "Bizum",
+  "PayPal",
+  "Transferencia",
 ];
