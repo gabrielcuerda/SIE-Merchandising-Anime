@@ -5,9 +5,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
   HERO_INTERVAL_MS,
-  heroSlides,
+  getHeroSlides,
   type HeroSlide,
 } from "@/lib/home/hero-slides";
+import { translate } from "@/lib/i18n/dict";
+import { useLanguage } from "@/components/i18n/language-context";
 
 function Slide({ slide, isActive }: { slide: HeroSlide; isActive: boolean }) {
   return (
@@ -46,7 +48,9 @@ function Slide({ slide, isActive }: { slide: HeroSlide; isActive: boolean }) {
 }
 
 export default function HeroCarousel() {
-  const total = heroSlides.length;
+  const { lang } = useLanguage();
+  const slides = getHeroSlides(lang);
+  const total = slides.length;
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -83,7 +87,7 @@ export default function HeroCarousel() {
     >
       <div className="relative overflow-hidden rounded-card border border-ink-200 bg-white">
         <div className="relative min-h-[340px] sm:min-h-[400px] md:min-h-[460px]">
-          {heroSlides.map((slide, i) => (
+          {slides.map((slide, i) => (
             <Slide key={slide.id} slide={slide} isActive={i === active} />
           ))}
         </div>
@@ -92,7 +96,7 @@ export default function HeroCarousel() {
         <button
           type="button"
           onClick={() => go(active - 1)}
-          aria-label="Diapositiva anterior"
+          aria-label={translate(lang, "hero.prev")}
           className="absolute left-3 top-1/2 -translate-y-1/2 rounded-md border border-ink-200 bg-white/90 p-2 text-ink-950 shadow-card transition hover:bg-brand-500 hover:text-white"
         >
           <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
@@ -100,7 +104,7 @@ export default function HeroCarousel() {
         <button
           type="button"
           onClick={() => go(active + 1)}
-          aria-label="Diapositiva siguiente"
+          aria-label={translate(lang, "hero.next")}
           className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md border border-ink-200 bg-white/90 p-2 text-ink-950 shadow-card transition hover:bg-brand-500 hover:text-white"
         >
           <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
@@ -108,12 +112,12 @@ export default function HeroCarousel() {
 
         {/* Puntos indicadores */}
         <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
-          {heroSlides.map((slide, i) => (
+          {slides.map((slide, i) => (
             <button
               key={slide.id}
               type="button"
               onClick={() => go(i)}
-              aria-label={`Ir a la diapositiva ${i + 1}: ${slide.title}`}
+              aria-label={`${translate(lang, "hero.dot")} ${i + 1}: ${slide.title}`}
               aria-current={i === active}
               className={[
                 "h-2.5 rounded-full transition-all motion-reduce:transition-none",
