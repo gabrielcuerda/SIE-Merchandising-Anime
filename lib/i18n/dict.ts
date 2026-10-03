@@ -14,6 +14,15 @@ const es = {
   "ship.pay.text": "Tarjeta, Bizum y transferencia",
   "announce.import": "Importación directa",
   "announce.from": "desde Japón",
+  "announce.academic.title": "Proyecto académico universitario",
+  "announce.academic.text": "Web no oficial: no se venden productos reales",
+  "announce.disclaimer":
+    "Trabajo académico universitario · Web no oficial. No vendemos productos reales ni estamos afiliados a las franquicias mostradas.",
+  "announce.aria": "Avisos del sitio",
+  "announce.prev": "Aviso anterior",
+  "announce.next": "Aviso siguiente",
+  "announce.dot": "Ir al aviso",
+  "announce.slide": "Aviso",
 
   // ── Buscador (Fase 1) ──
   "search.label": "Buscar productos",
@@ -83,12 +92,13 @@ const es = {
   "nav.news": "Novedades",
   "nav.bestSellers": "Más vendidos",
   "nav.deals": "Ofertas",
-  "nav.allCategories": "Todas las categorías",
+  "nav.allCategories": "Categorías",
   "nav.freeShippingFrom": "Envío gratis desde",
   "nav.ariaCategories": "Categorías y navegación principal",
-  "nav.loadingCategories": "Estamos cargando las categorías. Mientras tanto,",
   "nav.browseCatalog": "mira todo el catálogo",
-  "nav.viewFullCatalog": "Ver el catálogo completo →",
+  "nav.viewFullCatalog": "Ver el catálogo completo",
+  "nav.categoriesSubtitle": "Elige una categoría para ver todo su catálogo",
+  "nav.noCategories": "Todavía no hay categorías disponibles",
 
   // ── Menú móvil ──
   "menu.open": "Abrir menú",
@@ -105,7 +115,8 @@ const es = {
   "account.register": "Crear cuenta",
 
   // ── Footer ──
-  "footer.claim": "Merchandising de anime y manga importado de Japón. Piezas originales con garantía y envío rastreable desde nuestro almacén en Madrid.",
+  "footer.claim":
+    "Merchandising de anime y manga importado de Japón. Piezas originales con garantía y envío rastreable desde nuestro almacén en Madrid.",
   "footer.rights": "Todos los derechos reservados.",
   "footer.col.info": "Información",
   "footer.col.account": "Mi cuenta",
@@ -118,7 +129,6 @@ const es = {
   "footer.legal.privacy": "Política de privacidad",
   "footer.legal.cookies": "Cookies",
   "site.address": "Calle Mayor 1, 28013 Madrid, España",
-  
 } as const;
 
 export type DictKey = keyof typeof es;
@@ -135,6 +145,15 @@ const en: Record<DictKey, string> = {
   "ship.pay.text": "Card, Bizum and bank transfer",
   "announce.import": "Direct import",
   "announce.from": "from Japan",
+  "announce.academic.title": "University academic project",
+  "announce.academic.text": "Unofficial website: no real products are sold",
+  "announce.disclaimer":
+    "University academic project · Unofficial website. We do not sell real products and are not affiliated with the featured franchises.",
+  "announce.aria": "Site notices",
+  "announce.prev": "Previous notice",
+  "announce.next": "Next notice",
+  "announce.dot": "Go to notice",
+  "announce.slide": "Notice",
 
   // Search
   "search.label": "Search products",
@@ -203,12 +222,13 @@ const en: Record<DictKey, string> = {
   "nav.news": "New arrivals",
   "nav.bestSellers": "Best sellers",
   "nav.deals": "Deals",
-  "nav.allCategories": "All categories",
+  "nav.allCategories": "Categories",
   "nav.freeShippingFrom": "Free shipping from",
   "nav.ariaCategories": "Categories and main navigation",
-  "nav.loadingCategories": "We are loading the categories. In the meantime,",
   "nav.browseCatalog": "browse the full catalogue",
-  "nav.viewFullCatalog": "View the full catalogue →",
+  "nav.viewFullCatalog": "View the full catalogue",
+  "nav.categoriesSubtitle": "Pick a category to browse its full catalogue",
+  "nav.noCategories": "There are no categories available yet",
 
   // Mobile menu
   "menu.open": "Open menu",
@@ -225,7 +245,8 @@ const en: Record<DictKey, string> = {
   "account.register": "Create account",
 
   // Footer
-  "footer.claim": "Anime and manga merchandise imported from Japan. Original pieces with warranty and tracked shipping from our Madrid warehouse.",
+  "footer.claim":
+    "Anime and manga merchandise imported from Japan. Original pieces with warranty and tracked shipping from our Madrid warehouse.",
   "footer.rights": "All rights reserved.",
   "footer.col.info": "Information",
   "footer.col.account": "My account",
@@ -238,7 +259,6 @@ const en: Record<DictKey, string> = {
   "footer.legal.privacy": "Privacy policy",
   "footer.legal.cookies": "Cookies",
   "site.address": "Calle Mayor 1, 28013 Madrid, Spain",
-  
 };
 
 export const dict: Record<Lang, Record<DictKey, string>> = { es, en };
