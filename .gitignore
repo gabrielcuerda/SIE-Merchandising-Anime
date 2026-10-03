@@ -4,6 +4,7 @@ node_modules/
 .next/
 
 .env*
+.env.local
 !.env.example
 
 # Artefactos de build de TypeScript

@@ -65,6 +65,14 @@ export const TAGS = {
   cart: "cart",
 };
 
+/** `productos.precio` se guarda SIN IVA: hay que sumarlo al cobrar. */
+export const IVA_PORCENTAJE = 21;
+
+/** Envío gratuito en todos los pedidos por ahora. */
+export const COSTE_ENVIO = 0;
+
+export const MONEDA = "EUR";
+
 /** Solo lo usa la capa heredada de Shopify (lib/shopify). */
 export const SHOPIFY_GRAPHQL_API_ENDPOINT = "/api/2023-01/graphql.json";
 

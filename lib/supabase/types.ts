@@ -21,7 +21,13 @@ export type CarritoItem = {
 export type Carrito = {
   items: CarritoItem[];
   totalItems: number;
+  /** Suma de precios sin IVA. */
   subtotal: number;
+  /** IVA aplicado sobre el subtotal. */
+  iva: number;
+  costeEnvio: number;
+  /** Lo que se cobra de verdad: subtotal + iva + costeEnvio. */
+  total: number;
   moneda: string;
 };
 
@@ -41,6 +47,14 @@ export type Pedido = {
     codigo_postal: string;
     pais: string;
     telefono?: string;
+  } | null;
+  /** Desglose del cobro: subtotal sin IVA, IVA, envío y total. */
+  direccion_pago: {
+    subtotal: number;
+    iva_porcentaje: number;
+    iva: number;
+    coste_envio: number;
+    total: number;
   } | null;
   metodo_pago: string | null;
   pago_id: string | null;

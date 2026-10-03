@@ -13,6 +13,7 @@ import React, {
   useMemo,
   useOptimistic,
 } from "react";
+import { COSTE_ENVIO, IVA_PORCENTAJE } from "@/lib/constants";
 import type { Carrito, CarritoItem } from "@/lib/supabase/types";
 
 type UpdateType = "plus" | "minus" | "delete";
@@ -48,7 +49,10 @@ function updateCartItem(
   return { ...item, cantidad: newCantidad };
 }
 
-function createOrUpdateCartItem(existingItem: CarritoItem | undefined, payload: any): CarritoItem {
+function createOrUpdateCartItem(
+  existingItem: CarritoItem | undefined,
+  payload: any,
+): CarritoItem {
   const unidades = payload.cantidad || 1;
   const cantidad = existingItem ? existingItem.cantidad + unidades : unidades;
   return {
@@ -75,17 +79,37 @@ function createOrUpdateCartItem(existingItem: CarritoItem | undefined, payload: 
 
 function updateCartTotals(
   items: CarritoItem[],
-): Pick<Carrito, "totalItems" | "subtotal" | "moneda"> {
+): Pick<
+  Carrito,
+  "totalItems" | "subtotal" | "iva" | "costeEnvio" | "total" | "moneda"
+> {
   const totalItems = items.reduce((sum, item) => sum + item.cantidad, 0);
   const subtotal = items.reduce(
     (sum, item) => sum + (item.producto_variantes?.precio || 0) * item.cantidad,
     0,
   );
-  return { totalItems, subtotal, moneda: "EUR" };
+  const iva = Math.round(subtotal * IVA_PORCENTAJE) / 100;
+
+  return {
+    totalItems,
+    subtotal: Math.round(subtotal * 100) / 100,
+    iva,
+    costeEnvio: COSTE_ENVIO,
+    total: Math.round((subtotal + iva + COSTE_ENVIO) * 100) / 100,
+    moneda: "EUR",
+  };
 }
 
 function createEmptyCart(): Carrito {
-  return { items: [], totalItems: 0, subtotal: 0, moneda: "EUR" };
+  return {
+    items: [],
+    totalItems: 0,
+    subtotal: 0,
+    iva: 0,
+    costeEnvio: COSTE_ENVIO,
+    total: 0,
+    moneda: "EUR",
+  };
 }
 
 function cartReducer(state: Carrito | undefined, action: CartAction): Carrito {

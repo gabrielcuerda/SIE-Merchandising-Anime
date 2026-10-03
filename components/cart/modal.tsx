@@ -4,7 +4,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Price from "@/components/price";
-import { DEFAULT_OPTION } from "@/lib/constants";
+import { DEFAULT_OPTION, IVA_PORCENTAJE } from "@/lib/constants";
 import { createUrl } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
@@ -34,7 +34,7 @@ export default function CartModal() {
 
   return (
     <>
-      <button aria-label="Open cart" onClick={openCart}>
+      <button aria-label="Abrir carrito" onClick={openCart}>
         <OpenCart quantity={cart?.totalItems} />
       </button>
       <Transition show={isOpen}>
@@ -61,8 +61,8 @@ export default function CartModal() {
           >
             <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white">
               <div className="flex items-center justify-between">
-                <p className="text-lg font-semibold">My Cart</p>
-                <button aria-label="Close cart" onClick={closeCart}>
+                <p className="text-lg font-semibold">Mi carrito</p>
+                <button aria-label="Cerrar carrito" onClick={closeCart}>
                   <CloseCart />
                 </button>
               </div>
@@ -71,7 +71,7 @@ export default function CartModal() {
                 <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
                   <ShoppingCartIcon className="h-16" />
                   <p className="mt-6 text-center text-2xl font-bold">
-                    Your cart is empty.
+                    Tu carrito está vacío.
                   </p>
                 </div>
               ) : (
@@ -101,22 +101,25 @@ export default function CartModal() {
                                 />
                               </div>
                               <div className="flex flex-row">
-                                <div className="relative h-16 w-16 overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900">
-                                  <Image
-                                    className="h-full w-full object-cover"
-                                    width={64}
-                                    height={64}
-                                    alt={
-                                      item.productos?.producto_imagenes?.[0]
-                                        ?.alt_text ||
-                                      item.productos?.titulo ||
-                                      ""
-                                    }
-                                    src={
-                                      item.productos?.producto_imagenes?.[0]
-                                        ?.url || ""
-                                    }
-                                  />
+                                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md border border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900">
+                                  {/* next/image revienta con src="" */}
+                                  {item.productos?.producto_imagenes?.[0]
+                                    ?.url && (
+                                    <Image
+                                      className="h-full w-full object-cover"
+                                      width={64}
+                                      height={64}
+                                      alt={
+                                        item.productos.producto_imagenes[0]
+                                          .alt_text ||
+                                        item.productos?.titulo ||
+                                        ""
+                                      }
+                                      src={
+                                        item.productos.producto_imagenes[0].url
+                                      }
+                                    />
+                                  )}
                                 </div>
                                 <Link
                                   href={merchandiseUrl}
@@ -170,18 +173,32 @@ export default function CartModal() {
                   </ul>
                   <div className="py-4 text-sm text-neutral-500 dark:text-neutral-400">
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
-                      <p>Taxes</p>
-                      <p className="text-right">Calculated at checkout</p>
+                      <p>Subtotal</p>
+                      <Price
+                        className="text-right"
+                        amount={cart.subtotal.toFixed(2)}
+                        currencyCode="EUR"
+                      />
                     </div>
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
-                      <p>Shipping</p>
-                      <p className="text-right">Calculated at checkout</p>
+                      <p>IVA ({IVA_PORCENTAJE} %)</p>
+                      <Price
+                        className="text-right"
+                        amount={cart.iva.toFixed(2)}
+                        currencyCode="EUR"
+                      />
                     </div>
-                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 pt-1 dark:border-neutral-700">
+                    <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
+                      <p>Envío</p>
+                      <p className="text-right">
+                        {cart.costeEnvio > 0 ? "Calculado al pagar" : "Gratis"}
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-between text-base">
                       <p>Total</p>
                       <Price
-                        className="text-right text-base text-black dark:text-white"
-                        amount={cart.subtotal.toFixed(2)}
+                        className="text-right text-base font-semibold text-black dark:text-white"
+                        amount={cart.total.toFixed(2)}
                         currencyCode="EUR"
                       />
                     </div>
@@ -191,7 +208,14 @@ export default function CartModal() {
                     className="block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
                     onClick={closeCart}
                   >
-                    Proceed to Checkout
+                    Ir a pagar
+                  </Link>
+                  <Link
+                    href="/cart"
+                    className="mt-3 block text-center text-sm text-neutral-500 hover:underline"
+                    onClick={closeCart}
+                  >
+                    Ver carrito completo
                   </Link>
                 </div>
               )}

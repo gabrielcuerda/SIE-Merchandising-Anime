@@ -5,51 +5,53 @@ import clsx from "clsx";
 import { addItem } from "components/cart/actions";
 import { Product, ProductVariant } from "@/lib/commerce/types";
 import { useSearchParams } from "next/navigation";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { useCart } from "./cart-context";
 
+const MAX_CANTIDAD = 99;
+
 function SubmitButton({
-  availableForSale,
-  selectedVariantId,
+  disponible,
+  pending,
 }: {
-  availableForSale: boolean;
-  selectedVariantId: string | undefined;
+  disponible: boolean;
+  pending: boolean;
 }) {
   const buttonClasses =
     "relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white";
   const disabledClasses = "cursor-not-allowed opacity-60 hover:opacity-60";
 
-  if (!availableForSale)
+  if (!disponible)
     return (
       <button disabled className={clsx(buttonClasses, disabledClasses)}>
         Agotado
-      </button>
-    );
-  if (!selectedVariantId)
-    return (
-      <button disabled className={clsx(buttonClasses, disabledClasses)}>
-        Añadir al carrito
       </button>
     );
 
   return (
     <button
       aria-label="Añadir al carrito"
-      className={clsx(buttonClasses, "hover:opacity-90")}
+      className={clsx(buttonClasses, "hover:opacity-90", {
+        "cursor-wait opacity-70 hover:opacity-70": pending,
+      })}
+      disabled={pending}
     >
       <div className="absolute left-0 ml-4">
         <PlusIcon className="h-5" />
       </div>
-      Añadir al carrito
+      {pending ? "Añadiendo…" : "Añadir al carrito"}
     </button>
   );
 }
 
 function QuantitySelector({
   cantidad,
+  max,
   onChange,
 }: {
   cantidad: number;
+  max: number;
   onChange: (valor: number) => void;
 }) {
   const boton =
@@ -74,7 +76,7 @@ function QuantitySelector({
           id="cantidad"
           type="number"
           min={1}
-          max={99}
+          max={max}
           value={cantidad}
           onChange={(event) => onChange(Number(event.target.value))}
           className="w-12 border-x border-neutral-300 bg-transparent py-2 text-center text-sm dark:border-neutral-700"
@@ -83,6 +85,7 @@ function QuantitySelector({
           type="button"
           aria-label="Sumar una unidad"
           onClick={() => onChange(cantidad + 1)}
+          disabled={cantidad >= max}
           className={boton}
         >
           <PlusIcon className="h-4 w-4" />
@@ -96,7 +99,7 @@ export function AddToCart({ product }: { product: Product }) {
   const { variants, availableForSale } = product;
   const { addCartItem } = useCart();
   const searchParams = useSearchParams();
-  const [message, formAction] = useActionState(addItem, null);
+  const [result, formAction, isPending] = useActionState(addItem, null);
   const [cantidad, setCantidad] = useState(1);
 
   const variant = variants.find((v: ProductVariant) =>
@@ -106,12 +109,34 @@ export function AddToCart({ product }: { product: Product }) {
   );
   const defaultVariantId = variants.length === 1 ? variants[0]?.id : undefined;
   const selectedVariantId = variant?.id || defaultVariantId;
-  const finalVariant = variants.find((v) => v.id === selectedVariantId)!;
+  // Antes se hacía con `!` y petaba con TypeError al renderizar un producto con
+  // varias variantes y sin parámetros de URL. Ahora simply cae a la primera.
+  const finalVariant = variants.find((v) => v.id === selectedVariantId);
+
+  // El stock solo acota a los productos gestionados por stock; en pre-venta,
+  // a-pedido y oferta no hay límite.
+  const maxCantidad =
+    product.status === "stock" && product.stock > 0
+      ? Math.min(MAX_CANTIDAD, product.stock)
+      : MAX_CANTIDAD;
+
+  useEffect(() => {
+    if (!result) return;
+    if (result.ok) {
+      toast.success("Añadido al carrito");
+    } else {
+      toast.error(result.error ?? "No se ha podido añadir al carrito");
+    }
+  }, [result]);
 
   const actualizarCantidad = (valor: number) => {
     if (Number.isNaN(valor)) return;
-    setCantidad(Math.min(99, Math.max(1, valor)));
+    setCantidad(Math.min(maxCantidad, Math.max(1, valor)));
   };
+
+  const deshabilitado = !availableForSale || !finalVariant;
+
+  if (!finalVariant) return null;
 
   const addItemAction = formAction.bind(null, {
     productoId: product.id,
@@ -122,6 +147,7 @@ export function AddToCart({ product }: { product: Product }) {
   return (
     <form
       action={async () => {
+        if (deshabilitado) return;
         addCartItem({
           productoId: product.id,
           varianteId: finalVariant.id,
@@ -131,16 +157,17 @@ export function AddToCart({ product }: { product: Product }) {
           precio: Number(finalVariant.price.amount),
           cantidad,
         });
-        addItemAction();
+        await addItemAction();
       }}
     >
-      <QuantitySelector cantidad={cantidad} onChange={actualizarCantidad} />
-      <SubmitButton
-        availableForSale={availableForSale}
-        selectedVariantId={selectedVariantId}
+      <QuantitySelector
+        cantidad={cantidad}
+        max={maxCantidad}
+        onChange={actualizarCantidad}
       />
+      <SubmitButton disponible={!deshabilitado} pending={isPending} />
       <p aria-live="polite" className="sr-only" role="status">
-        {message}
+        {result && !result.ok ? result.error : ""}
       </p>
     </form>
   );
