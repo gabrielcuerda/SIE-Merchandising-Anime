@@ -47,7 +47,7 @@ export default async function RootLayout({
 
   return (
     <html lang={lang} className={GeistSans.variable}>
-       <body className="flex min-h-screen flex-col bg-white text-ink-950 selection:bg-brand-200 selection:text-ink-950">
+      <body className="flex min-h-screen flex-col bg-white text-ink-950 selection:bg-brand-200 selection:text-ink-950">
         <LanguageProvider initialLang={lang}>
           <CartProvider cartPromise={cart}>
             <Navbar />

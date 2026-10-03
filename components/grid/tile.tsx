@@ -39,8 +39,7 @@ export function GridTileImage({
           {...props}
         />
       ) : null}
-       {badge ? (
-        <div className="absolute left-2 top-2 z-10">{badge}</div>) : null}
+      {badge ? <div className="absolute left-2 top-2 z-10">{badge}</div> : null}
       {label ? (
         <Label
           title={label.title}

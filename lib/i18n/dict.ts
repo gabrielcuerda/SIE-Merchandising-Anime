@@ -128,6 +128,8 @@ const es = {
   "footer.legal.notice": "Aviso legal",
   "footer.legal.privacy": "Política de privacidad",
   "footer.legal.cookies": "Cookies",
+  "page.backHome": "Volver al inicio",
+  "page.updated": "Última actualización:",
   "site.address": "Calle Mayor 1, 28013 Madrid, España",
 } as const;
 
@@ -258,6 +260,8 @@ const en: Record<DictKey, string> = {
   "footer.legal.notice": "Legal notice",
   "footer.legal.privacy": "Privacy policy",
   "footer.legal.cookies": "Cookies",
+  "page.backHome": "Back to home",
+  "page.updated": "Last updated:",
   "site.address": "Calle Mayor 1, 28013 Madrid, Spain",
 };
 
