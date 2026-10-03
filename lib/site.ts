@@ -64,7 +64,11 @@ export const siteConfig = {
 
 export const mainNav: SiteLink[] = [
   { i18nKey: "nav.news", label: "Novedades", href: "/search?sort=latest-desc" },
-  { i18nKey: "nav.bestSellers", label: "Más vendidos", href: "/search?sort=trending-desc" },
+  {
+    i18nKey: "nav.bestSellers",
+    label: "Más vendidos",
+    href: "/search?sort=trending-desc",
+  },
   { i18nKey: "nav.deals", label: "Ofertas", href: "/search?sort=price-asc" },
 ];
 
@@ -80,9 +84,21 @@ export const footerColumns: FooterColumn[] = [
     title: "Información",
     links: [
       { i18nKey: "footer.info.about", label: "Sobre nosotros", href: "/about" },
-      { i18nKey: "footer.info.shipping", label: "Envíos y entregas", href: "/envios" },
-      { i18nKey: "footer.info.returns", label: "Devoluciones", href: "/devoluciones" },
-      { i18nKey: "footer.info.faq", label: "Preguntas frecuentes", href: "/preguntas-frecuentes" },
+      {
+        i18nKey: "footer.info.shipping",
+        label: "Envíos y entregas",
+        href: "/envios",
+      },
+      {
+        i18nKey: "footer.info.returns",
+        label: "Devoluciones",
+        href: "/devoluciones",
+      },
+      {
+        i18nKey: "footer.info.faq",
+        label: "Preguntas frecuentes",
+        href: "/preguntas-frecuentes",
+      },
     ],
   },
   {
@@ -91,47 +107,34 @@ export const footerColumns: FooterColumn[] = [
     links: [
       { i18nKey: "account.signIn", label: "Iniciar sesión", href: "/login" },
       { i18nKey: "account.register", label: "Crear cuenta", href: "/register" },
-      { i18nKey: "account.orders", label: "Mis pedidos", href: "/account/orders" },
-      { i18nKey: "account.wishlist", label: "Mi lista de deseos", href: "/wishlist" },
+      {
+        i18nKey: "account.orders",
+        label: "Mis pedidos",
+        href: "/account/orders",
+      },
+      {
+        i18nKey: "account.wishlist",
+        label: "Mi lista de deseos",
+        href: "/wishlist",
+      },
     ],
   },
   {
     i18nKey: "footer.col.legal",
     title: "Legal",
     links: [
-      { i18nKey: "footer.legal.notice", label: "Aviso legal", href: "/aviso-legal" },
-      { i18nKey: "footer.legal.privacy", label: "Política de privacidad", href: "/privacidad" },
+      {
+        i18nKey: "footer.legal.notice",
+        label: "Aviso legal",
+        href: "/aviso-legal",
+      },
+      {
+        i18nKey: "footer.legal.privacy",
+        label: "Política de privacidad",
+        href: "/privacidad",
+      },
       { i18nKey: "footer.legal.cookies", label: "Cookies", href: "/cookies" },
     ],
-  },
-];
-
-export type ShippingHighlight = {
-  title: string;
-  text: string;
-  icon: "truck" | "return" | "card";
-};
-
-export const shippingHighlights: ShippingHighlight[] = [
-  {
-    title: siteConfig.freeShippingLabel,
-    text: `En pedidos desde ${siteConfig.freeShippingThreshold} €`,
-    icon: "truck",
-  },
-  {
-    title: "Entrega en 24-48 h",
-    text: "Península y Europa con seguimiento",
-    icon: "truck",
-  },
-  {
-    title: "Devolución en 30 días",
-    text: "Sin preguntas y sin coste",
-    icon: "return",
-  },
-  {
-    title: "Pago seguro",
-    text: "Tarjeta, Bizum y transferencia",
-    icon: "card",
   },
 ];
 

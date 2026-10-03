@@ -66,6 +66,7 @@
   --animate-blink: blink 1s steps(2, start) infinite;
   --animate-carousel: carousel 30s linear infinite;
   --animate-marquee: marquee 34s linear infinite;
+  --animate-marquee-quick: marquee 22s linear infinite;
 
   @keyframes fade-in {
     from {

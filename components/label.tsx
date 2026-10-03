@@ -10,7 +10,7 @@ const Label = ({
   title: string;
   amount: string;
   currencyCode: string;
-  position?: "bottom" | "center";
+  position?: "bottom" | "center" | "bottom-center";
 }) => {
   return (
     <div
@@ -18,6 +18,7 @@ const Label = ({
         "absolute bottom-0 left-0 flex w-full px-3 pb-3 @container/label",
         {
           "lg:px-20 lg:pb-[35%]": position === "center",
+          "justify-center": position === "bottom-center",
         },
       )}
     >
