@@ -6,50 +6,72 @@ import {
   removeCartItem as removeCartItemDB,
   clearCart as clearCartDB,
 } from "@/lib/cart";
-import { revalidateTag } from "next/cache";
-import { TAGS } from "@/lib/constants";
+import { revalidatePath } from "next/cache";
+
+export type CartActionResult = {
+  ok: boolean;
+  error?: string;
+};
+
+const ok: CartActionResult = { ok: true };
+
+/** Los mensajes del SQL llegan al usuario tal cual ("Solo quedan 2 unidades..."). */
+function toMessage(e: unknown): string {
+  if (e instanceof Error) {
+    return e.message.replace(/\s*\(\w{0,5}: .*\)$/, "");
+  }
+  return "Ha ocurrido un error inesperado.";
+}
 
 export async function addItem(
-  prevState: any,
+  _prevState: unknown,
   payload: { productoId: string; varianteId: string; cantidad: number },
-) {
+): Promise<CartActionResult> {
   try {
     await addToCartDB(payload);
-    revalidateTag(TAGS.cart, "seconds");
+    revalidatePath("/cart");
+    return ok;
   } catch (e) {
-    console.error(e);
-    return "Error adding item to cart";
+    console.error("[carrito] addItem:", e);
+    return { ok: false, error: toMessage(e) };
   }
 }
 
-export async function removeItem(prevState: any, itemId: string) {
+export async function removeItem(
+  _prevState: unknown,
+  itemId: string,
+): Promise<CartActionResult> {
   try {
     await removeCartItemDB(itemId);
-    revalidateTag(TAGS.cart, "seconds");
+    revalidatePath("/cart");
+    return ok;
   } catch (e) {
-    console.error(e);
-    return "Error removing item from cart";
+    console.error("[carrito] removeItem:", e);
+    return { ok: false, error: toMessage(e) };
   }
 }
 
 export async function updateItemQuantity(
-  prevState: any,
+  _prevState: unknown,
   payload: { itemId: string; cantidad: number },
-) {
+): Promise<CartActionResult> {
   try {
     await updateCartItemDB(payload.itemId, payload.cantidad);
-    revalidateTag(TAGS.cart, "seconds");
+    revalidatePath("/cart");
+    return ok;
   } catch (e) {
-    console.error(e);
-    return "Error updating item quantity";
+    console.error("[carrito] updateItemQuantity:", e);
+    return { ok: false, error: toMessage(e) };
   }
 }
 
-export async function clearCartAction() {
+export async function clearCartAction(): Promise<CartActionResult> {
   try {
     await clearCartDB();
-    revalidateTag(TAGS.cart, "seconds");
+    revalidatePath("/cart");
+    return ok;
   } catch (e) {
-    console.error(e);
+    console.error("[carrito] clearCart:", e);
+    return { ok: false, error: toMessage(e) };
   }
 }

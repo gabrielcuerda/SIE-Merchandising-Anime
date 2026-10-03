@@ -2,7 +2,7 @@ import { getCart } from "@/lib/cart";
 import Image from "next/image";
 import Link from "next/link";
 import Price from "@/components/price";
-import { DEFAULT_OPTION } from "@/lib/constants";
+import { DEFAULT_OPTION, IVA_PORCENTAJE } from "@/lib/constants";
 import { createUrl } from "@/lib/utils";
 import { DeleteItemButton } from "@/components/cart/delete-item-button";
 import { EditItemQuantityButton } from "@/components/cart/edit-item-quantity-button";
@@ -18,15 +18,15 @@ export default async function CartPage() {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center">
         <ShoppingCartIcon className="h-16 w-16 text-neutral-400" />
-        <h1 className="mt-6 text-2xl font-bold">Your cart is empty</h1>
+        <h1 className="mt-6 text-2xl font-bold">Tu carrito está vacío</h1>
         <p className="mt-2 text-neutral-500">
-          Looks like you haven&apos;t added anything yet.
+          Todavía no has añadido ningún producto.
         </p>
         <Link
           href="/search"
           className="mt-6 rounded-full bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:opacity-90"
         >
-          Continue Shopping
+          Seguir comprando
         </Link>
       </div>
     );
@@ -34,7 +34,8 @@ export default async function CartPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="mb-8 text-3xl font-bold">Shopping Cart</h1>
+      <h1 className="mb-8 text-3xl font-bold">Carrito</h1>
+
       <div className="flex flex-col gap-8 lg:flex-row">
         <div className="flex-1">
           <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
@@ -45,21 +46,23 @@ export default async function CartPage() {
               );
               return (
                 <li key={item.id} className="flex gap-4 py-4">
-                  <div className="relative h-24 w-24 overflow-hidden rounded-md border border-neutral-300 bg-neutral-300 dark:border-neutral-700 dark:bg-neutral-900">
-                    <Image
-                      className="h-full w-full object-cover"
-                      width={96}
-                      height={96}
-                      alt={
-                        item.productos?.producto_imagenes?.[0]?.alt_text ||
-                        item.productos?.titulo ||
-                        ""
-                      }
-                      src={item.productos?.producto_imagenes?.[0]?.url || ""}
-                    />
+                  <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-md border border-neutral-300 bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900">
+                    {item.productos?.producto_imagenes?.[0]?.url && (
+                      <Image
+                        className="h-full w-full object-cover"
+                        width={96}
+                        height={96}
+                        alt={
+                          item.productos?.producto_imagenes?.[0]?.alt_text ||
+                          item.productos?.titulo ||
+                          ""
+                        }
+                        src={item.productos.producto_imagenes[0].url}
+                      />
+                    )}
                   </div>
                   <div className="flex flex-1 flex-col">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between gap-4">
                       <div>
                         <Link
                           href={merchandiseUrl}
@@ -82,42 +85,38 @@ export default async function CartPage() {
                     </div>
                     <div className="mt-auto flex items-center justify-between">
                       <div className="flex h-9 flex-row items-center rounded-full border border-neutral-200 dark:border-neutral-700">
-                        <EditItemQuantityButton
-                          item={item}
-                          type="minus"
-                          optimisticUpdate={async () => {}}
-                        />
+                        <EditItemQuantityButton item={item} type="minus" />
                         <p className="w-6 text-center text-sm">
                           {item.cantidad}
                         </p>
-                        <EditItemQuantityButton
-                          item={item}
-                          type="plus"
-                          optimisticUpdate={async () => {}}
-                        />
+                        <EditItemQuantityButton item={item} type="plus" />
                       </div>
-                      <DeleteItemButton
-                        item={item}
-                        optimisticUpdate={async () => {}}
-                      />
+                      <DeleteItemButton item={item} />
                     </div>
                   </div>
                 </li>
               );
             })}
           </ul>
-          <form action={clearCartAction} className="mt-4">
+
+          <form
+            action={async () => {
+              await clearCartAction();
+            }}
+            className="mt-4"
+          >
             <button
               type="submit"
               className="text-sm text-neutral-500 underline hover:text-neutral-800 dark:hover:text-neutral-300"
             >
-              Clear cart
+              Vaciar carrito
             </button>
           </form>
         </div>
+
         <div className="w-full lg:w-80">
           <div className="rounded-lg border border-neutral-200 p-6 dark:border-neutral-700">
-            <h2 className="mb-4 text-lg font-semibold">Order Summary</h2>
+            <h2 className="mb-4 text-lg font-semibold">Resumen del pedido</h2>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-neutral-500 dark:text-neutral-400">
@@ -127,32 +126,40 @@ export default async function CartPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-neutral-500 dark:text-neutral-400">
-                  Shipping
+                  IVA ({IVA_PORCENTAJE} %)
                 </span>
-                <span>Calculated at checkout</span>
+                <Price amount={cart.iva.toFixed(2)} currencyCode="EUR" />
               </div>
               <div className="flex justify-between">
                 <span className="text-neutral-500 dark:text-neutral-400">
-                  Taxes
+                  Envío
                 </span>
-                <span>Calculated at checkout</span>
+                <span>
+                  {cart.costeEnvio > 0 ? "Calculado al pagar" : "Gratis"}
+                </span>
               </div>
               <div className="flex justify-between border-t border-neutral-200 pt-3 text-base font-semibold dark:border-neutral-700">
                 <span>Total</span>
-                <Price amount={cart.subtotal.toFixed(2)} currencyCode="EUR" />
+                <Price amount={cart.total.toFixed(2)} currencyCode="EUR" />
               </div>
             </div>
+
+            <p className="mt-3 text-xs text-neutral-500">
+              Los precios no incluyen IVA. Se aplica un {IVA_PORCENTAJE} % en el
+              momento del pago.
+            </p>
+
             <Link
               href="/checkout"
               className="mt-6 block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
             >
-              Proceed to Checkout
+              Ir a pagar
             </Link>
             <Link
               href="/search"
               className="mt-3 block text-center text-sm text-neutral-500 hover:underline"
             >
-              Continue Shopping
+              Seguir comprando
             </Link>
           </div>
         </div>
