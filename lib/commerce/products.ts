@@ -5,6 +5,9 @@ import type {
   ProductoVariante,
 } from "@/lib/db/types";
 import type { Image, Product, ProductOption, ProductVariant } from "./types";
+import { getLang } from "@/lib/i18n/lang";
+import { traducirCampo } from "@/lib/i18n/productos.en";
+import type { Lang } from "@/lib/i18n/dict";
 
 const placeholderImage: Image = {
   url: "/placeholder.svg",
@@ -19,12 +22,12 @@ type ProductoConDetalle = Producto & {
   categorias: { nombre: string; slug: string } | null;
 };
 
-function mapImages(producto: ProductoConDetalle): Image[] {
+function mapImages(producto: ProductoConDetalle, titulo: string): Image[] {
   const images = [...(producto.producto_imagenes || [])]
     .sort((a, b) => a.orden_cat - b.orden_cat)
     .map((image) => ({
       url: image.url,
-      altText: image.alt_text || producto.titulo,
+      altText: image.alt_text || titulo,
       width: 1200,
       height: 1200,
     }));
@@ -32,7 +35,15 @@ function mapImages(producto: ProductoConDetalle): Image[] {
   return images.length > 0 ? images : [placeholderImage];
 }
 
-function mapProduct(producto: ProductoConDetalle): Product {
+function mapProduct(producto: ProductoConDetalle, lang: Lang): Product {
+  const titulo = traducirCampo(producto.slug, "titulo", producto.titulo, lang);
+  const descripcion = traducirCampo(
+    producto.slug,
+    "descripcion",
+    producto.descripcion,
+    lang,
+  );
+
   type SourceVariant = Pick<
     ProductoVariante,
     "id" | "titulo" | "precio" | "stock" | "opciones"
@@ -81,14 +92,14 @@ function mapProduct(producto: ProductoConDetalle): Product {
   const prices = variants.map((variant) => Number(variant.price.amount));
   const minPrice = Math.min(...prices);
   const maxPrice = Math.max(...prices);
-  const images = mapImages(producto);
+  const images = mapImages(producto, titulo);
 
   return {
     id: producto.id,
+    title: titulo,
+    description: descripcion,
+    descriptionHtml: descripcion,
     handle: producto.slug,
-    title: producto.titulo,
-    description: producto.descripcion || "",
-    descriptionHtml: producto.descripcion || "",
     availableForSale: producto.stock > 0 || producto.status !== "stock",
     status: producto.status,
     stock: producto.stock,
@@ -102,8 +113,8 @@ function mapProduct(producto: ProductoConDetalle): Product {
       maxVariantPrice: { amount: String(maxPrice), currencyCode: "EUR" },
     },
     seo: {
-      title: producto.titulo,
-      description: producto.descripcion || producto.titulo,
+      title: titulo,
+      description: descripcion || titulo,
     },
     tags: producto.tags || [],
     createdAt: producto.created_at,
@@ -113,21 +124,23 @@ function mapProduct(producto: ProductoConDetalle): Product {
 
 export async function getProduct(handle: string): Promise<Product | undefined> {
   const producto = await getProducto(handle);
-  return producto ? mapProduct(producto as ProductoConDetalle) : undefined;
+  if (!producto) return undefined;
+  const lang = await getLang();
+  return mapProduct(producto as ProductoConDetalle, lang);
 }
 
 export async function getProductRecommendations(
   productId: string,
 ): Promise<Product[]> {
   const productos = await getProductos({});
+  const lang = await getLang();
   return productos
     .filter((producto) => producto.id !== productId)
     .slice(0, 4)
     .map((producto) =>
-      mapProduct({
-        ...producto,
-        producto_variantes: [],
-        categorias: null,
-      } as ProductoConDetalle),
+      mapProduct(
+        { ...producto, producto_variantes: [], categorias: null } as ProductoConDetalle,
+        lang,
+      ),
     );
 }

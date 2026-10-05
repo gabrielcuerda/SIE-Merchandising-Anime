@@ -4,6 +4,8 @@ import StatusBadge from "components/grid/status-badge";
 import WishlistToggle from "@/components/wishlist/wishlist-toggle";
 import type { Producto, ProductoImagen } from "@/lib/db/types";
 import Link from "next/link";
+import { getLang } from "@/lib/i18n/lang";
+import { traducirCampo } from "@/lib/i18n/productos.en";
 
 export type ProductoConImagen = Producto & {
   producto_imagenes: ProductoImagen[];
@@ -24,6 +26,7 @@ export default async function ProductoGridItems({
   productos: ProductoConImagen[];
   wishlistProductIds?: string[];
 }) {
+  const lang = await getLang();
   return (
     <>
       {productos.map((producto) => (
@@ -35,10 +38,10 @@ export default async function ProductoGridItems({
               prefetch={true}
             >
               <GridTileImage
-                alt={producto.titulo}
+                alt={traducirCampo(producto.slug, "titulo", producto.titulo, lang)}
                 badge={ <StatusBadge status={producto.status} stock={producto.stock} />}
                 label={{
-                  title: producto.titulo,
+                  title: traducirCampo(producto.slug, "titulo", producto.titulo, lang),
                   amount: producto.precio.toString(),
                   currencyCode: "EUR",
                 }}
