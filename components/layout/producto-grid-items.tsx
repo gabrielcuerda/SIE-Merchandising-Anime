@@ -4,8 +4,8 @@ import StatusBadge from "components/grid/status-badge";
 import WishlistToggle from "@/components/wishlist/wishlist-toggle";
 import type { Producto, ProductoImagen } from "@/lib/db/types";
 import Link from "next/link";
-import { translate } from "@/lib/i18n/dict";
 import { getLang } from "@/lib/i18n/lang";
+import { traducirCampo } from "@/lib/i18n/productos.en";
 
 export type ProductoConImagen = Producto & {
   producto_imagenes: ProductoImagen[];
@@ -38,10 +38,10 @@ export default async function ProductoGridItems({
               prefetch={true}
             >
               <GridTileImage
-                alt={producto.titulo}
-                badge={<StatusBadge status={producto.status} />}
+                alt={traducirCampo(producto.slug, "titulo", producto.titulo, lang)}
+                badge={ <StatusBadge status={producto.status} stock={producto.stock} />}
                 label={{
-                  title: producto.titulo,
+                  title: traducirCampo(producto.slug, "titulo", producto.titulo, lang),
                   amount: producto.precio.toString(),
                   currencyCode: "EUR",
                 }}
@@ -50,13 +50,6 @@ export default async function ProductoGridItems({
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
               />
             </Link>
-            {producto.stock === 0 ? (
-              <div className="pointer-events-none absolute left-2 top-9 z-10">
-                <span className="rounded-sm bg-alert-500 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase">
-                  {translate(lang, "status.agotado")}
-                </span>
-              </div>
-            ) : null}
             <WishlistToggle
               productId={producto.id}
               initialSaved={wishlistProductIds.includes(producto.id)}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import Prose from "components/prose";
 import Link from "next/link";
-
+import { getPageEn } from "@/lib/i18n/pages.en";
 import { getPage } from "@/lib/commerce/placeholders";
 import { translate } from "@/lib/i18n/dict";
 import { getLang } from "@/lib/i18n/lang";
@@ -16,9 +16,12 @@ export async function generateMetadata(props: {
 
   if (!page) return notFound();
 
+  const lang = await getLang();
+  const contenido = (lang === "es" ? null : getPageEn(params.page)) ?? page;
+
   return {
-    title: page.seo?.title || page.title,
-    description: page.seo?.description || page.bodySummary,
+    title: contenido.title,
+    description: contenido.seo.description || contenido.bodySummary,
     openGraph: {
       publishedTime: page.createdAt,
       modifiedTime: page.updatedAt,
@@ -36,21 +39,22 @@ export default async function Page(props: {
   if (!page) return notFound();
 
   const lang = await getLang();
+  const contenido = (lang === "es" ? null : getPageEn(params.page)) ?? page;
 
   return (
     <article>
       <header className="mb-8 border-b border-ink-200 pb-6">
         <h1 className="text-3xl font-extrabold tracking-tight text-ink-950 uppercase md:text-5xl">
-          {page.title}
+          {contenido.title}
         </h1>
-        {page.seo?.description || page.bodySummary ? (
+        {contenido.seo?.description || contenido.bodySummary ? (
           <p className="mt-3 text-base text-ink-500">
-            {page.seo?.description || page.bodySummary}
+            {contenido.seo?.description || contenido.bodySummary}
           </p>
         ) : null}
       </header>
 
-      <Prose className="mb-10" html={page.body} />
+      <Prose className="mb-10" html={contenido.body} />
 
       <footer className="mt-10 flex flex-col gap-4 border-t border-ink-200 pt-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs text-ink-400">

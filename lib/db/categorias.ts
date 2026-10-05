@@ -16,7 +16,16 @@ export async function getCategorias() {
 export type CategoriaDestacada = Categoria & {
   totalProductos: number;
   totalOfertas: number;
+  tipo: "figura" | "ropa" | "mixto";
 };
+
+const TAGS_ROPA = new Set([
+  "ropa", "camiseta", "camisetas", "sudadera", "pantalon",
+  "hoodie", "apparel", "tshirt", "t-shirt", "playera",
+]);
+
+const esRopa = (p: { tags: string[] | null }) =>
+  (p.tags ?? []).some((t) => TAGS_ROPA.has(t.toLowerCase()));
 
 /**
  * Categorías con el número de figuras de cada una.
@@ -25,7 +34,7 @@ export async function getCategoriasDestacadas(): Promise<CategoriaDestacada[]> {
   // Las dos consultas van a la vez: no hay por qué esperar a la primera
   const [categorias, productos] = await Promise.all([
     getCategorias(),
-    supabase.from('productos').select('categoria_id, status'),
+    supabase.from('productos').select('categoria_id, status, tags'),
   ]);
 
   if (productos.error) throw productos.error;
@@ -33,15 +42,25 @@ export async function getCategoriasDestacadas(): Promise<CategoriaDestacada[]> {
   const filas = (productos.data ?? []) as {
     categoria_id: string | null;
     status: string;
+    tags: string[] | null;
   }[];
 
   return categorias.map((categoria) => {
     const propias = filas.filter((p) => p.categoria_id === categoria.id);
+    const ropa = propias.filter(esRopa).length;
+
+    const tipo =
+      propias.length === 0 || ropa === 0
+        ? "figura"
+        : ropa === propias.length
+          ? "ropa"
+          : "mixto";
 
     return {
       ...categoria,
       totalProductos: propias.length,
       totalOfertas: propias.filter((p) => p.status === 'oferta').length,
+      tipo,
     };
   });
 }

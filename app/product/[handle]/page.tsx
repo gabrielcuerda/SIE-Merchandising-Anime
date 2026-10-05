@@ -10,6 +10,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { createClient } from "@/lib/supabase/server";
 
 function Breadcrumb({ product }: { product: Product }) {
   const migas = [
@@ -94,6 +95,20 @@ export default async function ProductPage(props: {
 
   if (!product) return notFound();
 
+  const supabase = await createClient();
+  const { data: authData } = await supabase.auth.getUser();
+  let guardado = false;
+
+  if (authData.user) {
+    const { data: fila } = await supabase
+      .from("wishlist")
+      .select("id")
+      .eq("usuario_id", authData.user.id)
+      .eq("producto_id", product.id)
+      .maybeSingle();
+    guardado = Boolean(fila);
+  }
+
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -143,7 +158,7 @@ export default async function ProductPage(props: {
 
           <div className="basis-full lg:basis-2/6">
             <Suspense fallback={null}>
-              <ProductDescription product={product} />
+              <ProductDescription product={product} saved={guardado} />
             </Suspense>
           </div>
         </div>
