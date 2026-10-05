@@ -1,14 +1,18 @@
 import Collections from "components/layout/search/collections";
 import FilterList from "components/layout/search/filter";
-import { estados, precios, sorting } from "lib/constants";
+import { estados, precios, sorting, traducirFiltros } from "lib/constants";
+import { translate } from "@/lib/i18n/dict";
+import { getLang } from "@/lib/i18n/lang";
 import ChildrenWrapper from "./children-wrapper";
 import { Suspense } from "react";
 
-export default function SearchLayout({
+export default async function SearchLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const lang = await getLang();
+
   return (
     <div className="page-container flex flex-col gap-8 pb-4 md:flex-row">
       <div className="order-first w-full flex-none md:max-w-[220px]">
@@ -20,14 +24,23 @@ export default function SearchLayout({
         </Suspense>
       </div>
       <div className="order-none flex-none md:order-last md:w-[220px]">
-          <FilterList list={sorting} title="Ordenar" />
+          <FilterList
+            list={traducirFiltros(lang, sorting)}
+            title={translate(lang, "search.sortTitle")}
+          />
 
           <div className="mt-6">
-            <FilterList list={estados} title="Estado" />
+            <FilterList
+              list={traducirFiltros(lang, estados)}
+              title={translate(lang, "search.statusTitle")}
+            />
           </div>
 
           <div className="mt-6">
-            <FilterList list={precios} title="Precio" />
+            <FilterList
+              list={traducirFiltros(lang, precios)}
+              title={translate(lang, "search.priceTitle")}
+            />
           </div>
         </div>
     </div>

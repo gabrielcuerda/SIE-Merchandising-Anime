@@ -32,7 +32,7 @@ function Banner({ categoria, duplicado = false, lang }: BannerProps) {
   const degradado = GRADIENTES[categoria.slug] ?? GRADIENTE_POR_DEFECTO;
   const etiqueta = translate(
     lang,
-    categoria.totalProductos === 1 ? "promo.figure.one" : "promo.figure.other",
+    `promo.item.${categoria.tipo}.${categoria.totalProductos === 1 ? "one" : "other"}`,
   );
 
   return (

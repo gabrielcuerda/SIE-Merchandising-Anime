@@ -1,4 +1,7 @@
+import { translate, type Lang } from "@/lib/i18n/dict";
+
 export type SortFilterItem = {
+  i18nKey: string;
   title: string;
   slug: string | null;
   sortKey: "RELEVANCE" | "BEST_SELLING" | "CREATED_AT" | "PRICE";
@@ -6,6 +9,7 @@ export type SortFilterItem = {
 };
 
 export const defaultSort: SortFilterItem = {
+  i18nKey: "sort.relevance",
   title: "Relevance",
   slug: null,
   sortKey: "RELEVANCE",
@@ -14,50 +18,38 @@ export const defaultSort: SortFilterItem = {
 
 export const sorting: SortFilterItem[] = [
   defaultSort,
-  {
-    title: "Trending",
-    slug: "trending-desc",
-    sortKey: "BEST_SELLING",
-    reverse: false,
-  }, // asc
-  {
-    title: "Latest arrivals",
-    slug: "latest-desc",
-    sortKey: "CREATED_AT",
-    reverse: true,
-  },
-  {
-    title: "Price: Low to high",
-    slug: "price-asc",
-    sortKey: "PRICE",
-    reverse: false,
-  }, // asc
-  {
-    title: "Price: High to low",
-    slug: "price-desc",
-    sortKey: "PRICE",
-    reverse: true,
-  },
+  { i18nKey: "sort.trending", title: "Trending", slug: "trending-desc", sortKey: "BEST_SELLING", reverse: false },
+  { i18nKey: "sort.latest", title: "Latest arrivals", slug: "latest-desc", sortKey: "CREATED_AT", reverse: true },
+  { i18nKey: "sort.priceAsc", title: "Price: Low to high", slug: "price-asc", sortKey: "PRICE", reverse: false },
+  { i18nKey: "sort.priceDesc", title: "Price: High to low", slug: "price-desc", sortKey: "PRICE", reverse: true },
 ];
 
 export type ParamFilterItem = {
+  i18nKey: string;
   title: string;
   param: string;
   value: string;
 };
 
 export const estados: ParamFilterItem[] = [
-  { title: "En stock", param: "estado", value: "stock" },
-  { title: "Pre-venta", param: "estado", value: "pre-venta" },
-  { title: "Bajo pedido", param: "estado", value: "a-pedido" },
-  { title: "Oferta", param: "estado", value: "oferta" },
+  { i18nKey: "status.stock", title: "En stock", param: "estado", value: "stock" },
+  { i18nKey: "status.preVenta", title: "Pre-venta", param: "estado", value: "pre-venta" },
+  { i18nKey: "status.aPedido", title: "Bajo pedido", param: "estado", value: "a-pedido" },
+  { i18nKey: "status.oferta", title: "Oferta", param: "estado", value: "oferta" },
 ];
 
 export const precios: ParamFilterItem[] = [
-  { title: "Menos de 150 €", param: "precio", value: "0-150" },
-  { title: "150 € – 200 €", param: "precio", value: "150-200" },
-  { title: "Más de 200 €", param: "precio", value: "200-" },
+  { i18nKey: "price.under150", title: "Menos de 150 €", param: "precio", value: "0-150" },
+  { i18nKey: "price.150to200", title: "150 € – 200 €", param: "precio", value: "150-200" },
+  { i18nKey: "price.over200", title: "Más de 200 €", param: "precio", value: "200-" },
 ];
+
+export function traducirFiltros<T extends { i18nKey: string; title: string }>(
+  lang: Lang,
+  items: T[],
+): T[] {
+  return items.map((i) => ({ ...i, title: translate(lang, i.i18nKey) || i.title }));
+}
 
 export const TAGS = {
   collections: "collections",

@@ -2,6 +2,7 @@ import { AddToCart } from "components/cart/add-to-cart";
 import StatusBadge from "components/grid/status-badge";
 import Price from "components/price";
 import Prose from "components/prose";
+import WishlistToggle from "@/components/wishlist/wishlist-toggle";
 
 import { Product } from "@/lib/commerce/types";
 import { VariantSelector } from "./variant-selector";
@@ -30,22 +31,30 @@ function disponibilidad(product: Product): { texto: string; clase: string } {
   };
 }
 
-export function ProductDescription({ product }: { product: Product }) {
+export function ProductDescription({
+  product,
+  saved = false,
+}: {
+  product: Product;
+  saved?: boolean;
+}) {
   const estado = disponibilidad(product);
 
   return (
-    <>
+    <div className="relative">
+
       <div className="mb-6 flex flex-col border-b pb-6 dark:border-neutral-700">
         <h1 className="mb-3 text-5xl font-medium">{product.title}</h1>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex flex-wrap items-center gap-3 py-1 pr-12">
           <div className="rounded-full bg-blue-600 p-2 text-sm text-white">
             <Price
               amount={product.priceRange.maxVariantPrice.amount}
               currencyCode={product.priceRange.maxVariantPrice.currencyCode}
             />
           </div>
-          <StatusBadge status={product.status} />
+          <StatusBadge status={product.status} stock={product.stock} />
+          <WishlistToggle productId={product.id} initialSaved={saved} />
         </div>
 
         <p className={`mt-3 text-sm font-medium ${estado.clase}`}>
@@ -61,6 +70,6 @@ export function ProductDescription({ product }: { product: Product }) {
         />
       ) : null}
       <AddToCart product={product} />
-    </>
+    </div>
   );
 }
