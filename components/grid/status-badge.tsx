@@ -12,9 +12,21 @@ const ESTADOS: Record<Status, { key: string; clases: string }> = {
   oferta: { key: "status.oferta", clases: "bg-rose-600 text-white" },
 };
 
-export default async function StatusBadge({ status }: { status: Status }) {
+export default async function StatusBadge({
+  status,
+  stock,
+}: {
+  status: Status;
+  stock?: number;
+}) {
   const lang = await getLang();
-  const estado = ESTADOS[status];
+
+  // Marcado como "en stock" pero sin unidades => agotado
+  const agotado = status === "stock" && stock !== undefined && stock <= 0;
+
+  const estado = agotado
+    ? { key: "status.agotado", clases: "bg-alert-500 text-white" }
+    : ESTADOS[status];
 
   return (
     <span

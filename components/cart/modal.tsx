@@ -10,12 +10,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { useCart } from "./cart-context";
+import { translate } from "@/lib/i18n/dict";
+import { useLanguage } from "components/i18n/language-context";
 import { DeleteItemButton } from "./delete-item-button";
 import { EditItemQuantityButton } from "./edit-item-quantity-button";
 import OpenCart from "./open-cart";
 
 export default function CartModal() {
   const { cart, updateCartItem } = useCart();
+  const { lang } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const quantityRef = useRef(cart?.totalItems);
   const openCart = () => setIsOpen(true);
@@ -34,7 +37,7 @@ export default function CartModal() {
 
   return (
     <>
-      <button aria-label="Abrir carrito" onClick={openCart}>
+      <button aria-label={translate(lang, "cart.open")} onClick={openCart}>
         <OpenCart quantity={cart?.totalItems} />
       </button>
       <Transition show={isOpen}>
@@ -61,8 +64,8 @@ export default function CartModal() {
           >
             <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white">
               <div className="flex items-center justify-between">
-                <p className="text-lg font-semibold">Mi carrito</p>
-                <button aria-label="Cerrar carrito" onClick={closeCart}>
+                <p className="text-lg font-semibold">{translate(lang, "cart.title")}</p>
+                <button aria-label={translate(lang, "cart.close")} onClick={closeCart}>
                   <CloseCart />
                 </button>
               </div>
@@ -71,7 +74,7 @@ export default function CartModal() {
                 <div className="mt-20 flex w-full flex-col items-center justify-center overflow-hidden">
                   <ShoppingCartIcon className="h-16" />
                   <p className="mt-6 text-center text-2xl font-bold">
-                    Tu carrito está vacío.
+                    {translate(lang, "cart.empty")}
                   </p>
                 </div>
               ) : (
@@ -173,7 +176,7 @@ export default function CartModal() {
                   </ul>
                   <div className="py-4 text-sm text-neutral-500 dark:text-neutral-400">
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
-                      <p>Subtotal</p>
+                      <p>{translate(lang, "cart.subtotal")}</p>
                       <Price
                         className="text-right"
                         amount={cart.subtotal.toFixed(2)}
@@ -181,7 +184,7 @@ export default function CartModal() {
                       />
                     </div>
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
-                      <p>IVA ({IVA_PORCENTAJE} %)</p>
+                      <p>{translate(lang, "cart.vat")} ({IVA_PORCENTAJE} %)</p>
                       <Price
                         className="text-right"
                         amount={cart.iva.toFixed(2)}
@@ -189,13 +192,13 @@ export default function CartModal() {
                       />
                     </div>
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
-                      <p>Envío</p>
+                      <p>{translate(lang, "cart.shipping")}</p>
                       <p className="text-right">
-                        {cart.costeEnvio > 0 ? "Calculado al pagar" : "Gratis"}
+                        {cart.costeEnvio > 0 ? translate(lang, "cart.shippingCalculated") : translate(lang, "cart.freeShipping")}
                       </p>
                     </div>
                     <div className="flex items-center justify-between text-base">
-                      <p>Total</p>
+                      <p>{translate(lang, "cart.total")}</p>
                       <Price
                         className="text-right text-base font-semibold text-black dark:text-white"
                         amount={cart.total.toFixed(2)}
@@ -208,14 +211,14 @@ export default function CartModal() {
                     className="block w-full rounded-full bg-blue-600 p-3 text-center text-sm font-medium text-white opacity-90 hover:opacity-100"
                     onClick={closeCart}
                   >
-                    Ir a pagar
+                    {translate(lang, "cart.checkout")}
                   </Link>
                   <Link
                     href="/cart"
                     className="mt-3 block text-center text-sm text-neutral-500 hover:underline"
                     onClick={closeCart}
                   >
-                    Ver carrito completo
+                    {translate(lang, "cart.viewFull")}
                   </Link>
                 </div>
               )}

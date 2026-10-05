@@ -6,16 +6,23 @@ import { createUrl } from "lib/utils";
 import { getProductos } from "@/lib/db/productos";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { translate } from "@/lib/i18n/dict";
+import { getLang } from "@/lib/i18n/lang";
 
-export const metadata: Metadata = {
-  title: "Search",
-  description: "Busca productos en la tienda.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLang();
+  return {
+    title: "Search",
+    description: translate(lang, "search.metaDescription"),
+  };
+}
 
 export default async function SearchPage(props: {
   searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const searchParams = await props.searchParams;
+  const lang = await getLang();
+  const t = (k: string) => translate(lang, k);
   const { sort, q: searchValue, estado, precio } = searchParams as Record<
     string,
     string
@@ -33,7 +40,7 @@ export default async function SearchPage(props: {
 
   const hayFiltros = Boolean(searchValue || estado || precio);
   const total = productos.length;
-  const resultsText = total === 1 ? "resultado" : "resultados";
+  const resultsText = total === 1 ? t("search.resultsOne") : t("search.resultsOther");
 
   const limpiarHref = createUrl(
     "/search",
@@ -46,11 +53,11 @@ export default async function SearchPage(props: {
         <div className="mb-4 flex flex-wrap items-center gap-4">
           <p className="m-0">
             {total === 0
-              ? "No hay productos que coincidan con los filtros."
-              : `Mostrando ${total} ${resultsText}`}
+              ? t("search.noMatches")
+              : `${t("search.showing")} ${total} ${resultsText}`}
             {searchValue ? (
               <>
-                {" para "}
+                {t("search.forQuery")}
                 <span className="font-bold">&quot;{searchValue}&quot;</span>
               </>
             ) : null}
@@ -59,7 +66,7 @@ export default async function SearchPage(props: {
             href={limpiarHref}
             className="text-sm text-blue-600 underline underline-offset-4 hover:opacity-80"
           >
-            Limpiar filtros
+            {t("search.clearFilters")}
           </Link>
         </div>
       ) : null}
