@@ -110,17 +110,11 @@ const pages: Record<string, Page> = {
       description: "Condiciones generales de uso de la tienda.",
     },
   },
-  privacidad: {
-    title: "Política de privacidad",
-    body: `<p>Tratamos los datos necesarios para gestionar tu pedido y tu cuenta en ${SITE.email}.</p><p>Puedes solicitar la exportación o la eliminación de tus datos en cualquier momento.</p>`,
-    bodySummary: "Cómo tratamos tus datos personales.",
-    createdAt: "2024-01-01T00:00:00.000Z",
-    updatedAt: "2024-01-01T00:00:00.000Z",
-    seo: {
-      title: "Política de privacidad",
-      description: "Cómo tratamos tus datos personales.",
-    },
-  },
+  // La política de privacidad NO está aquí: vive en `app/privacidad/page.tsx`
+  // como ruta dedicada. Necesita secciones, tabla de finalidad/base legal y
+  // `generateMetadata` propio, cosa que un string HTML plano no permite
+  // expresar. Si se reañadiera esta entrada, `app/[page]/page.tsx` competiría
+  // con la ruta dedicada y Next se quejaría del conflicto.
   cookies: {
     title: "Política de cookies",
     body: "<p>Utilizamos cookies propias y de terceros para el funcionamiento de la tienda y con fines analíticos.</p>",
