@@ -1,6 +1,6 @@
 import { HeartIcon, UserIcon } from "@heroicons/react/24/outline";
 import CartModal from "components/cart/modal";
-import { LogoBadge, LogoWordmark } from "components/logo";
+import { LogoBadge, LogoWordmark } from "@/components/logo";
 import { getNavCategorias } from "@/lib/navigation";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -21,8 +21,8 @@ export async function Navbar() {
     <header className="sticky top-0 z-40">
       <AnnouncementBar />
 
-      <div className="relative border-b border-ink-200 bg-white">
-        <div className="page-container flex h-16 items-center gap-2 lg:h-20 lg:gap-6">
+      <div className="relative bg-white">
+        <div className="page-container flex h-16 items-center gap-2 lg:h-20 lg:gap-3">
           <Suspense fallback={null}>
             <MobileMenu categorias={categorias} />
           </Suspense>
@@ -30,24 +30,23 @@ export async function Navbar() {
           <Link
             href="/"
             prefetch={true}
-            className="flex items-center gap-2.5 lg:mr-2"
+            className="flex items-center gap-2.5 lg:mr-1"
             aria-label={translate(lang, "nav.home")}
           >
             <LogoBadge size="lg" />
             <LogoWordmark className="hidden sm:flex" />
           </Link>
 
-          <div className="hidden flex-1 lg:flex lg:justify-center">
-            <div className="w-full max-w-xl">
-              <Suspense fallback={<SearchSkeleton />}>
-                <Search />
-              </Suspense>
-            </div>
+          <CategoryNav categorias={categorias} />
+
+          <div className="ml-auto hidden min-w-0 flex-1 xl:flex xl:max-w-xl">
+            <Suspense fallback={<SearchSkeleton />}>
+              <Search />
+            </Suspense>
           </div>
 
           <div className="ml-auto flex items-center gap-1.5 lg:ml-0 lg:gap-2">
-            <MobileSearch />
-
+            <MobileSearch className="lg:border-0" />
             <LangToggle />
 
             <Link
@@ -74,8 +73,6 @@ export async function Navbar() {
           </div>
         </div>
       </div>
-
-      <CategoryNav categorias={categorias} />
     </header>
   );
 }

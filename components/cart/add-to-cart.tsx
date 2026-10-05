@@ -8,6 +8,8 @@ import { useSearchParams } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useCart } from "./cart-context";
+import { translate } from "@/lib/i18n/dict";
+import { useLanguage } from "components/i18n/language-context";
 
 const MAX_CANTIDAD = 99;
 
@@ -21,17 +23,18 @@ function SubmitButton({
   const buttonClasses =
     "relative flex w-full items-center justify-center rounded-full bg-blue-600 p-4 tracking-wide text-white";
   const disabledClasses = "cursor-not-allowed opacity-60 hover:opacity-60";
+  const { lang } = useLanguage();
 
   if (!disponible)
     return (
       <button disabled className={clsx(buttonClasses, disabledClasses)}>
-        Agotado
+        {translate(lang, "cart.soldOut")}
       </button>
     );
 
   return (
     <button
-      aria-label="Añadir al carrito"
+      aria-label={translate(lang, "cart.add")}
       className={clsx(buttonClasses, "hover:opacity-90", {
         "cursor-wait opacity-70 hover:opacity-70": pending,
       })}
@@ -40,7 +43,7 @@ function SubmitButton({
       <div className="absolute left-0 ml-4">
         <PlusIcon className="h-5" />
       </div>
-      {pending ? "Añadiendo…" : "Añadir al carrito"}
+      {pending ? translate(lang, "cart.adding") : translate(lang, "cart.add")}
     </button>
   );
 }
@@ -56,16 +59,17 @@ function QuantitySelector({
 }) {
   const boton =
     "px-3 py-2 text-neutral-500 transition hover:text-black disabled:cursor-not-allowed disabled:opacity-40 dark:hover:text-white";
+  const { lang } = useLanguage();
 
   return (
     <div className="mb-4 flex items-center gap-3">
       <label htmlFor="cantidad" className="text-sm font-medium">
-        Cantidad
+        {translate(lang, "cart.quantity")}
       </label>
       <div className="flex items-center rounded-full border border-neutral-300 dark:border-neutral-700">
         <button
           type="button"
-          aria-label="Restar una unidad"
+          aria-label={translate(lang, "cart.minus")}
           onClick={() => onChange(cantidad - 1)}
           disabled={cantidad <= 1}
           className={boton}
@@ -83,7 +87,7 @@ function QuantitySelector({
         />
         <button
           type="button"
-          aria-label="Sumar una unidad"
+          aria-label={translate(lang, "cart.plus")}
           onClick={() => onChange(cantidad + 1)}
           disabled={cantidad >= max}
           className={boton}
@@ -101,6 +105,7 @@ export function AddToCart({ product }: { product: Product }) {
   const searchParams = useSearchParams();
   const [result, formAction, isPending] = useActionState(addItem, null);
   const [cantidad, setCantidad] = useState(1);
+  const { lang } = useLanguage();
 
   const variant = variants.find((v: ProductVariant) =>
     v.selectedOptions.every(
@@ -123,9 +128,9 @@ export function AddToCart({ product }: { product: Product }) {
   useEffect(() => {
     if (!result) return;
     if (result.ok) {
-      toast.success("Añadido al carrito");
+      toast.success(translate(lang, "cart.added"))
     } else {
-      toast.error(result.error ?? "No se ha podido añadir al carrito");
+      toast.error(result.error ?? translate(lang, "cart.addError"));
     }
   }, [result]);
 

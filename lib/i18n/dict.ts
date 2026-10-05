@@ -14,6 +14,15 @@ const es = {
   "ship.pay.text": "Tarjeta, Bizum y transferencia",
   "announce.import": "Importación directa",
   "announce.from": "desde Japón",
+  "announce.academic.title": "Proyecto académico universitario",
+  "announce.academic.text": "Web no oficial: no se venden productos reales",
+  "announce.disclaimer":
+    "Trabajo académico universitario · Web no oficial. No vendemos productos reales ni estamos afiliados a las franquicias mostradas.",
+  "announce.aria": "Avisos del sitio",
+  "announce.prev": "Aviso anterior",
+  "announce.next": "Aviso siguiente",
+  "announce.dot": "Ir al aviso",
+  "announce.slide": "Aviso",
 
   // ── Buscador (Fase 1) ──
   "search.label": "Buscar productos",
@@ -66,6 +75,12 @@ const es = {
   "promo.figure.other": "figuras",
   "promo.onSale": "en oferta",
   "promo.viewFigures": "Ver figuras",
+  "promo.item.figura.one": "figura",
+  "promo.item.figura.other": "figuras",
+  "promo.item.ropa.one": "camiseta",
+  "promo.item.ropa.other": "camisetas",
+  "promo.item.mixto.one": "producto",
+  "promo.item.mixto.other": "productos",
   "promo.title": "Explora por franquicia",
   "promo.subtitle": "Elige la serie que buscas y ve directo a sus figuras",
   "promo.viewAll": "Ver todo el catálogo",
@@ -78,17 +93,60 @@ const es = {
   "status.oferta": "Oferta",
   "status.agotado": "Agotado",
 
+  // ── Carrito ──
+  "cart.open": "Abrir carrito",
+  "cart.close": "Cerrar carrito",
+  "cart.title": "Mi carrito",
+  "cart.empty": "Tu carrito está vacío.",
+  "cart.subtotal": "Subtotal",
+  "cart.vat": "IVA",
+  "cart.shipping": "Envío",
+  "cart.shippingCalculated": "Calculado al pagar",
+  "cart.freeShipping": "Gratis",
+  "cart.total": "Total",
+  "cart.checkout": "Ir a pagar",
+  "cart.viewFull": "Ver carrito completo",
+  "cart.soldOut": "Agotado",
+  "cart.add": "Añadir al carrito",
+  "cart.adding": "Añadiendo…",
+  "cart.quantity": "Cantidad",
+  "cart.minus": "Restar una unidad",
+  "cart.plus": "Sumar una unidad",
+  "cart.added": "Añadido al carrito",
+  "cart.addError": "No se ha podido añadir al carrito",
+
+  // ── Filtros de búsqueda ──
+  "search.sortTitle": "Ordenar",
+  "search.statusTitle": "Estado",
+  "search.priceTitle": "Precio",
+  "sort.relevance": "Relevancia",
+  "sort.trending": "Tendencias",
+  "sort.latest": "Recién llegados",
+  "sort.priceAsc": "Precio: de menor a mayor",
+  "sort.priceDesc": "Precio: de mayor a menor",
+  "price.under150": "Menos de 150 €",
+  "price.150to200": "150 € – 200 €",
+  "price.over200": "Más de 200 €",
+  "search.metaDescription": "Busca productos en la tienda.",
+  "search.resultsOne": "resultado",
+  "search.resultsOther": "resultados",
+  "search.showing": "Mostrando",
+  "search.forQuery": " para ",
+  "search.noMatches": "No hay productos que coincidan con los filtros.",
+  "search.clearFilters": "Limpiar filtros",  
+
   // ── Navbar ──
   "nav.homeLink": "Inicio",
   "nav.news": "Novedades",
   "nav.bestSellers": "Más vendidos",
   "nav.deals": "Ofertas",
-  "nav.allCategories": "Todas las categorías",
+  "nav.allCategories": "Categorías",
   "nav.freeShippingFrom": "Envío gratis desde",
   "nav.ariaCategories": "Categorías y navegación principal",
-  "nav.loadingCategories": "Estamos cargando las categorías. Mientras tanto,",
   "nav.browseCatalog": "mira todo el catálogo",
-  "nav.viewFullCatalog": "Ver el catálogo completo →",
+  "nav.viewFullCatalog": "Ver el catálogo completo",
+  "nav.categoriesSubtitle": "Elige una categoría para ver todo su catálogo",
+  "nav.noCategories": "Todavía no hay categorías disponibles",
 
   // ── Menú móvil ──
   "menu.open": "Abrir menú",
@@ -105,7 +163,8 @@ const es = {
   "account.register": "Crear cuenta",
 
   // ── Footer ──
-  "footer.claim": "Merchandising de anime y manga importado de Japón. Piezas originales con garantía y envío rastreable desde nuestro almacén en Madrid.",
+  "footer.claim":
+    "Merchandising de anime y manga importado de Japón. Piezas originales con garantía y envío rastreable desde nuestro almacén en Madrid.",
   "footer.rights": "Todos los derechos reservados.",
   "footer.col.info": "Información",
   "footer.col.account": "Mi cuenta",
@@ -117,8 +176,9 @@ const es = {
   "footer.legal.notice": "Aviso legal",
   "footer.legal.privacy": "Política de privacidad",
   "footer.legal.cookies": "Cookies",
+  "page.backHome": "Volver al inicio",
+  "page.updated": "Última actualización:",
   "site.address": "Calle Mayor 1, 28013 Madrid, España",
-  
 } as const;
 
 export type DictKey = keyof typeof es;
@@ -135,6 +195,15 @@ const en: Record<DictKey, string> = {
   "ship.pay.text": "Card, Bizum and bank transfer",
   "announce.import": "Direct import",
   "announce.from": "from Japan",
+  "announce.academic.title": "University academic project",
+  "announce.academic.text": "Unofficial website: no real products are sold",
+  "announce.disclaimer":
+    "University academic project · Unofficial website. We do not sell real products and are not affiliated with the featured franchises.",
+  "announce.aria": "Site notices",
+  "announce.prev": "Previous notice",
+  "announce.next": "Next notice",
+  "announce.dot": "Go to notice",
+  "announce.slide": "Notice",
 
   // Search
   "search.label": "Search products",
@@ -186,6 +255,12 @@ const en: Record<DictKey, string> = {
   "promo.figure.other": "figures",
   "promo.onSale": "on sale",
   "promo.viewFigures": "View figures",
+  "promo.item.figura.one": "figure",
+  "promo.item.figura.other": "figures",
+  "promo.item.ropa.one": "t-shirt",
+  "promo.item.ropa.other": "t-shirts",
+  "promo.item.mixto.one": "product",
+  "promo.item.mixto.other": "products",
   "promo.title": "Browse by franchise",
   "promo.subtitle": "Pick the series you want and go straight to its figures",
   "promo.viewAll": "View full catalogue",
@@ -198,17 +273,60 @@ const en: Record<DictKey, string> = {
   "status.oferta": "Deal",
   "status.agotado": "Sold out",
 
+  // Cart
+  "cart.open": "Open cart",
+  "cart.close": "Close cart",
+  "cart.title": "My cart",
+  "cart.empty": "Your cart is empty.",
+  "cart.subtotal": "Subtotal",
+  "cart.vat": "VAT",
+  "cart.shipping": "Shipping",
+  "cart.shippingCalculated": "Calculated at checkout",
+  "cart.freeShipping": "Free",
+  "cart.total": "Total",
+  "cart.checkout": "Go to checkout",
+  "cart.viewFull": "View full cart",
+  "cart.soldOut": "Sold out",
+  "cart.add": "Add to cart",
+  "cart.adding": "Adding…",
+  "cart.quantity": "Quantity",
+  "cart.minus": "Decrease quantity",
+  "cart.plus": "Increase quantity",
+  "cart.added": "Added to cart",
+  "cart.addError": "Could not add to cart",
+
+  // Filters and search
+  "search.sortTitle": "Sort by",
+  "search.statusTitle": "Status",
+  "search.priceTitle": "Price",
+  "sort.relevance": "Relevance",
+  "sort.trending": "Trending",
+  "sort.latest": "Latest arrivals",
+  "sort.priceAsc": "Price: Low to high",
+  "sort.priceDesc": "Price: High to low",
+  "price.under150": "Under €150",
+  "price.150to200": "€150 – €200",
+  "price.over200": "Over €200",
+  "search.metaDescription": "Search the store.",
+  "search.resultsOne": "result",
+  "search.resultsOther": "results",
+  "search.showing": "Showing",
+  "search.forQuery": " for ",
+  "search.noMatches": "No products match the filters.",
+  "search.clearFilters": "Clear filters",  
+
   // Navbar
   "nav.homeLink": "Home",
   "nav.news": "New arrivals",
   "nav.bestSellers": "Best sellers",
   "nav.deals": "Deals",
-  "nav.allCategories": "All categories",
+  "nav.allCategories": "Categories",
   "nav.freeShippingFrom": "Free shipping from",
   "nav.ariaCategories": "Categories and main navigation",
-  "nav.loadingCategories": "We are loading the categories. In the meantime,",
   "nav.browseCatalog": "browse the full catalogue",
-  "nav.viewFullCatalog": "View the full catalogue →",
+  "nav.viewFullCatalog": "View the full catalogue",
+  "nav.categoriesSubtitle": "Pick a category to browse its full catalogue",
+  "nav.noCategories": "There are no categories available yet",
 
   // Mobile menu
   "menu.open": "Open menu",
@@ -225,7 +343,8 @@ const en: Record<DictKey, string> = {
   "account.register": "Create account",
 
   // Footer
-  "footer.claim": "Anime and manga merchandise imported from Japan. Original pieces with warranty and tracked shipping from our Madrid warehouse.",
+  "footer.claim":
+    "Anime and manga merchandise imported from Japan. Original pieces with warranty and tracked shipping from our Madrid warehouse.",
   "footer.rights": "All rights reserved.",
   "footer.col.info": "Information",
   "footer.col.account": "My account",
@@ -237,11 +356,12 @@ const en: Record<DictKey, string> = {
   "footer.legal.notice": "Legal notice",
   "footer.legal.privacy": "Privacy policy",
   "footer.legal.cookies": "Cookies",
+  "page.backHome": "Back to home",
+  "page.updated": "Last updated:",
   "site.address": "Calle Mayor 1, 28013 Madrid, Spain",
-  
 };
 
-export const dict: Record<Lang, Record<DictKey, string>> = { es, en };
+export const dict: Record<Lang, Record<DictKey, string>> = { es, en};
 
 export function translate(lang: Lang, key: string): string {
   const k = key as DictKey;

@@ -1,6 +1,7 @@
 import { GridTileImage } from "components/grid/tile";
 import { Gallery } from "components/product/gallery";
 import { ProductDescription } from "components/product/product-description";
+import { ViewTracker } from "components/product/view-tracker";
 import { HIDDEN_PRODUCT_TAG } from "lib/constants";
 
 import { getProduct, getProductRecommendations } from "@/lib/commerce/products";
@@ -9,6 +10,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { createClient } from "@/lib/supabase/server";
 
 function Breadcrumb({ product }: { product: Product }) {
   const migas = [
@@ -93,6 +95,20 @@ export default async function ProductPage(props: {
 
   if (!product) return notFound();
 
+  const supabase = await createClient();
+  const { data: authData } = await supabase.auth.getUser();
+  let guardado = false;
+
+  if (authData.user) {
+    const { data: fila } = await supabase
+      .from("wishlist")
+      .select("id")
+      .eq("usuario_id", authData.user.id)
+      .eq("producto_id", product.id)
+      .maybeSingle();
+    guardado = Boolean(fila);
+  }
+
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -118,6 +134,10 @@ export default async function ProductPage(props: {
           __html: JSON.stringify(productJsonLd),
         }}
       />
+      {/* Telemetría de `product.viewed`. Va aquí y no junto a `getProduct`
+          porque desde el servidor también se ejecuta con el prefetch de los
+          enlaces a producto. Ver components/product/view-tracker.tsx. */}
+      <ViewTracker productId={product.id} />
       <div className="mx-auto max-w-(--breakpoint-2xl) px-4">
         <Breadcrumb product={product} />
         <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
@@ -138,7 +158,7 @@ export default async function ProductPage(props: {
 
           <div className="basis-full lg:basis-2/6">
             <Suspense fallback={null}>
-              <ProductDescription product={product} />
+              <ProductDescription product={product} saved={guardado} />
             </Suspense>
           </div>
         </div>

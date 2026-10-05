@@ -1,53 +1,89 @@
-import { SparklesIcon, TruckIcon } from "@heroicons/react/24/outline";
-import { shippingHighlights } from "@/lib/site";
+import {
+  AcademicCapIcon,
+  ArrowUturnLeftIcon,
+  CreditCardIcon,
+  SparklesIcon,
+  TruckIcon,
+} from "@heroicons/react/24/outline";
+import clsx from "clsx";
+import Link from "next/link";
 import { translate } from "@/lib/i18n/dict";
 import { getLang } from "@/lib/i18n/lang";
+import {
+  getAnnounceSlides,
+  type AnnounceIcon,
+} from "@/lib/navbar/announcement-slides";
 
-const SHIP_KEYS = ["ship.free", "ship.24h", "ship.dev", "ship.pay"] as const;
+const ICONOS: Record<AnnounceIcon, typeof TruckIcon> = {
+  truck: TruckIcon,
+  return: ArrowUturnLeftIcon,
+  card: CreditCardIcon,
+  import: SparklesIcon,
+  academic: AcademicCapIcon,
+};
 
+/**
+ * Tira de avisos del header. Mismo patrón de bucle continuo que los banners
+ * por franquicia: w-max + translateX(-50%) sobre la lista duplicada.
+ */
 export default async function AnnouncementBar() {
   const lang = await getLang();
+  const slides = getAnnounceSlides(lang);
 
-  const items = shippingHighlights.slice(0, 3).map((item, i) => ({
-    ...item,
-    title: translate(lang, `${SHIP_KEYS[i]}.title`),
-    text: translate(lang, `${SHIP_KEYS[i]}.text`),
-  }));
   return (
     <div className="bg-ink-950 text-white">
-      <div className="page-container flex h-9 items-center justify-center gap-8 overflow-x-auto text-[11px] font-bold uppercase tracking-[0.14em] no-scrollbar">
-        {items.map((item) => (
-          <span
-            key={item.title}
-            className="flex flex-none items-center gap-1.5 whitespace-nowrap"
-          >
-            <TruckIcon
-              className="h-3.5 w-3.5 text-brand-400"
-              aria-hidden="true"
-            />
-          <span className="text-brand-400">{item.title}</span>
-          <span className="font-medium normal-case tracking-normal text-ink-300">
-            {item.text}
-          </span>
-            <span className="text-brand-400">
-              {translate(lang, "announce.import")}
-            </span>
-            <span className="font-medium normal-case tracking-normal text-ink-300">
-              {translate(lang, "announce.from")}
-            </span>
-          </span>
-        ))}
-        <span className="hidden flex-none items-center gap-1.5 whitespace-nowrap xl:flex">
-          <SparklesIcon
-            className="h-3.5 w-3.5 text-brand-400"
-            aria-hidden="true"
-          />
-          <span className="text-brand-400">Importación directa</span>
-          <span className="font-medium normal-case tracking-normal text-ink-300">
-            desde Japón
-          </span>
-        </span>
+      <div className="group relative overflow-hidden motion-reduce:overflow-x-auto">
+        <ul className="flex w-max animate-marquee-quick items-center gap-8 py-2.5 group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused] motion-reduce:animate-none">
+          {[...slides, ...slides].map((slide, i) => {
+            const duplicado = i >= slides.length;
+            const Icono = ICONOS[slide.icon];
+
+            const contenido = (
+              <>
+                <Icono
+                  className="h-3.5 w-3.5 shrink-0 text-brand-400"
+                  aria-hidden="true"
+                />
+                <span
+                  className={clsx(
+                    "shrink-0",
+                    slide.destacado ? "text-brand-300" : "text-brand-400",
+                  )}
+                >
+                  {slide.title}
+                </span>
+                <span className="font-medium normal-case tracking-normal text-ink-300">
+                  {slide.text}
+                </span>
+              </>
+            );
+
+            return (
+              <li
+                key={`${slide.id}-${i}`}
+                aria-hidden={duplicado || undefined}
+                className="flex flex-none items-center gap-1.5 text-[11px] font-bold whitespace-nowrap tracking-[0.14em] uppercase"
+              >
+                {slide.href && !duplicado ? (
+                  <Link
+                    href={slide.href}
+                    tabIndex={duplicado ? -1 : undefined}
+                    className="flex items-center gap-1.5"
+                  >
+                    {contenido}
+                  </Link>
+                ) : (
+                  contenido
+                )}
+              </li>
+            );
+          })}
+        </ul>
       </div>
+
+      <p className="border-t border-ink-800 bg-ink-900 px-4 py-1.5 text-center text-[10px] leading-tight font-medium text-ink-300">
+        {translate(lang, "announce.disclaimer")}
+      </p>
     </div>
   );
 }

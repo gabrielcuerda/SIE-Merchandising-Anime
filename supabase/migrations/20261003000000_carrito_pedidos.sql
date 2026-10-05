@@ -188,6 +188,22 @@ begin
       set cantidad = least(99, coalesce(v_actual, 0) + v_cantidad)
     where id = v_item_id;
 
+    -- Evento de negocio. Va dentro de la función, y por tanto dentro de la
+    -- misma transacción que el cambio de estado: si el carrito se actualiza,
+    -- el evento existe. Ver 20261005000000_eventos.sql.
+    --
+    -- `accion` distingue una línea nueva de una cantidad sumada a la que ya
+    -- estaba, que en el embudo son dos hechos distintos.
+    perform public.registrar_evento(
+      'cart.item_added', v_sid,
+      jsonb_build_object(
+        'producto_id', p_producto_id,
+        'variante_id', v_variante,
+        'cantidad',    v_cantidad,
+        'accion',      'consolidada'
+      )
+    );
+
     return v_item_id;
   end if;
 
@@ -202,6 +218,16 @@ begin
     v_uid, v_sid, p_producto_id, v_variante, v_cantidad
   )
   returning id into v_item_id;
+
+  perform public.registrar_evento(
+    'cart.item_added', v_sid,
+    jsonb_build_object(
+      'producto_id', p_producto_id,
+      'variante_id', v_variante,
+      'cantidad',    v_cantidad,
+      'accion',      'nueva_linea'
+    )
+  );
 
   return v_item_id;
 end;
@@ -446,10 +472,13 @@ begin
   v_total := v_subtotal + v_iva + coalesce(p_coste_envio, 0);
 
   insert into public.pedidos (
-    usuario_id, status, subtotal, coste_envio, total, moneda,
+    usuario_id, session_id, status, subtotal, coste_envio, total, moneda,
     direccion_pedido, direccion_pago, metodo_pago, pago_id
   ) values (
     v_propietario,
+    -- Para un invitado, la única forma de unir su recorrido de eventos con su
+    -- pedido. Sin esta columna el tramo session_id -> order_id se rompía.
+    v_sesion,
     'paid',
     v_subtotal,
     coalesce(p_coste_envio, 0),
@@ -506,6 +535,37 @@ begin
     where id = v_item.producto_id
       and status = 'stock';
   end loop;
+
+  -- Eventos de negocio. Van AQUÍ, después del bucle y no después del insert de
+  -- `pedidos`: `lineas` solo se puede contar cuando las líneas ya existen.
+  --
+  -- Al estar dentro de la misma transacción que el pedido, no puede haber un
+  -- pedido sin evento ni un evento de pedido que no exista.
+  --
+  -- `payment.simulated` porque el pago es simulado: no hay pasarela real, así
+  -- que el evento documenta que el cobro se dio por bueno, no que haya dinero.
+  perform public.registrar_evento(
+    'order.created', v_sesion,
+    jsonb_build_object(
+      'pedido_id', v_pedido_id,
+      'lineas',    (select count(*) from public.items_pedido
+                    where pedido_id = v_pedido_id),
+      'subtotal',  v_subtotal,
+      'iva',       v_iva,
+      'total',     v_total,
+      'moneda',    'EUR'
+    )
+  );
+
+  perform public.registrar_evento(
+    'payment.simulated', v_sesion,
+    jsonb_build_object(
+      'pedido_id',   v_pedido_id,
+      'pago_id',     p_pago_id,
+      'metodo_pago', p_metodo_pago,
+      'importe',     v_total
+    )
+  );
 
   if v_propietario is not null then
     delete from public.carrito_items where user_id = v_propietario;
