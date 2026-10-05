@@ -193,5 +193,15 @@ export async function crearSesionCheckout(params: {
     throw new Error("Stripe no ha devuelto la URL de pago.");
   }
 
-  return session.url;
+  // Se devuelven también el identificador de la sesión de Stripe y los totales
+  // del carrito para que quien llama pueda registrar `checkout.started` sin
+  // tener que releer el carrito: el `stripe_session_id` es lo que permite
+  // emparejar después este evento con el pedido que se cree al confirmar el
+  // pago.
+  return {
+    url: session.url,
+    sessionId: session.id,
+    total: cart.total,
+    totalItems: cart.totalItems,
+  };
 }

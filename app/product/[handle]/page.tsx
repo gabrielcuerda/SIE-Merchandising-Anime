@@ -1,6 +1,7 @@
 import { GridTileImage } from "components/grid/tile";
 import { Gallery } from "components/product/gallery";
 import { ProductDescription } from "components/product/product-description";
+import { ViewTracker } from "components/product/view-tracker";
 import { HIDDEN_PRODUCT_TAG } from "lib/constants";
 
 import { getProduct, getProductRecommendations } from "@/lib/commerce/products";
@@ -118,6 +119,10 @@ export default async function ProductPage(props: {
           __html: JSON.stringify(productJsonLd),
         }}
       />
+      {/* Telemetría de `product.viewed`. Va aquí y no junto a `getProduct`
+          porque desde el servidor también se ejecuta con el prefetch de los
+          enlaces a producto. Ver components/product/view-tracker.tsx. */}
+      <ViewTracker productId={product.id} />
       <div className="mx-auto max-w-(--breakpoint-2xl) px-4">
         <Breadcrumb product={product} />
         <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
