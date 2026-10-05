@@ -19,7 +19,10 @@ export const siteConfig = {
   claim: "Merchandising de anime y manga importado de Japón",
   description:
     "Merchandising de anime y manga importado directamente desde Japón: figuras, manga, apparel y coleccionables para fans.",
-  locale: "es_ES",
+  // Etiqueta BCP 47 con guion, NO `es_ES`: `Intl.NumberFormat` e
+  // `Intl.DateTimeFormat` lanzan `RangeError: Incorrect locale information
+  // provided` con el guion bajo. `lib/admin/formato.ts` la usa en el panel.
+  locale: "es-ES",
   currency: "EUR",
   email: "hola@siemerchandising.es",
   phone: "+34 900 123 456",

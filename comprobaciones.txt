@@ -3,3 +3,8 @@
 [x] P2 — UI Core: Modificar app/layout.tsx con estructura correcta
 [x] P2 — UI Core: Definir tema visual (colores, tipografía, variables CSS) y actualizar globals.css
 [x] P2 — UI Core: Crear componentes reutilizables (Badge, Card, Separator, AlertBanner)
+[ ] P5 — Auth/Admin: Crear panel admin (/admin): dashboard con métricas (código listo; falta aplicar la migración y probar en local)
+[ ] P5 — Auth/Admin: Crear admin: CRUD productos con formulario y subida de imágenes (código listo; falta aplicar la migración y probar la subida real)
+[ ] P5 — Auth/Admin: Crear admin: gestión de categorías (código listo; falta aplicar la migración y probar)
+[ ] P5 — Auth/Admin: Crear admin: gestión de pedidos y usuarios (código listo; falta aplicar la migración y probar)
+[x] P5 — Auth/Admin: Crear la página de política de privacidad (ruta dedicada /privacidad, 11 secciones LOPD/RGPD; quedan datos legales del responsable por rellenar)

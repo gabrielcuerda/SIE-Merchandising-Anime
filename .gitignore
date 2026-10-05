@@ -13,3 +13,5 @@ tsconfig.tsbuildinfo
 .DS_Store
 
 .agents/
+
+AGENTS.md
