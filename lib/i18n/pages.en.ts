@@ -7,7 +7,7 @@ const SCHEDULE = "Monday to Friday, 9:00 to 18:00";
 const pagesEn: Record<string, Page> = {
   about: {
     title: "About us",
-    body: `<p>SIE Merchandising is a shop specialising in anime and manga merchandise imported directly from Japan. We hand-pick action figures, manga, apparel and collectibles from franchises such as Dragon Ball, One Piece, Naruto, Jujutsu Kaisen, Demon Slayer, Attack on Titan and Chainsaw Man.</p>
+    body: `<p>Animemerchan is a shop specialising in anime and manga merchandise imported directly from Japan. We hand-pick action figures, manga, apparel and collectibles from franchises such as Dragon Ball, One Piece, Naruto, Jujutsu Kaisen, Demon Slayer, Attack on Titan and Chainsaw Man.</p>
 
 <h2>Who we are</h2>
 <p>We are a small team of fans who started buying figures for our own collections and ended up importing them for other collectors. We do not sell second-hand items or replicas: everything that leaves our warehouse is original and factory sealed.</p>
@@ -67,13 +67,13 @@ const pagesEn: Record<string, Page> = {
 <h2>Response time</h2>
 <p>We reply to every message within 24 working hours. If your message arrives before 14:00 on a working day, we reply the same day.</p>`,
     bodySummary:
-      "Email, phone, opening hours and customer service address for SIE Merchandising.",
+        "Email, phone, opening hours and customer service address for Animemerchan.",
     createdAt: "2024-01-01T00:00:00.000Z",
     updatedAt: "2025-02-18T00:00:00.000Z",
     seo: {
       title: "Contact",
       description:
-        "Email, phone, opening hours and customer service address for SIE Merchandising.",
+      "Email, phone, opening hours and customer service address for Animemerchan.",
     },
   },
 

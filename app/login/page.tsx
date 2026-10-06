@@ -3,7 +3,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Iniciar sesión",
-  description: "Accede a tu cuenta de SIE Merchandising.",
+  description: "Accede a tu cuenta de Animemerchan.",
 };
 
 type LoginPageProps = {

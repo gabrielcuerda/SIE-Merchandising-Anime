@@ -149,7 +149,7 @@ export async function crearSesionCheckout(params: {
     invoice_creation: {
       enabled: true,
       invoice_data: {
-        description: "Pedido SIE Merchandising",
+        description: "Pedido Animemerchan",
         footer: `${siteConfig.name} · ${siteConfig.email} · ${siteConfig.phone}`,
         // El SDK v22 no tipa `shipping_details` en InvoiceData, así que la
         // dirección viaja como campos personalizados de la factura. Ojo: el

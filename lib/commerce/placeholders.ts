@@ -46,7 +46,7 @@ export async function getMenu(_handle: string): Promise<Menu[]> {
 const pages: Record<string, Page> = {
   about: {
     title: "Sobre nosotros",
-    body: `<p>SIE Merchandising es una tienda especializada en merchandising de anime y manga importado directamente desde Japón. Seleccionamos figuras de acción, manga, apparel y coleccionables de franquicias como Dragon Ball, One Piece, Naruto, Jujutsu Kaisen, Demon Slayer, Attack on Titan y Chainsaw Man.</p>
+    body: `<p>Animemerchan es una tienda especializada en merchandising de anime y manga importado directamente desde Japón. Seleccionamos figuras de acción, manga, apparel y coleccionables de franquicias como Dragon Ball, One Piece, Naruto, Jujutsu Kaisen, Demon Slayer, Attack on Titan y Chainsaw Man.</p>
 
 <h2>Quiénes somos</h2>
 <p>Somos un equipo pequeño de aficionados que empezó comprando figuras para su colección personal y acabó importándolas para otros coleccionistas. No vendemos producto de segunda mano ni réplicas: todo lo que sale de nuestro almacén es original y está sellado.</p>
@@ -106,13 +106,13 @@ const pages: Record<string, Page> = {
 <h2>Tiempo de respuesta</h2>
 <p>Respondemos todos los mensajes en un máximo de 24 horas laborables. Si tu mensaje entra antes de las 14:00 de un día laborable, lo respondemos el mismo día.</p>`,
     bodySummary:
-      "Email, teléfono, horario y dirección de atención al cliente de SIE Merchandising.",
+        "Email, teléfono, horario y dirección de atención al cliente de Animemerchan.",
     createdAt: "2024-01-01T00:00:00.000Z",
     updatedAt: "2025-02-18T00:00:00.000Z",
     seo: {
       title: "Contacto",
       description:
-        "Email, teléfono, horario y dirección de atención al cliente de SIE Merchandising.",
+      "Email, teléfono, horario y dirección de atención al cliente de Animemerchan.",
     },
   },
 

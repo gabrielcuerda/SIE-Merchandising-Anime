@@ -8,7 +8,7 @@ export default function WelcomeToast() {
     // En pantallas pequeñas el toast molesta, así que no se muestra
     if (window.innerHeight < 650) return;
     if (!document.cookie.includes("welcome-toast=2")) {
-      toast("¡Bienvenido a SIE Merchandising! 🛍️", {
+      toast("¡Bienvenido a Animemerchan! 🛍️", {
         id: "welcome-toast",
         duration: Infinity,
         onDismiss: () => {

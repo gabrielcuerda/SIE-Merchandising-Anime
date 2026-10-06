@@ -3,7 +3,7 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Crear cuenta",
-  description: "Crea una cuenta en SIE Merchandising.",
+  description: "Crea una cuenta en Animemerchan.",
 };
 
 export default function RegisterPage() {
