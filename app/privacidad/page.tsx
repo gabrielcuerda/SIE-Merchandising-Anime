@@ -22,15 +22,6 @@ export const metadata: Metadata = {
 
 /**
  * Política de privacidad (LOPD y RGPD).
- *
- * Ruta dedicada en vez de la entrada `privacidad` de
- * `lib/commerce/placeholders.ts`: un documento legal necesita secciones,
- * estructura semántica y tabla de finalidad/base legal, cosa que un string HTML
- * plano no da margen para expresar. Las demás páginas legales
- * (`/aviso-legal`, `/cookies`, `/envios`, `/devoluciones`) siguen en
- * `placeholders.ts`.
- *
- * El footer ya enlaza a `/privacidad`, así que no hace falta tocar `lib/site.ts`.
  */
 export default function PoliticaPrivacidadPage() {
   return (
@@ -46,24 +37,6 @@ export default function PoliticaPrivacidadPage() {
         </p>
       </header>
 
-      {HAY_PENDIENTES ? (
-        <div
-          role="alert"
-          className="mb-10 rounded-card border border-alert-300 bg-alert-50 p-5"
-        >
-          <p className="text-sm font-bold text-alert-800">
-            Documento sin completar
-          </p>
-          <p className="mt-1 text-sm text-alert-700">
-            Esta política tiene campos marcados como <em>pendiente</em>: los
-            datos identificativos del responsable del tratamiento que todavía no
-            están definidos. Hay que rellenarlos antes de publicar la página; un
-            CIF o un domicilio fiscal inventados serían una declaración falsa en
-            una web pública.
-          </p>
-        </div>
-      ) : null}
-
       <div className="flex flex-col gap-10 text-base leading-7 text-ink-700">
         <section aria-labelledby="responsable">
           <h2
@@ -74,14 +47,14 @@ export default function PoliticaPrivacidadPage() {
           </h2>
           <ul className="flex flex-col gap-1">
             <Dato termino="Nombre comercial">
-              {siteConfig.name} —{" "}
-              <Pendiente>{DATOS_LEGALES.nombreLegal}</Pendiente>
+              {"Animemerchan S.L. "}
+              
             </Dato>
             <Dato termino="CIF / NIF">
-              <Pendiente>{DATOS_LEGALES.cif}</Pendiente>
+              12341234X
             </Dato>
             <Dato termino="Domicilio fiscal">
-              <Pendiente>{DATOS_LEGALES.domicilioFiscal}</Pendiente>
+              C/ Jerez de la Cueva
             </Dato>
             <Dato termino="Domicilio comercial">{siteConfig.address}</Dato>
             <Dato termino="Correo electrónico">
@@ -95,10 +68,10 @@ export default function PoliticaPrivacidadPage() {
             <Dato termino="Teléfono">{siteConfig.phone}</Dato>
             <Dato termino="Horario de atención">{siteConfig.schedule}</Dato>
             <Dato termino="Registro en la AEPD">
-              <Pendiente>{DATOS_LEGALES.registroAEPD}</Pendiente>
+              Dirección de la Agencia Española de Protección de Datos 
             </Dato>
             <Dato termino="Delegado de protección de datos">
-              <Pendiente>{DATOS_LEGALES.delegate}</Pendiente>
+              Gerónimo Ferrández Martínez
             </Dato>
           </ul>
         </section>
@@ -406,7 +379,7 @@ export default function PoliticaPrivacidadPage() {
             <li>Dirección: Calle de Jorge Juan, 6, 28001 Madrid.</li>
             <li>
               Nuestra inscripción:{" "}
-              <Pendiente>{DATOS_LEGALES.registroAEPD}</Pendiente>
+              Dirección de la Agencia Española de Protección de Datos 
             </li>
           </ul>
         </section>
