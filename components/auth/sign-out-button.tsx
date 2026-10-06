@@ -4,15 +4,19 @@ import { createClient } from "@/lib/supabase/browser";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const supabase = createClient();
-
 export default function SignOutButton() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   async function handleSignOut() {
     setLoading(true);
-    await supabase.auth.signOut();
+    try {
+      await createClient().auth.signOut();
+    } catch {
+      // Aunque falle el cierre, salimos: en /login la sesión ya no es usable.
+    } finally {
+      setLoading(false);
+    }
     router.push("/login");
     router.refresh();
   }

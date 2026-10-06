@@ -1,11 +1,10 @@
 "use client";
 
+import { MissingSupabaseEnvError } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/browser";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
-
-const supabase = createClient();
 
 type AuthMode = "login" | "register" | "forgot-password" | "reset-password";
 
@@ -18,6 +17,38 @@ type AuthFormProps = {
 
 const inputClass =
   "w-full rounded-md border border-neutral-300 bg-white px-3 py-2 text-sm text-black outline-none transition focus:border-blue-600 dark:border-neutral-700 dark:bg-neutral-950 dark:text-white";
+
+/**
+ * Traduce los `error_code` de Supabase Auth a un mensaje entendible.
+ * Si el código no está en la tabla se usa `fallback` para no filtrar
+ * mensajes técnicos en inglés en la interfaz.
+ */
+function mensajeAuthError(
+  error: { code?: string; message: string } | null,
+  fallback: string,
+) {
+  if (!error) return fallback;
+
+  const mensajes: Record<string, string> = {
+    invalid_credentials: "El correo o la contraseña no son correctos.",
+    user_not_found: "No existe ninguna cuenta con ese correo.",
+    email_not_confirmed:
+      "Tu correo todavía no está confirmado. Revisa tu bandeja de entrada.",
+    user_already_exists: "Ya existe una cuenta con ese correo electrónico.",
+    email_exists: "Ya existe una cuenta con ese correo electrónico.",
+    email_address_invalid: "El correo electrónico no es válido.",
+    email_address_not_authorized: "Ese dominio de correo no está autorizado.",
+    weak_password: "La contraseña es demasiado débil.",
+    same_password: "La contraseña nueva tiene que ser distinta a la anterior.",
+    signup_disabled: "El registro está deshabilitado temporalmente.",
+    over_email_send_rate_limit:
+      "Hemos enviado demasiados correos en poco tiempo. Vuelve a intentarlo en unos minutos.",
+    over_request_rate_limit:
+      "Demasiados intentos seguidos. Espera unos minutos y vuelve a probar.",
+  };
+
+  return mensajes[error.code ?? ""] ?? fallback;
+}
 
 export default function AuthForm({
   mode,
@@ -64,6 +95,10 @@ export default function AuthForm({
     setLoading(true);
 
     try {
+      // Se crea aquí y no a nivel de módulo: si la configuración falla, el
+      // fallo se muestra dentro del formulario en vez de tumbar la página.
+      const supabase = createClient();
+
       if (mode === "login") {
         const { error: authError } = await supabase.auth.signInWithPassword({
           email,
@@ -71,7 +106,12 @@ export default function AuthForm({
         });
 
         if (authError) {
-          setError("No hemos podido iniciar sesión. Revisa tus datos.");
+          setError(
+            mensajeAuthError(
+              authError,
+              "No hemos podido iniciar sesión. Revisa tus datos.",
+            ),
+          );
           return;
         }
 
@@ -101,7 +141,7 @@ export default function AuthForm({
         });
 
         if (authError) {
-          setError(authError.message);
+          setError(mensajeAuthError(authError, authError.message));
           return;
         }
 
@@ -126,7 +166,7 @@ export default function AuthForm({
         );
 
         if (authError) {
-          setError(authError.message);
+          setError(mensajeAuthError(authError, authError.message));
           return;
         }
 
@@ -150,7 +190,10 @@ export default function AuthForm({
 
       if (authError) {
         setError(
-          "No hemos podido actualizar la contraseña. Solicita un nuevo enlace e inténtalo de nuevo.",
+          mensajeAuthError(
+            authError,
+            "No hemos podido actualizar la contraseña. Solicita un nuevo enlace e inténtalo de nuevo.",
+          ),
         );
         return;
       }
@@ -160,8 +203,12 @@ export default function AuthForm({
         router.push("/account");
         router.refresh();
       }, 1000);
-    } catch {
-      setError("Ha ocurrido un error inesperado. Inténtalo de nuevo.");
+    } catch (caught) {
+      setError(
+        caught instanceof MissingSupabaseEnvError
+          ? caught.message
+          : "Ha ocurrido un error inesperado. Inténtalo de nuevo.",
+      );
     } finally {
       setLoading(false);
     }
