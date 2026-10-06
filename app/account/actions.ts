@@ -29,7 +29,7 @@ export async function updateProfile(
   const fullNombre = getValue(formData, "full_nombre");
   const telefono = getValue(formData, "telefono");
 
-  const { error } = await supabase.from("profiles").upsert(
+  const { error } = await supabase.from("perfiles").upsert(
     {
       id: user.id,
       full_nombre: fullNombre || null,
@@ -62,7 +62,7 @@ export async function updateAddress(
     return { error: "Tu sesión ha caducado. Vuelve a iniciar sesión." };
   }
 
-  const { error } = await supabase.from("profiles").upsert(
+  const { error } = await supabase.from("perfiles").upsert(
     {
       id: user.id,
       direccion_calle: getValue(formData, "direccion_calle") || null,

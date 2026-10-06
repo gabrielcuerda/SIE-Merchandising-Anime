@@ -26,16 +26,22 @@ export default async function AccountLayout({
   }
 
   const { data: profile } = await supabase
-    .from("profiles")
+    .from("perfiles")
     .select("full_nombre")
     .eq("id", user.id)
     .maybeSingle();
 
   if (!profile) {
-    await supabase.from("profiles").insert({
-      id: user.id,
-      full_nombre: user.user_metadata?.full_nombre ?? null,
-    });
+    // `upsert` y no `insert`: con `insert`, dos peticiones simultáneas sobre el
+    // mismo perfil (el layout corre en cada navegación) chocan con una violación
+    // de clave primaria y el usuario ve un error al recargar.
+    await supabase.from("perfiles").upsert(
+      {
+        id: user.id,
+        full_nombre: user.user_metadata?.full_nombre ?? null,
+      },
+      { onConflict: "id" },
+    );
   }
 
   const fullName =

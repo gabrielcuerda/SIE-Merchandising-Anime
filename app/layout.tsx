@@ -41,15 +41,18 @@ export default async function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  // Don't await the fetch, pass the Promise to the context provider
-  const cart = getCart();
+  // El carrito se resuelve AQUÍ y no dentro del provider: pasar la promesa hacia
+  // el cliente obligaba a leerla con `use()`, que durante la hidratación genera
+  // un árbol distinto al que se envió y rompe el render del header. Ver el
+  // comentario de `CartProvider`.
+  const cart = await getCart();
   const lang = await getLang();
 
   return (
     <html lang={lang} className={GeistSans.variable}>
       <body className="flex min-h-screen flex-col bg-white text-ink-950 selection:bg-brand-200 selection:text-ink-950">
         <LanguageProvider initialLang={lang}>
-          <CartProvider cartPromise={cart}>
+          <CartProvider cart={cart}>
             <Navbar />
 
             <main id="contenido" className="flex-1">

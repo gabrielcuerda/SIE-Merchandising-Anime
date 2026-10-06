@@ -8,7 +8,6 @@ import type {
 } from "@/lib/commerce/types";
 import React, {
   createContext,
-  use,
   useContext,
   useMemo,
   useOptimistic,
@@ -33,7 +32,7 @@ type CartAction =
     };
 
 type CartContextType = {
-  cartPromise: Promise<Carrito | undefined>;
+  cart: Carrito | undefined;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -150,17 +149,28 @@ function cartReducer(state: Carrito | undefined, action: CartAction): Carrito {
   }
 }
 
+/**
+ * El carrito llega **resuelto**, no como promesa.
+ *
+ * Antes se pasaba la promesa y `useCart()` la leía con el `use()` de React. Ese
+ * camino no es seguro durante la hidratación: en el servidor la promesa ya está
+ * resuelta cuando se genera el HTML, y en el cliente es una promesa distinta que
+ * React tiene que resolver otra vez. Hasta que lo hace, el árbol que construye
+ * no coincide con el que le mandaron y React regenera el subárbol entero,
+ * dejando la página en blanco un instante.
+ *
+ * Por eso `app/layout.tsx` hace `await getCart()`. Son milisegundos en el TTFB a
+ * cambio de un HTML coherente desde el primer byte.
+ */
 export function CartProvider({
   children,
-  cartPromise,
+  cart,
 }: {
   children: React.ReactNode;
-  cartPromise: Promise<Carrito | undefined>;
+  cart: Carrito | undefined;
 }) {
   return (
-    <CartContext.Provider value={{ cartPromise }}>
-      {children}
-    </CartContext.Provider>
+    <CartContext.Provider value={{ cart }}>{children}</CartContext.Provider>
   );
 }
 
@@ -169,7 +179,7 @@ export function useCart() {
   if (context === undefined)
     throw new Error("useCart must be used within a CartProvider");
 
-  const initialCart = use(context.cartPromise);
+  const initialCart = context.cart;
   const [optimisticCart, updateOptimisticCart] = useOptimistic(
     initialCart,
     cartReducer,
