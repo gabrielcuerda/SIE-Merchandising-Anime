@@ -11,7 +11,7 @@ export function MarkSeal(props: MarkProps) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 40 40"
       role="img"
-      aria-label="Sello SIE"
+      aria-label="Sello Animemerchan"
       {...props}
     >
       <circle
@@ -41,7 +41,7 @@ export function MarkKatana(props: MarkProps) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 40 40"
       role="img"
-      aria-label="Katana SIE"
+      aria-label="Katana Animemerchan"
       {...props}
     >
       <g transform="rotate(-40 20 20)" fill="currentColor">
@@ -70,7 +70,7 @@ export function MarkAngular(props: MarkProps) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 40 40"
       role="img"
-      aria-label="S angular SIE"
+      aria-label="S angular Animemerchan"
       {...props}
     >
       <path
@@ -92,7 +92,7 @@ export function MarkDisc(props: MarkProps) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 40 40"
       role="img"
-      aria-label="Disco SIE"
+      aria-label="Disco Animemerchan"
       {...props}
     >
       <circle cx="20" cy="20" r="19" fill="currentColor" />

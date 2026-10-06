@@ -11,7 +11,7 @@ export default function LogoMark(props: React.ComponentProps<"svg">) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 40 40"
       role="img"
-      aria-label="SIE Merchandising"
+      aria-label="Animemerchan"
       {...props}
       className={clsx(props.className ?? "h-6 w-6")}
     >

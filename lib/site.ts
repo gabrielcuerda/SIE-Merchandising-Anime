@@ -14,8 +14,8 @@ export type SiteLink = {
 };
 
 export const siteConfig = {
-  name: "SIE Merchandising",
-  shortName: "SIE",
+  name: "Animemerchan",
+  shortName: "Animemerchan",
   claim: "Merchandising de anime y manga importado de Japón",
   description:
     "Merchandising de anime y manga importado directamente desde Japón: figuras, manga, apparel y coleccionables para fans.",

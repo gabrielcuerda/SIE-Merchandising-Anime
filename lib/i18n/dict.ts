@@ -30,7 +30,7 @@ const es = {
   "search.submit": "Buscar",
 
   // ── Navbar (Fase 1) ──
-  "nav.home": "SIE Merchandising, ir al inicio",
+  "nav.home": "Animemerchan, ir al inicio",
   "nav.account": "Mi cuenta",
   "nav.wishlist": "Lista de deseos",
 
@@ -211,7 +211,7 @@ const en: Record<DictKey, string> = {
   "search.submit": "Search",
 
   // Navbar
-  "nav.home": "SIE Merchandising, go to home",
+  "nav.home": "Animemerchan, go to home",
   "nav.account": "My account",
   "nav.wishlist": "Wishlist",
 

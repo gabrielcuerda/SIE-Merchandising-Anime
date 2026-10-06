@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Mi cuenta",
-  description: "Gestiona tu cuenta de SIE Merchandising.",
+  description: "Gestiona tu cuenta de Animemerchan.",
 };
 
 const accountCards = [

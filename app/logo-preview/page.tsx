@@ -14,15 +14,7 @@ function Wordmark({ tone }: { tone: "dark" | "light" }) {
           tone === "light" ? "text-white" : "text-ink-950"
         }`}
       >
-        {siteConfig.shortName}
-      </span>
-      <span aria-hidden="true" className="h-4 w-px bg-brand-500" />
-      <span
-        className={`font-display text-[11px] font-bold tracking-[0.22em] uppercase ${
-          tone === "light" ? "text-ink-400" : "text-ink-500"
-        }`}
-      >
-        Merchandising
+        {siteConfig.name}
       </span>
     </span>
   );
