@@ -115,6 +115,16 @@ const es = {
   "cart.added": "Añadido al carrito",
   "cart.addError": "No se ha podido añadir al carrito",
 
+  // ── Ficha de producto ──
+  "product.preventa": "Pre-venta · se envía al lanzamiento oficial",
+  "product.apedido": "Bajo pedido · plazo estimado de 2 a 3 semanas",
+  "product.agotado": "Agotado",
+  "product.pocas": "¡Solo quedan {n} unidades!",
+  "product.stock": "{n} unidades en stock",
+  "crumb.home": "Inicio",
+  "crumb.categories": "Categorías",
+  "product.related": "Productos relacionados",
+
   // ── Filtros de búsqueda ──
   "search.sortTitle": "Ordenar",
   "search.statusTitle": "Estado",
@@ -294,6 +304,16 @@ const en: Record<DictKey, string> = {
   "cart.plus": "Increase quantity",
   "cart.added": "Added to cart",
   "cart.addError": "Could not add to cart",
+
+  // Product page
+  "product.preventa": "Pre-order · ships on the official release date",
+  "product.apedido": "Made to order · estimated delivery in 2 to 3 weeks",
+  "product.agotado": "Out of stock",
+  "product.pocas": "Only {n} left in stock!",
+  "product.stock": "{n} units in stock",
+  "crumb.home": "Home",
+  "crumb.categories": "Categories",
+  "product.related": "Related products",
 
   // Filters and search
   "search.sortTitle": "Sort by",
