@@ -6,27 +6,32 @@ import WishlistToggle from "@/components/wishlist/wishlist-toggle";
 
 import { Product } from "@/lib/commerce/types";
 import { VariantSelector } from "./variant-selector";
+import { translate, type Lang } from "@/lib/i18n/dict";
 
 /** Texto y color del indicador de disponibilidad */
-function disponibilidad(product: Product): { texto: string; clase: string } {
+function disponibilidad(
+  product: Product,
+  lang: Lang,
+): { texto: string; clase: string } {
   if (product.status === "pre-venta")
     return {
-      texto: "Pre-venta · se envía al lanzamiento oficial",
+      texto: translate(lang, "product.preventa"),
       clase: "text-amber-600",
     };
   if (product.status === "a-pedido")
     return {
-      texto: "Bajo pedido · plazo estimado de 2 a 3 semanas",
+      texto: translate(lang, "product.apedido"),
       clase: "text-sky-600",
     };
-  if (product.stock <= 0) return { texto: "Agotado", clase: "text-rose-600" };
+  if (product.stock <= 0)
+    return { texto: translate(lang, "product.agotado"), clase: "text-rose-600" };
   if (product.stock <= 5)
     return {
-      texto: `¡Solo quedan ${product.stock} unidades!`,
+      texto: translate(lang, "product.pocas").replace("{n}", String(product.stock)),
       clase: "text-orange-600",
     };
   return {
-    texto: `${product.stock} unidades en stock`,
+    texto: translate(lang, "product.stock").replace("{n}", String(product.stock)),
     clase: "text-emerald-600",
   };
 }
@@ -34,11 +39,13 @@ function disponibilidad(product: Product): { texto: string; clase: string } {
 export function ProductDescription({
   product,
   saved = false,
+  lang,
 }: {
   product: Product;
   saved?: boolean;
+  lang: Lang;
 }) {
-  const estado = disponibilidad(product);
+  const estado = disponibilidad(product, lang);
 
   return (
     <div className="relative">
