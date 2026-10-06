@@ -6,6 +6,24 @@ export const SUPABASE_ENV_VARS = [
 const PLACEHOLDER_PATTERN =
   /TU[-_](PROYECTO|CLAVE|DOMINIO)|CHANGE_ME|CAMBIAR_?AQUI|<[^>]+>/i;
 
+/**
+ * Lectura ESTÁTICA de las variables públicas.
+ *
+ * Next.js sólo sustituye `process.env.NEXT_PUBLIC_X` cuando el nombre aparece
+ * escrito literalmente en el código. Con un acceso dinámico (`process.env[name]`)
+ * no hay sustitución y en el navegador `process.env` queda vacío: `readVar`
+ * devolvía `null`, `getSupabaseEnv()` lanzaba `MissingSupabaseEnvError` al
+ * evaluar el módulo y el formulario de login/registro desaparecía al hidratar.
+ */
+const PUBLIC_ENV: Record<
+  (typeof SUPABASE_ENV_VARS)[number],
+  string | undefined
+> = {
+  NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+};
+
 export class MissingSupabaseEnvError extends Error {
   readonly missing: string[];
 
@@ -21,8 +39,8 @@ export class MissingSupabaseEnvError extends Error {
   }
 }
 
-function readVar(name: string) {
-  const value = process.env[name]?.trim();
+function readVar(name: (typeof SUPABASE_ENV_VARS)[number]) {
+  const value = PUBLIC_ENV[name]?.trim();
 
   if (!value || PLACEHOLDER_PATTERN.test(value)) return null;
 
