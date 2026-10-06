@@ -22,6 +22,20 @@ type ProductoConDetalle = Producto & {
   categorias: { nombre: string; slug: string } | null;
 };
 
+const IMAGENES_LOCALES: Record<string, string[]> = {
+  "camiseta-attack-on-titan-eren-titan": [
+    "/images/camiseta-eren-titan/azul.jpg",
+    "/images/camiseta-eren-titan/roja.jpg",
+    "/images/camiseta-eren-titan/verde.jpg",
+    "/images/camiseta-eren-titan/negra.jpg",
+    "/images/camiseta-eren-titan/blanca.jpg",
+  ],
+};
+
+export function getImagenesLocales(slug: string): string[] {
+  return IMAGENES_LOCALES[slug] ?? [];
+}
+
 function mapImages(producto: ProductoConDetalle, titulo: string): Image[] {
   const images = [...(producto.producto_imagenes || [])]
     .sort((a, b) => a.orden_cat - b.orden_cat)
@@ -32,7 +46,18 @@ function mapImages(producto: ProductoConDetalle, titulo: string): Image[] {
       height: 1200,
     }));
 
-  return images.length > 0 ? images : [placeholderImage];
+  if (images.length > 0) return images;
+
+  const locales = IMAGENES_LOCALES[producto.slug] ?? [];
+  if (locales.length > 0)
+    return locales.map((url) => ({
+      url,
+      altText: titulo,
+      width: 1200,
+      height: 1200,
+    }));
+
+  return [placeholderImage];
 }
 
 function mapProduct(producto: ProductoConDetalle, lang: Lang): Product {

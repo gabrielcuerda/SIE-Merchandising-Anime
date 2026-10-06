@@ -7,6 +7,8 @@ import WishlistToggle from "@/components/wishlist/wishlist-toggle";
 import { Product } from "@/lib/commerce/types";
 import { VariantSelector } from "./variant-selector";
 import { translate, type Lang } from "@/lib/i18n/dict";
+import { SelectorColor } from "./selector-color";
+import { tieneCirculos } from "@/lib/commerce/colores-producto";
 
 /** Texto y color del indicador de disponibilidad */
 function disponibilidad(
@@ -69,7 +71,12 @@ export function ProductDescription({
         </p>
       </div>
 
-      <VariantSelector options={product.options} variants={product.variants} />
+      <SelectorColor slug={product.handle} lang={lang} />
+      <VariantSelector
+        options={product.options}
+        variants={product.variants}
+        ocultar={tieneCirculos(product.handle) ? ["color"] : []}
+      />
       {product.descriptionHtml ? (
         <Prose
           className="mb-6 text-sm leading-tight dark:text-white/[60%]"
