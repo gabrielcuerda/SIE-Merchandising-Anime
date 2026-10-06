@@ -29,20 +29,56 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=TU_CLAVE_PUBLICA
 ADMIN_EMAILS=admin@ejemplo.com
 ```
 
-`ADMIN_EMAILS` es opcional y se utiliza para autorizar el acceso a `/admin`.
+`ADMIN_EMAILS` es opcional y da acceso a la **interfaz** de `/admin`, pero no a
+los datos: la base de datos solo acepta el rol `admin` en `app_metadata` (ver el
+paso 4). Es una lista de emails de despliegue, no un mecanismo de permisos.
 
-4. Aplica la migración del carrito y los pedidos. Es **obligatoria**: sin ella
-   el botón de "Añadir al carrito" no hace nada, porque `carrito_items` tiene RLS
-   activado y sin políticas de escritura.
+3. Aplica las migraciones de la base de datos. Es **obligatorio** y van **en
+   orden**, porque cada una da por hecho que la anterior ya está aplicada:
 
-```bash
-# Copia el contenido de este fichero en Supabase Studio > SQL Editor > New query
-supabase/migrations/20261003000000_carrito_pedidos.sql
-```
+   | Fichero                                                         | Qué se rompe sin él                                                                                                                                                                     |
+   | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   | `supabase/migrations/20261003000000_carrito_pedidos.sql`        | «Añadir al carrito» no hace nada: `carrito_items` tiene RLS activado y sin políticas de escritura.                                                                                      |
+   | `supabase/migrations/20261004000000_admin_p5.sql`               | El panel `/admin` no carga nada: **ninguna** función `admin_*` existe en la base de datos.                                                                                              |
+   | `supabase/migrations/20261005000000_eventos.sql`                | La tabla `eventos` no se crea y la instrumentación del embudo de compra no registra.                                                                                                    |
+   | `supabase/migrations/20261006000000_admin_pedidos_perfiles.sql` | El listado de pedidos del panel falla con `PGRST200`: no hay relación `pedidos` → `perfiles`. Además `perfiles` se queda vacía y los formularios de perfil y dirección no guardan nada. |
 
-Es idempotente, así que puedes ejecutarla más de una vez. Si PostgREST no la ve
-todavía, es la caché de esquema: recarga el proyecto en el dashboard o espera
-unos segundos.
+   Se ejecutan desde **Supabase Studio → SQL Editor → New query**: copias el
+   contenido del fichero y pulsas _Run_. Las tres son idempotentes, así que
+   puedes ejecutarlas las veces que haga falta.
+
+4. Concede el rol de administrador a la cuenta que va a entrar al panel. La
+   migración anterior crea `is_admin()` y `require_admin()`, y las dos miran
+   **solo** el claim `role` de `app_metadata`: sin él, todas las funciones del
+   panel fallan con _No tienes permisos_. `ADMIN_EMAILS` no cuenta.
+
+   En Supabase Studio → Authentication → Users, edita el usuario y pon
+   `app_metadata` = `{"role":"admin"}`. O por SQL:
+
+   ```sql
+   update auth.users
+   set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb)
+     || jsonb_build_object('role', 'admin')
+   where email = 'TU_EMAIL';
+   ```
+
+   Después **cierra sesión y vuelve a entrar**: el claim va dentro del JWT firmado
+   y una sesión ya abierta no lo ve. Mientras el rol venga solo de
+   `ADMIN_EMAILS`, el panel muestra un aviso naranja en la parte superior.
+
+   Para confirmar que las migraciones se aplicaron de verdad:
+
+   ```sql
+   -- Debe existir el bucket 'productos': lo crea la migración del panel
+   select id, public from storage.buckets;
+   ```
+
+   Si una RPC responde `Could not find the function ... in the schema cache`, la
+   función existe pero PostgREST todavía no la ha visto: recarga el esquema con
+
+   ```sql
+   notify pgrst, 'reload schema';
+   ```
 
 5. Inicia el servidor:
 

@@ -10,9 +10,10 @@ import type { AdminUsuario, AdminUsuarioDetalle } from "@/lib/admin/tipos";
  * todo pasa por las RPC `admin_lista_usuarios` / `admin_usuario_detalle`, que
  * son `SECURITY DEFINER` y proyectan solo los campos necesarios.
  *
- * Aviso sobre el nombre de la tabla: el código de `app/account/` usa `"profiles"`
- * (en inglés) en sus `.from()`, pero la tabla real se llama `perfiles`. Aquí se
- * usa `perfiles` a propósito.
+ * Aviso sobre el nombre de la tabla: se llama `perfiles`, en español. Durante un
+ * tiempo `app/account/` consultaba `"profiles"` en inglés y PostgREST devolvía
+ * `PGRST205` en cada lectura y escritura, así que la tabla se quedaba vacía y
+ * los formularios de perfil y dirección no guardaban nada.
  */
 
 export const USUARIOS_POR_PAGINA = 25;
