@@ -8,22 +8,31 @@ import {
   TITULO,
 } from "@/app/privacidad/datos";
 import { fechaEnEspañol } from "@/lib/admin/formato";
+import { getLang } from "@/lib/i18n/lang";
+import { PRIVACIDAD_EN, PrivacidadEn } from "@/lib/i18n/privacidad.en";
 import { siteConfig } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: TITULO,
-  description: RESUMEN,
-  openGraph: {
-    title: TITULO,
-    description: RESUMEN,
-    type: "article",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLang();
+  const title = lang === "en" ? PRIVACIDAD_EN.titulo : TITULO;
+  const description = lang === "en" ? PRIVACIDAD_EN.resumen : RESUMEN;
+  return {
+    title,
+    description,
+    openGraph: { title, description, type: "article" },
+  };
+}
 
 /**
  * Política de privacidad (LOPD y RGPD).
  */
-export default function PoliticaPrivacidadPage() {
+export default async function PoliticaPrivacidadPage() {
+  const lang = await getLang();
+  if (lang === "en") return <PrivacidadEn />;
+  return <PoliticaPrivacidadEs />;
+}
+
+function PoliticaPrivacidadEs() {
   return (
     <div className="page-container max-w-3xl py-12">
       <header className="mb-10">

@@ -341,9 +341,9 @@ const pagesEn: Record<string, Page> = {
 <table>
 <thead><tr><th>Name</th><th>Purpose</th><th>Duration</th></tr></thead>
 <tbody>
-<tr><td>carrito</td><td>Stores the products in your cart</td><td>Session</td></tr>
-<tr><td>idioma</td><td>Remembers whether you prefer Spanish or English</td><td>1 year</td></tr>
-<tr><td>sesion</td><td>Keeps you signed in</td><td>Session</td></tr>
+<tr><td>cart</td><td>Stores the products in your cart</td><td>Session</td></tr>
+<tr><td>language</td><td>Remembers whether you prefer Spanish or English</td><td>1 year</td></tr>
+<tr><td>session</td><td>Keeps you signed in</td><td>Session</td></tr>
 </tbody>
 </table>
 
