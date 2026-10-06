@@ -124,6 +124,16 @@ const es = {
   "crumb.home": "Inicio",
   "crumb.categories": "Categorías",
   "product.related": "Productos relacionados",
+  "product.color": "Color",
+  "product.size": "Talla",
+  "color.azul": "Azul",
+  "color.roja": "Roja",
+  "color.verde": "Verde",
+  "color.negra": "Negra",
+  "color.blanca": "Blanca",
+  "gallery.prev": "Imagen anterior",
+  "gallery.next": "Imagen siguiente",
+  "gallery.select": "Seleccionar imagen del producto",
 
   // ── Filtros de búsqueda ──
   "search.sortTitle": "Ordenar",
@@ -314,7 +324,17 @@ const en: Record<DictKey, string> = {
   "crumb.home": "Home",
   "crumb.categories": "Categories",
   "product.related": "Related products",
-
+  "product.color": "Color",
+  "product.size": "Size",
+  "color.azul": "Blue",
+  "color.roja": "Red",
+  "color.verde": "Green",
+  "color.negra": "Black",
+  "color.blanca": "White",
+  "gallery.prev": "Previous image",
+  "gallery.next": "Next image",
+  "gallery.select": "Select product image",
+  
   // Filters and search
   "search.sortTitle": "Sort by",
   "search.statusTitle": "Status",

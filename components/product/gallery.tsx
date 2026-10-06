@@ -1,9 +1,11 @@
 "use client";
 
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { GridTileImage } from "components/grid/tile";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
+import { translate } from "@/lib/i18n/dict";
+import { useLanguage } from "components/i18n/language-context";
 
 export function Gallery({
   images,
@@ -15,7 +17,8 @@ export function Gallery({
   const imageIndex = searchParams.has("image")
     ? parseInt(searchParams.get("image")!)
     : 0;
-
+  const { lang } = useLanguage();
+  
   const updateImage = (index: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("image", index);
@@ -26,8 +29,8 @@ export function Gallery({
   const previousImageIndex =
     imageIndex === 0 ? images.length - 1 : imageIndex - 1;
 
-  const buttonClassName =
-    "h-full px-6 transition-all ease-in-out hover:scale-110 hover:text-black dark:hover:text-white flex items-center justify-center";
+  const flecha =
+    "absolute top-1/2 -translate-y-1/2 bg-neutral-900/80 px-2.5 py-5 text-white backdrop-blur-sm transition hover:bg-neutral-900";
 
   return (
     <form>
@@ -44,25 +47,22 @@ export function Gallery({
         )}
 
         {images.length > 1 ? (
-          <div className="absolute bottom-[15%] flex w-full justify-center">
-            <div className="mx-auto flex h-11 items-center rounded-full border border-white bg-neutral-50/80 text-neutral-500 backdrop-blur-sm dark:border-black dark:bg-neutral-900/80">
-              <button
-                formAction={() => updateImage(previousImageIndex.toString())}
-                aria-label="Previous product image"
-                className={buttonClassName}
-              >
-                <ArrowLeftIcon className="h-5" />
-              </button>
-              <div className="mx-1 h-6 w-px bg-neutral-500"></div>
-              <button
-                formAction={() => updateImage(nextImageIndex.toString())}
-                aria-label="Next product image"
-                className={buttonClassName}
-              >
-                <ArrowRightIcon className="h-5" />
-              </button>
-            </div>
-          </div>
+          <>
+            <button
+              formAction={() => updateImage(previousImageIndex.toString())}
+              aria-label={translate(lang, "gallery.prev")}
+              className={`${flecha} left-0`}
+            >
+              <ChevronLeftIcon className="h-5 w-5" />
+            </button>
+            <button
+              formAction={() => updateImage(nextImageIndex.toString())}
+              aria-label={translate(lang, "gallery.next")}
+              className={`${flecha} right-0`}
+            >
+              <ChevronRightIcon className="h-5 w-5" />
+            </button>
+          </>
         ) : null}
       </div>
 
@@ -75,7 +75,7 @@ export function Gallery({
               <li key={image.src} className="h-20 w-20">
                 <button
                   formAction={() => updateImage(index.toString())}
-                  aria-label="Select product image"
+                  aria-label={translate(lang, "gallery.select")}
                   className="h-full w-full"
                 >
                   <GridTileImage
