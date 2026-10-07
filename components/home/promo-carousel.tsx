@@ -6,6 +6,8 @@ import {
 } from "@/lib/db/categorias";
 import { translate, type Lang } from "@/lib/i18n/dict";
 import { getLang } from "@/lib/i18n/lang";
+import Image from "next/image";
+
 /**
  * Tira de banners promocionales por franquicia.
  */
@@ -21,6 +23,20 @@ const GRADIENTES: Record<string, string> = {
 };
 
 const GRADIENTE_POR_DEFECTO = "from-blue-700 via-blue-800 to-blue-950";
+
+const STORAGE =
+  "https://utekksdmegnoxrrqpaoa.supabase.co/storage/v1/object/public/productos";
+
+// Una foto por franquicia (cambiables en 1 línea cada una).
+const FOTOS: Record<string, string> = {
+  "dragon-ball": `${STORAGE}/DB.jpg`,
+  "one-piece": `${STORAGE}/OP.jpg`,
+  naruto: `${STORAGE}/N.jpg`,
+  "jujutsu-kaisen": `${STORAGE}/JK.jpg`,
+  "demon-slayer": `${STORAGE}/KnY.jpg`,
+  "chainsaw-man": `${STORAGE}/CM.jpg`,
+  "attack-on-titan": `${STORAGE}/AOT.jpg`,
+};
 
 type BannerProps = {
   categoria: CategoriaDestacada;
@@ -41,13 +57,30 @@ function Banner({ categoria, duplicado = false, lang }: BannerProps) {
       tabIndex={duplicado ? -1 : undefined}
       className={`group/banner relative flex h-40 w-72 flex-none flex-col justify-between overflow-hidden rounded-2xl bg-gradient-to-br p-5 text-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg sm:h-44 sm:w-80 ${degradado}`}
     >
-      {/* Inicial gigante: da textura visual sin necesitar imágenes */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-10 -right-4 select-none text-[8rem] leading-none font-black text-white/10"
-      >
-        {categoria.nombre.charAt(0)}
-      </span>
+      {FOTOS[categoria.slug] ? (
+        <>
+          <Image
+            src={FOTOS[categoria.slug] as string}
+            alt=""
+            fill
+            sizes="(min-width: 640px) 320px, 288px"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          {/* velo para que el texto se lea; el degradado queda detrás por si falla */}
+          <span
+            aria-hidden="true"
+            className={`absolute inset-0 bg-gradient-to-t from-ink-950/75 via-ink-950/25 to-transparent`}
+          />
+        </>
+      ) : (
+        /* Inicial gigante solo si no hay foto */
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-10 -right-4 select-none text-[8rem] leading-none font-black text-white/10"
+        >
+          {categoria.nombre.charAt(0)}
+        </span>
+      )}
 
       <span className="relative inline-flex w-fit rounded-full bg-blue-950/30 px-2.5 py-1 text-[0.65rem] font-semibold tracking-widest uppercase">
         {translate(lang, "promo.franchise")}

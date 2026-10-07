@@ -7,6 +7,7 @@ export type HeroSlide = {
   ctaHref: string; // a dónde lleva el botón
   background: string; // clases de Tailwind del degradado
   accent: string; // clases del badge
+  image: string; // foto (URL pública de Storage)
 };
 
 /** Cada cuánto cambia la diapositiva sola (ms) */
@@ -23,6 +24,8 @@ export const heroSlides: HeroSlide[] = [
     ctaHref: "/search",
     background: "from-brand-400 via-brand-300 to-ki-200",
     accent: "bg-brand-600 text-white",
+    image:
+      "https://utekksdmegnoxrrqpaoa.supabase.co/storage/v1/object/public/productos/Hero-01.jpg",
   },
   {
     id: "novedades",
@@ -34,6 +37,8 @@ export const heroSlides: HeroSlide[] = [
     ctaHref: "/search?sort=latest-desc",
     background: "from-ki-300 via-ki-100 to-brand-50",
     accent: "bg-blue-700 text-white",
+    image:
+      "https://utekksdmegnoxrrqpaoa.supabase.co/storage/v1/object/public/productos/Hero-02.jpg",
   },
   {
     id: "franquicias",
@@ -45,6 +50,8 @@ export const heroSlides: HeroSlide[] = [
     ctaHref: "/search/dragon-ball",
     background: "from-blue-300 via-blue-200 to-ki-200",
     accent: "bg-ki-500 text-ink-950",
+    image:
+      "https://utekksdmegnoxrrqpaoa.supabase.co/storage/v1/object/public/productos/Hero-03.jpg",
   },
 ];
 
