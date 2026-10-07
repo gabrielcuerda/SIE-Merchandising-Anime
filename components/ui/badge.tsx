@@ -12,7 +12,7 @@ export type BadgeTone =
 
 const toneClasses: Record<BadgeTone, string> = {
   brand: "bg-brand-500 text-white",
-  ink: "bg-ink-950 text-white",
+  ink: "bg-blue-700 text-white",
   alert: "bg-alert-500 text-white",
   success: "bg-emerald-600 text-white",
   warning: "bg-amber-500 text-ink-950",
@@ -22,7 +22,7 @@ const toneClasses: Record<BadgeTone, string> = {
 
 const dotClasses: Record<BadgeTone, string> = {
   brand: "bg-brand-500",
-  ink: "bg-ink-950",
+  ink: "bg-blue-700",
   alert: "bg-alert-500",
   success: "bg-emerald-600",
   warning: "bg-amber-500",

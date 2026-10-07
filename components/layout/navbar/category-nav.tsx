@@ -34,7 +34,9 @@ export default function CategoryNav({
             <PopoverButton
               className={clsx(
                 "flex items-center gap-2 px-2 text-sm font-extrabold tracking-[0.12em] uppercase transition",
-                open ? "text-brand-600" : "text-ink-950 hover:text-brand-600",
+                open
+                  ? "bg-blue-900 text-white"
+                  : "text-ki-400 hover:bg-blue-900 hover:text-white",
               )}
             >
               <BarsIcon />
@@ -131,7 +133,7 @@ export default function CategoryNav({
           <li key={item.href} className="flex">
             <Link
               href={item.href}
-              className="flex items-center px-2.5 text-sm font-extrabold tracking-[0.12em] text-ink-950 uppercase transition hover:bg-ink-50 hover:text-brand-600"
+              className="flex items-center px-2.5 text-sm font-extrabold tracking-[0.12em] text-ki-400 uppercase transition hover:bg-blue-900 hover:text-white"
             >
               {item.label}
             </Link>

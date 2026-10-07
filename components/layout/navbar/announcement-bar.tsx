@@ -31,9 +31,9 @@ export default async function AnnouncementBar() {
   const slides = getAnnounceSlides(lang);
 
   return (
-    <div className="bg-ink-950 text-white">
-      <div className="group relative overflow-hidden motion-reduce:overflow-x-auto">
-        <ul className="flex w-max animate-marquee-quick items-center gap-8 py-2.5 group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused] motion-reduce:animate-none">
+    <div className="bg-blue-900 text-white">
+      <div className="marquee-fade group relative overflow-hidden motion-reduce:overflow-x-auto">
+        <ul className="flex w-max animate-marquee-quick items-center py-3.5 group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused] motion-reduce:animate-none">
           {[...slides, ...slides].map((slide, i) => {
             const duplicado = i >= slides.length;
             const Icono = ICONOS[slide.icon];
@@ -41,18 +41,18 @@ export default async function AnnouncementBar() {
             const contenido = (
               <>
                 <Icono
-                  className="h-3.5 w-3.5 shrink-0 text-brand-400"
+                  className="h-3.5 w-3.5 shrink-0 text-ki-400"
                   aria-hidden="true"
                 />
                 <span
                   className={clsx(
                     "shrink-0",
-                    slide.destacado ? "text-brand-300" : "text-brand-400",
+                    slide.destacado ? "text-ki-300" : "text-ki-400",
                   )}
                 >
                   {slide.title}
                 </span>
-                <span className="font-medium normal-case tracking-normal text-ink-300">
+                <span className="font-medium normal-case tracking-normal text-blue-100">
                   {slide.text}
                 </span>
               </>
@@ -62,7 +62,7 @@ export default async function AnnouncementBar() {
               <li
                 key={`${slide.id}-${i}`}
                 aria-hidden={duplicado || undefined}
-                className="flex flex-none items-center gap-1.5 text-[11px] font-bold whitespace-nowrap tracking-[0.14em] uppercase"
+                className="flex flex-none items-center gap-1.5 pr-8 text-[11px] font-bold whitespace-nowrap tracking-[0.14em] uppercase"
               >
                 {slide.href && !duplicado ? (
                   <Link
@@ -81,7 +81,7 @@ export default async function AnnouncementBar() {
         </ul>
       </div>
 
-      <p className="border-t border-ink-800 bg-ink-900 px-4 py-1.5 text-center text-[10px] leading-tight font-medium text-ink-300">
+      <p className="border-t border-blue-200 bg-white px-6 py-2.5 text-center text-[10px] leading-tight font-medium text-blue-700">
         {translate(lang, "announce.disclaimer")}
       </p>
     </div>

@@ -29,7 +29,9 @@ export default function ProductSection({
     <section className="mx-auto max-w-(--breakpoint-2xl) px-4 pb-8">
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold">{title}</h2>
+          <h2 className="text-3xl font-extrabold tracking-tight text-blue-900">
+            {title}
+          </h2>
           {subtitle ? (
             <p className="mt-1 text-sm text-slate-600">{subtitle}</p>
           ) : null}

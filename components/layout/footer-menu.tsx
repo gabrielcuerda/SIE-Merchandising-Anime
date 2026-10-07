@@ -20,8 +20,8 @@ export function FooterLink({
       <Link
         href={link.href}
         className={clsx(
-          "inline-block py-1.5 text-sm transition hover:text-brand-400",
-          isActive && "font-bold text-brand-400",
+          "inline-block py-1.5 text-sm transition hover:text-ki-400",
+          isActive && "font-bold text-ki-400",
           className,
         )}
       >

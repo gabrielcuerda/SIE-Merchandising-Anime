@@ -11,7 +11,7 @@ export default function OpenCart({
   return (
     <span
       className={clsx(
-        "relative flex h-10 w-10 items-center justify-center rounded-md bg-ink-950 text-white transition hover:bg-brand-500 lg:h-11 lg:w-11",
+        "relative flex h-10 w-10 items-center justify-center rounded-md bg-ki-500 text-ink-950 transition hover:bg-white lg:h-11 lg:w-11",
         className,
       )}
     >
