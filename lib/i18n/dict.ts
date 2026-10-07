@@ -114,6 +114,14 @@ const es = {
   "cart.plus": "Sumar una unidad",
   "cart.added": "Añadido al carrito",
   "cart.addError": "No se ha podido añadir al carrito",
+  // ── Banner de cookies ──
+  "cookie.title": "Cookies",
+  "cookie.text":
+    "Usamos cookies técnicas para que la tienda funcione (carrito, sesión e idioma). Sin ellas no puedes comprar.",
+  "cookie.accept": "Aceptar todas",
+  "cookie.necessary": "Solo necesarias",
+  "cookie.reject": "Rechazar",
+  "cookie.more": "Ver política de cookies",
 
   // ── Ficha de producto ──
   "product.preventa": "Pre-venta · se envía al lanzamiento oficial",
@@ -314,6 +322,15 @@ const en: Record<DictKey, string> = {
   "cart.plus": "Increase quantity",
   "cart.added": "Added to cart",
   "cart.addError": "Could not add to cart",
+
+  // Cookie banner
+  "cookie.title": "Cookies",
+  "cookie.text":
+    "We use technical cookies so the shop works (cart, session and language). Without them you cannot check out.",
+  "cookie.accept": "Accept all",
+  "cookie.necessary": "Necessary only",
+  "cookie.reject": "Reject",
+  "cookie.more": "See cookie policy",
 
   // Product page
   "product.preventa": "Pre-order · ships on the official release date",

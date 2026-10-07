@@ -33,7 +33,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <>
+    <div className="bg-gradient-to-b from-brand-50/70 via-white to-ki-100/40">
       <HeroCarousel />
       <PromoCarousel />
 
@@ -70,6 +70,6 @@ export default async function HomePage() {
           <ProductoGridItems productos={productos} />
         </Grid>
       </section>
-    </>
+    </div>
   );
 }

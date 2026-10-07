@@ -1,7 +1,7 @@
 import { CartProvider } from "components/cart/cart-context";
 import Footer from "components/layout/footer";
 import { Navbar } from "components/layout/navbar";
-import WelcomeToast from "components/welcome-toast";
+import CookieBanner from "components/cookies/cookie-banner";
 import { GeistSans } from "geist/font/sans";
 
 import { siteConfig } from "@/lib/site";
@@ -63,7 +63,7 @@ export default async function RootLayout({
           </CartProvider>
 
           <Toaster position="bottom-right" closeButton richColors />
-          <WelcomeToast />
+          <CookieBanner />
         </LanguageProvider>
       </body>
     </html>

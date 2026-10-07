@@ -14,7 +14,7 @@ export default async function SearchLayout({
   const lang = await getLang();
 
   return (
-    <div className="page-container flex flex-col gap-8 pb-4 md:flex-row">
+    <div className="page-container flex flex-col gap-8 bg-gradient-to-b from-brand-50/60 to-transparent pb-4 md:flex-row">
       <div className="order-first w-full flex-none md:max-w-[220px]">
         <Collections />
       </div>
