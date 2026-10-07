@@ -32,7 +32,7 @@ export function GridTileImage({
     >
       {props.src ? (
         <Image
-          className={clsx("relative h-full w-full object-contain", {
+          className={clsx("relative h-full w-full object-cover", {
             "transition duration-300 ease-in-out group-hover:scale-105":
               isInteractive,
           })}
