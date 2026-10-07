@@ -23,13 +23,8 @@ type ProductoConDetalle = Producto & {
 };
 
 const IMAGENES_LOCALES: Record<string, string[]> = {
-  "camiseta-attack-on-titan-eren-titan": [
-    "/images/camiseta-eren-titan/azul.jpg",
-    "/images/camiseta-eren-titan/roja.jpg",
-    "/images/camiseta-eren-titan/verde.jpg",
-    "/images/camiseta-eren-titan/negra.jpg",
-    "/images/camiseta-eren-titan/blanca.jpg",
-  ],
+  // Vacío: las fotos viven en Supabase Storage (`producto_imagenes`).
+  // El mecanismo se conserva como respaldo para productos sin fotos en BD.
 };
 
 export function getImagenesLocales(slug: string): string[] {
