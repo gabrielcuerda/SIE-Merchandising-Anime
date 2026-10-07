@@ -2,14 +2,8 @@ import SignOutButton from "@/components/auth/sign-out-button";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-
-const accountLinks = [
-  { href: "/account", label: "Resumen" },
-  { href: "/account/profile", label: "Perfil" },
-  { href: "/account/addresses", label: "Direcciones" },
-  { href: "/account/orders", label: "Pedidos" },
-  { href: "/account/wishlist", label: "Deseos" },
-];
+import { getLang } from "@/lib/i18n/lang";
+import { translate } from "@/lib/i18n/dict";
 
 export default async function AccountLayout({
   children,
@@ -43,19 +37,28 @@ export default async function AccountLayout({
       { onConflict: "id" },
     );
   }
+  
+    const lang = await getLang();
+    const accountLinks = [
+      { href: "/account", label: translate(lang, "account.tab.overview") },
+      { href: "/account/profile", label: translate(lang, "account.tab.profile") },
+      { href: "/account/addresses", label: translate(lang, "account.tab.addresses") },
+      { href: "/account/orders", label: translate(lang, "account.tab.orders") },
+      { href: "/account/wishlist", label: translate(lang, "account.tab.wishlist") },
+    ];
 
   const fullName =
-    profile?.full_nombre ?? user.user_metadata?.full_nombre ?? "Cliente";
+    profile?.full_nombre ?? user.user_metadata?.full_nombre ?? translate(lang, "account.guest");
 
   return (
     <div className="mx-auto min-h-[70vh] w-full max-w-6xl px-4 py-10 lg:px-6">
       <header className="flex flex-col gap-6 border-b border-neutral-200 pb-8 sm:flex-row sm:items-center sm:justify-between dark:border-neutral-800">
         <div>
           <p className="text-sm text-neutral-500 dark:text-neutral-400">
-            Mi cuenta
+            {translate(lang, "account.title")}
           </p>
           <h1 className="mt-1 text-3xl font-bold text-black dark:text-white">
-            Hola, {fullName}
+            {translate(lang, "account.hello")}, {fullName}
           </h1>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             {user.email}

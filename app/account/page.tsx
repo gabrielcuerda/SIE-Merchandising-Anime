@@ -2,36 +2,25 @@ import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getLang } from "@/lib/i18n/lang";
+import { translate } from "@/lib/i18n/dict";
 
-export const metadata: Metadata = {
-  title: "Mi cuenta",
-  description: "Gestiona tu cuenta de Animemerchan.",
-};
-
-const accountCards = [
-  {
-    href: "/account/profile",
-    title: "Perfil",
-    description: "Actualiza tu nombre y teléfono.",
-  },
-  {
-    href: "/account/addresses",
-    title: "Direcciones",
-    description: "Gestiona tu dirección de envío.",
-  },
-  {
-    href: "/account/orders",
-    title: "Pedidos",
-    description: "Revisa el historial de tus compras.",
-  },
-  {
-    href: "/account/wishlist",
-    title: "Deseos",
-    description: "Consulta tus productos favoritos.",
-  },
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLang();
+  return {
+    title: translate(lang, "account.metaTitle"),
+    description: translate(lang, "account.metaDescription"),
+  };
+}
 
 export default async function AccountPage() {
+  const lang = await getLang();
+  const accountCards = [
+  { href: "/account/profile", title: translate(lang, "account.card.profile"), description: translate(lang, "account.card.profileDesc") },
+  { href: "/account/addresses", title: translate(lang, "account.card.addresses"), description: translate(lang, "account.card.addressesDesc") },
+  { href: "/account/orders", title: translate(lang, "account.card.orders"), description: translate(lang, "account.card.ordersDesc") },
+  { href: "/account/wishlist", title: translate(lang, "account.card.wishlist"), description: translate(lang, "account.card.wishlistDesc") },
+  ];
   const supabase = await createClient();
   const {
     data: { user },
@@ -49,9 +38,9 @@ export default async function AccountPage() {
   return (
     <section>
       <div className="mb-6">
-        <h2 className="text-xl font-bold">Resumen de tu cuenta</h2>
+        <h2 className="text-xl font-bold">{translate(lang, "account.summaryTitle")}</h2>
         <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-          Gestiona tus datos, direcciones y compras desde aquí.
+          {translate(lang, "account.summaryDesc")} {orderCount} {translate(lang, orderCount === 1 ? "account.orderOne" : "account.orderOther")}
         </p>
       </div>
 

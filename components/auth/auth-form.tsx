@@ -5,6 +5,8 @@ import { createClient } from "@/lib/supabase/browser";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { translate } from "@/lib/i18n/dict";
+import { useLanguage } from "@/components/i18n/language-context";
 
 type AuthMode = "login" | "register" | "forgot-password" | "reset-password";
 
@@ -25,29 +27,13 @@ const inputClass =
  */
 function mensajeAuthError(
   error: { code?: string; message: string } | null,
+  lang: Parameters<typeof translate>[0],
   fallback: string,
 ) {
   if (!error) return fallback;
-
-  const mensajes: Record<string, string> = {
-    invalid_credentials: "El correo o la contraseña no son correctos.",
-    user_not_found: "No existe ninguna cuenta con ese correo.",
-    email_not_confirmed:
-      "Tu correo todavía no está confirmado. Revisa tu bandeja de entrada.",
-    user_already_exists: "Ya existe una cuenta con ese correo electrónico.",
-    email_exists: "Ya existe una cuenta con ese correo electrónico.",
-    email_address_invalid: "El correo electrónico no es válido.",
-    email_address_not_authorized: "Ese dominio de correo no está autorizado.",
-    weak_password: "La contraseña es demasiado débil.",
-    same_password: "La contraseña nueva tiene que ser distinta a la anterior.",
-    signup_disabled: "El registro está deshabilitado temporalmente.",
-    over_email_send_rate_limit:
-      "Hemos enviado demasiados correos en poco tiempo. Vuelve a intentarlo en unos minutos.",
-    over_request_rate_limit:
-      "Demasiados intentos seguidos. Espera unos minutos y vuelve a probar.",
-  };
-
-  return mensajes[error.code ?? ""] ?? fallback;
+  const clave = `auth.err.${error.code ?? ""}`;
+  const traducido = translate(lang, clave);
+  return traducido !== "" && traducido !== clave ? traducido : fallback;
 }
 
 export default function AuthForm({
@@ -64,6 +50,7 @@ export default function AuthForm({
   const [message, setMessage] = useState(initialMessage);
   const [error, setError] = useState(initialError);
   const [loading, setLoading] = useState(false);
+  const { lang } = useLanguage();
 
   const destination =
     nextPath.startsWith("/") && !nextPath.startsWith("//")
@@ -72,21 +59,21 @@ export default function AuthForm({
 
   const title =
     mode === "login"
-      ? "Iniciar sesión"
+      ? translate(lang, "auth.loginTitle")
       : mode === "register"
-        ? "Crear cuenta"
+        ? translate(lang, "auth.registerTitle")
         : mode === "forgot-password"
-          ? "Recuperar contraseña"
-          : "Nueva contraseña";
+          ? translate(lang, "auth.forgotTitle")
+          : translate(lang, "auth.resetTitle");
 
   const description =
     mode === "login"
-      ? "Accede a tu cuenta para gestionar tus pedidos."
+      ? translate(lang, "auth.loginDesc")
       : mode === "register"
-        ? "Crea una cuenta para comprar merchandising de anime."
+        ? translate(lang, "auth.registerDesc")
         : mode === "forgot-password"
-          ? "Te enviaremos un enlace para crear una nueva contraseña."
-          : "Introduce una nueva contraseña para tu cuenta.";
+          ? translate(lang, "auth.forgotDesc")
+          : translate(lang, "auth.resetDesc");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -109,7 +96,8 @@ export default function AuthForm({
           setError(
             mensajeAuthError(
               authError,
-              "No hemos podido iniciar sesión. Revisa tus datos.",
+              lang,
+              translate(lang, "auth.loginError"),
             ),
           );
           return;
@@ -122,12 +110,12 @@ export default function AuthForm({
 
       if (mode === "register") {
         if (password.length < 8) {
-          setError("La contraseña debe tener al menos 8 caracteres.");
+          setError(translate(lang, "auth.passwordTooShort"));
           return;
         }
 
         if (password !== confirmPassword) {
-          setError("Las contraseñas no coinciden.");
+          setError(translate(lang, "auth.passwordsDoNotMatch"));
           return;
         }
 
@@ -141,7 +129,7 @@ export default function AuthForm({
         });
 
         if (authError) {
-          setError(mensajeAuthError(authError, authError.message));
+          setError(mensajeAuthError(authError, lang, authError.message));
           return;
         }
 
@@ -166,7 +154,7 @@ export default function AuthForm({
         );
 
         if (authError) {
-          setError(mensajeAuthError(authError, authError.message));
+          setError(mensajeAuthError(authError, lang, authError.message));
           return;
         }
 
@@ -177,7 +165,7 @@ export default function AuthForm({
       }
 
       if (password.length < 8) {
-        setError("La contraseña debe tener al menos 8 caracteres.");
+        setError(translate(lang, "auth.passwordTooShort"));
         return;
       }
 
@@ -192,7 +180,8 @@ export default function AuthForm({
         setError(
           mensajeAuthError(
             authError,
-            "No hemos podido actualizar la contraseña. Solicita un nuevo enlace e inténtalo de nuevo.",
+            lang,
+            translate(lang, "auth.updateError"),
           ),
         );
         return;
@@ -233,7 +222,7 @@ export default function AuthForm({
                 className="mb-1 block text-sm font-medium"
                 htmlFor="fullName"
               >
-                Nombre completo
+                {translate(lang, "auth.fullName")}
               </label>
               <input
                 id="fullName"
@@ -250,7 +239,7 @@ export default function AuthForm({
           {mode !== "reset-password" ? (
             <div>
               <label className="mb-1 block text-sm font-medium" htmlFor="email">
-                Correo electrónico
+                {translate(lang, "auth.email")}
               </label>
               <input
                 id="email"
@@ -270,7 +259,7 @@ export default function AuthForm({
                 className="mb-1 block text-sm font-medium"
                 htmlFor="password"
               >
-                Contraseña
+                {translate(lang, "auth.password")}
               </label>
               <input
                 id="password"
@@ -293,7 +282,7 @@ export default function AuthForm({
                 className="mb-1 block text-sm font-medium"
                 htmlFor="confirmPassword"
               >
-                Confirmar contraseña
+                {translate(lang, "auth.confirmPassword")}
               </label>
               <input
                 id="confirmPassword"
@@ -331,15 +320,11 @@ export default function AuthForm({
             type="submit"
             disabled={loading}
           >
-            {loading
-              ? "Un momento..."
-              : mode === "login"
-                ? "Iniciar sesión"
-                : mode === "register"
-                  ? "Crear cuenta"
-                  : mode === "forgot-password"
-                    ? "Enviar enlace"
-                    : "Actualizar contraseña"}
+            {loading ? translate(lang, "auth.loading")
+              : mode === "login" ? translate(lang, "auth.submitLogin")
+              : mode === "register" ? translate(lang, "auth.submitRegister")
+              : mode === "forgot-password" ? translate(lang, "auth.submitForgot")
+              : translate(lang, "auth.submitReset")}
           </button>
         </form>
 
@@ -350,15 +335,15 @@ export default function AuthForm({
                 className="hover:text-black dark:hover:text-white"
                 href="/forgot-password"
               >
-                ¿Has olvidado tu contraseña?
+                {translate(lang, "auth.forgotLink")}
               </Link>
               <span>
-                ¿No tienes cuenta?{" "}
+                {translate(lang, "auth.noAccount")}{" "}
                 <Link
                   className="text-blue-600 hover:underline"
                   href="/register"
                 >
-                  Regístrate
+                  {translate(lang, "auth.registerLink")}
                 </Link>
               </span>
             </>
@@ -366,16 +351,16 @@ export default function AuthForm({
 
           {mode === "register" ? (
             <span>
-              ¿Ya tienes cuenta?{" "}
+              {translate(lang, "auth.hasAccount")}{" "}
               <Link className="text-blue-600 hover:underline" href="/login">
-                Inicia sesión
+                {translate(lang, "auth.loginLink")}
               </Link>
             </span>
           ) : null}
 
           {mode === "forgot-password" || mode === "reset-password" ? (
             <Link className="text-blue-600 hover:underline" href="/login">
-              Volver al inicio de sesión
+              {translate(lang, "auth.backToLogin")}
             </Link>
           ) : null}
         </div>
