@@ -21,7 +21,7 @@ export async function Navbar() {
     <header className="sticky top-0 z-40">
       <AnnouncementBar />
 
-      <div className="relative bg-white">
+      <div className="relative bg-blue-700">
         <div className="page-container flex h-16 items-center gap-2 lg:h-20 lg:gap-3">
           <Suspense fallback={null}>
             <MobileMenu categorias={categorias} />
@@ -34,7 +34,7 @@ export async function Navbar() {
             aria-label={translate(lang, "nav.home")}
           >
             <LogoBadge size="lg" />
-            <LogoWordmark className="hidden sm:flex" />
+            <LogoWordmark tone="gold" className="hidden sm:flex" />
           </Link>
 
           <CategoryNav categorias={categorias} />
@@ -54,7 +54,7 @@ export async function Navbar() {
               prefetch={true}
               aria-label={translate(lang, "nav.account")}
               title={translate(lang, "nav.account")}
-              className="flex h-10 w-10 items-center justify-center rounded-md text-ink-800 transition hover:bg-ink-50 hover:text-brand-600"
+              className="flex h-10 w-10 items-center justify-center rounded-md text-ki-400 transition hover:bg-blue-900 hover:text-white"
             >
               <UserIcon className="h-5 w-5" aria-hidden="true" />
             </Link>
@@ -64,7 +64,7 @@ export async function Navbar() {
               prefetch={true}
               aria-label={translate(lang, "nav.wishlist")}
               title={translate(lang, "nav.wishlist")}
-              className="hidden h-10 w-10 items-center justify-center rounded-md text-ink-800 transition hover:bg-ink-50 hover:text-brand-600 sm:flex"
+              className="hidden h-10 w-10 items-center justify-center rounded-md text-ki-400 transition hover:bg-blue-900 hover:text-white sm:flex"
             >
               <HeartIcon className="h-5 w-5" aria-hidden="true" />
             </Link>

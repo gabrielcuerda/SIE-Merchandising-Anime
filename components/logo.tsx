@@ -2,7 +2,7 @@ import clsx from "clsx";
 import LogoMark from "./icons/logo";
 import { siteConfig } from "@/lib/site";
 
-/** Sello circular con el símbolo. Negro de marca + monograma naranja. */
+/** Sello circular con el símbolo. Disco azul profundo + monograma en oro. */
 export function LogoBadge({
   size = "md",
   tone = "dark",
@@ -15,13 +15,13 @@ export function LogoBadge({
   return (
     <span
       className={clsx(
-        "flex flex-none items-center justify-center rounded-full text-brand-500",
+        "flex flex-none items-center justify-center rounded-full text-ki-400",
         {
           "h-8 w-8": size === "sm",
           "h-10 w-10": size === "md",
           "h-12 w-12": size === "lg",
-          "bg-ink-950": tone === "dark",
-          "bg-ink-900 ring-1 ring-ink-800 ring-inset": tone === "light",
+          "bg-blue-950 ring-2 ring-ki-400": tone === "dark",
+          "bg-blue-800 ring-1 ring-blue-900 ring-inset": tone === "light",
         },
         className,
       )}
@@ -44,14 +44,18 @@ export function LogoWordmark({
   tone = "dark",
 }: {
   className?: string;
-  tone?: "dark" | "light";
+  tone?: "dark" | "light" | "gold";
 }) {
   return (
     <span className={clsx("flex items-center gap-2 leading-none", className)}>
       <span
         className={clsx(
           "font-display text-xl font-extrabold tracking-[-0.03em]",
-          tone === "light" ? "text-white" : "text-ink-950",
+          tone === "light"
+            ? "text-white"
+            : tone === "gold"
+              ? "text-ki-400"
+              : "text-ink-950",
         )}
       >
         {siteConfig.name}

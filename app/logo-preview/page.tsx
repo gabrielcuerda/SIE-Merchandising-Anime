@@ -47,23 +47,23 @@ export default function LogoPreviewPage() {
 
                 <div className="mt-5 flex items-end gap-6">
                   <span
-                    className={`flex h-24 w-24 flex-none items-center justify-center bg-ink-950 text-brand-500 ${badge}`}
+                    className={`flex h-24 w-24 flex-none items-center justify-center bg-blue-700 text-ki-400 ${badge}`}
                   >
                     <Mark className="h-14 w-14" />
                   </span>
                   <div className="flex items-end gap-4">
                     <span
-                      className={`flex h-12 w-12 flex-none items-center justify-center bg-ink-950 text-brand-500 ${badge}`}
+                      className={`flex h-12 w-12 flex-none items-center justify-center bg-blue-700 text-ki-400 ${badge}`}
                     >
                       <Mark className="h-7 w-7" />
                     </span>
                     <span
-                      className={`flex h-8 w-8 flex-none items-center justify-center bg-ink-950 text-brand-500 ${badge}`}
+                      className={`flex h-8 w-8 flex-none items-center justify-center bg-blue-700 text-ki-400 ${badge}`}
                     >
                       <Mark className="h-5 w-5" />
                     </span>
                     <span
-                      className={`flex h-4 w-4 flex-none items-center justify-center bg-ink-950 text-brand-500 ${badge}`}
+                      className={`flex h-4 w-4 flex-none items-center justify-center bg-blue-700 text-ki-400 ${badge}`}
                     >
                       <Mark className="h-4 w-4" />
                     </span>
@@ -73,7 +73,7 @@ export default function LogoPreviewPage() {
 
               <div className="flex h-20 items-center border-b border-ink-200 px-6">
                 <span
-                  className={`flex h-12 w-12 flex-none items-center justify-center bg-ink-950 text-brand-500 ${badge}`}
+                  className={`flex h-12 w-12 flex-none items-center justify-center bg-blue-700 text-ki-400 ${badge}`}
                 >
                   <Mark className="h-7 w-7" />
                 </span>
@@ -82,9 +82,9 @@ export default function LogoPreviewPage() {
                 </span>
               </div>
 
-              <div className="flex h-20 items-center bg-ink-950 px-6">
+              <div className="flex h-20 items-center bg-blue-950 px-6">
                 <span
-                  className={`flex h-12 w-12 flex-none items-center justify-center bg-ink-900 text-brand-500 ring-1 ring-ink-800 ring-inset ${badge}`}
+                  className={`flex h-12 w-12 flex-none items-center justify-center bg-blue-800 text-ki-400 ring-1 ring-blue-900 ring-inset ${badge}`}
                 >
                   <Mark className="h-7 w-7" />
                 </span>

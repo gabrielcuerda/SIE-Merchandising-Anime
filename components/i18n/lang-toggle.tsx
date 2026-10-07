@@ -12,7 +12,7 @@ export default function LangToggle() {
     <div
       role="group"
       aria-label="Cambiar idioma / Change language"
-      className="flex h-10 items-center rounded-md border border-ink-200 bg-white p-0.5"
+      className="flex h-10 items-center rounded-md border border-blue-500 bg-blue-900 p-0.5"
     >
       {LANGS.map((l) => (
         <button
@@ -22,8 +22,8 @@ export default function LangToggle() {
           aria-pressed={lang === l}
           className={`h-full rounded-sm px-2.5 text-xs font-bold uppercase transition ${
             lang === l
-              ? "bg-ink-950 text-white"
-              : "text-ink-500 hover:text-ink-950"
+              ? "bg-ki-500 text-ink-950"
+              : "text-blue-100 hover:text-ki-400"
           }`}
         >
           {LABELS[l]}

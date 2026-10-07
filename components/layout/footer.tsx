@@ -10,11 +10,11 @@ export default async function Footer() {
   const columnas = getFooterColumns(lang);
 
   return (
-    <footer className="mt-16 bg-ink-950 text-ink-300">
+    <footer className="mt-16 bg-blue-700 text-blue-100">
       {/* Enlaces y datos de contacto */}
       <div className="page-container grid gap-10 py-12 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <p className="max-w-sm text-sm text-ink-400">
+          <p className="max-w-sm text-sm text-blue-200">
             {translate(lang, "footer.claim")}
           </p>
 
@@ -36,7 +36,7 @@ export default async function Footer() {
       </div>
 
       {/* Barra legal */}
-      <div className="border-t border-ink-800">
+      <div className="border-t border-blue-800">
         <div className="page-container py-5 text-xs">
           <p>
             © {year} {siteConfig.name}. {translate(lang, "footer.rights")}

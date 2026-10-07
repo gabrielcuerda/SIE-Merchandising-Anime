@@ -51,7 +51,7 @@ export default function CartModal() {
             leaveFrom="opacity-100 backdrop-blur-[.5px]"
             leaveTo="opacity-0 backdrop-blur-none"
           >
-            <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+            <div className="fixed inset-0 bg-blue-950/40" aria-hidden="true" />
           </Transition.Child>
           <Transition.Child
             as={Fragment}
@@ -64,8 +64,13 @@ export default function CartModal() {
           >
             <Dialog.Panel className="fixed bottom-0 right-0 top-0 flex h-full w-full flex-col border-l border-neutral-200 bg-white/80 p-6 text-black backdrop-blur-xl md:w-[390px] dark:border-neutral-700 dark:bg-black/80 dark:text-white">
               <div className="flex items-center justify-between">
-                <p className="text-lg font-semibold">{translate(lang, "cart.title")}</p>
-                <button aria-label={translate(lang, "cart.close")} onClick={closeCart}>
+                <p className="text-lg font-semibold">
+                  {translate(lang, "cart.title")}
+                </p>
+                <button
+                  aria-label={translate(lang, "cart.close")}
+                  onClick={closeCart}
+                >
                   <CloseCart />
                 </button>
               </div>
@@ -184,7 +189,9 @@ export default function CartModal() {
                       />
                     </div>
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
-                      <p>{translate(lang, "cart.vat")} ({IVA_PORCENTAJE} %)</p>
+                      <p>
+                        {translate(lang, "cart.vat")} ({IVA_PORCENTAJE} %)
+                      </p>
                       <Price
                         className="text-right"
                         amount={cart.iva.toFixed(2)}
@@ -194,7 +201,9 @@ export default function CartModal() {
                     <div className="mb-3 flex items-center justify-between border-b border-neutral-200 pb-1 dark:border-neutral-700">
                       <p>{translate(lang, "cart.shipping")}</p>
                       <p className="text-right">
-                        {cart.costeEnvio > 0 ? translate(lang, "cart.shippingCalculated") : translate(lang, "cart.freeShipping")}
+                        {cart.costeEnvio > 0
+                          ? translate(lang, "cart.shippingCalculated")
+                          : translate(lang, "cart.freeShipping")}
                       </p>
                     </div>
                     <div className="flex items-center justify-between text-base">

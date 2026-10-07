@@ -33,7 +33,7 @@ export function SocialLinks({
             className={clsx(
               "flex h-9 w-9 items-center justify-center rounded-md transition",
               tone === "light"
-                ? "bg-ink-800 text-ink-200 hover:bg-brand-500 hover:text-white"
+                ? "bg-blue-900 text-ink-200 hover:bg-ki-400 hover:text-ink-950"
                 : "border border-ink-200 text-ink-700 hover:border-brand-500 hover:bg-brand-500 hover:text-white",
             )}
           >
@@ -51,31 +51,28 @@ export async function ContactDetails({ className }: { className?: string }) {
     <ul className={clsx("space-y-3 text-sm", className)}>
       <li className="flex items-start gap-3">
         <EnvelopeIcon
-          className="mt-0.5 h-4 w-4 flex-none text-brand-500"
+          className="mt-0.5 h-4 w-4 flex-none text-ki-400"
           aria-hidden="true"
         />
         <a
           href={`mailto:${siteConfig.email}`}
-          className="transition hover:text-brand-500"
+          className="transition hover:text-ki-400"
         >
           {siteConfig.email}
         </a>
       </li>
       <li className="flex items-start gap-3">
         <PhoneIcon
-          className="mt-0.5 h-4 w-4 flex-none text-brand-500"
+          className="mt-0.5 h-4 w-4 flex-none text-ki-400"
           aria-hidden="true"
         />
-        <a
-          href={siteConfig.phoneHref}
-          className="transition hover:text-brand-500"
-        >
+        <a href={siteConfig.phoneHref} className="transition hover:text-ki-400">
           {siteConfig.phone}
         </a>
       </li>
       <li className="flex items-start gap-3">
         <MapPinIcon
-          className="mt-0.5 h-4 w-4 flex-none text-brand-500"
+          className="mt-0.5 h-4 w-4 flex-none text-ki-400"
           aria-hidden="true"
         />
         <span>{translate(lang, "site.address")}</span>

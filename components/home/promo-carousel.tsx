@@ -14,13 +14,13 @@ import { getLang } from "@/lib/i18n/lang";
 const GRADIENTES: Record<string, string> = {
   "dragon-ball": "from-orange-500 via-amber-500 to-red-600",
   "one-piece": "from-red-600 via-rose-500 to-orange-600",
-  "naruto": "from-amber-400 via-yellow-500 to-orange-600",
+  naruto: "from-amber-400 via-yellow-500 to-orange-600",
   "jujutsu-kaisen": "from-violet-600 via-purple-700 to-indigo-800",
   "demon-slayer": "from-teal-600 via-cyan-700 to-slate-900",
   "chainsaw-man": "from-zinc-800 via-red-700 to-zinc-900",
 };
 
-const GRADIENTE_POR_DEFECTO = "from-slate-700 via-slate-800 to-slate-950";
+const GRADIENTE_POR_DEFECTO = "from-blue-700 via-blue-800 to-blue-950";
 
 type BannerProps = {
   categoria: CategoriaDestacada;
@@ -49,7 +49,7 @@ function Banner({ categoria, duplicado = false, lang }: BannerProps) {
         {categoria.nombre.charAt(0)}
       </span>
 
-      <span className="relative inline-flex w-fit rounded-full bg-black/25 px-2.5 py-1 text-[0.65rem] font-semibold tracking-widest uppercase">
+      <span className="relative inline-flex w-fit rounded-full bg-blue-950/30 px-2.5 py-1 text-[0.65rem] font-semibold tracking-widest uppercase">
         {translate(lang, "promo.franchise")}
       </span>
 
@@ -83,11 +83,11 @@ export default async function PromoCarousel() {
   return (
     <section
       aria-label={translate(lang, "promo.aria")}
-      className="mx-auto max-w-(--breakpoint-2xl) px-4 pt-6"
+      className="mx-auto max-w-(--breakpoint-2xl) px-4 pt-6 pb-8"
     >
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold">
+          <h2 className="text-3xl font-extrabold tracking-tight text-blue-900">
             {translate(lang, "promo.title")}
           </h2>
           <p className="mt-1 text-sm text-slate-600">

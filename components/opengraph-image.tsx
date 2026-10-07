@@ -22,7 +22,7 @@ export default async function OpengraphImage(
 
   return new ImageResponse(
     (
-      <div tw="flex h-full w-full flex-col items-center justify-center bg-black">
+      <div tw="flex h-full w-full flex-col items-center justify-center bg-blue-950">
         <div tw="flex flex-none items-center justify-center border border-neutral-700 h-[160px] w-[160px] rounded-3xl">
           <LogoIcon width="64" height="58" fill="white" />
         </div>

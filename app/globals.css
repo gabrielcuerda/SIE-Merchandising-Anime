@@ -6,9 +6,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ==========================================================================
-   Tema visual
-   Paleta y tipografía inspiradas en animefan.es: naranja de marca (#ee7639),
-   rojo de aviso (#d63031), negro puro para bloques de peso y fondos blancos.
+   Tema visual — "Dragon Ball"
+   Paleta inspirada en la serie: naranja del uniforme Kame (brand),
+   dorado Super Saiyan (ki), azul del gi (blue, sobreescribe la escala por
+   defecto de Tailwind), rojo de la esfera de 4 estrellas (alert) y un negro
+   ligeramente azulado tipo tinta de cómic (ink). Fondo blanco para que los
+   colores fuertes revienten.
    ========================================================================== */
 @theme {
   --font-sans:
@@ -18,43 +21,70 @@
     var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     sans-serif;
 
-  /* Naranja de marca */
-  --color-brand-50: #fff6f0;
-  --color-brand-100: #ffe9d9;
-  --color-brand-200: #ffcfaf;
-  --color-brand-300: #ffad78;
-  --color-brand-400: #ff8a45;
-  --color-brand-500: #ee7639;
-  --color-brand-600: #d95d22;
-  --color-brand-700: #b34918;
-  --color-brand-800: #8c3a17;
-  --color-brand-900: #733015;
-  --color-brand-950: #3d1708;
+  /* Naranja Kame — color principal de marca */
+  --color-brand-50: #fff4e9;
+  --color-brand-100: #ffe6ce;
+  --color-brand-200: #ffcba0;
+  --color-brand-300: #ffab66;
+  --color-brand-400: #ff8733;
+  --color-brand-500: #ff6b00;
+  --color-brand-600: #d85400;
+  --color-brand-700: #b04300;
+  --color-brand-800: #8a350a;
+  --color-brand-900: #712d0c;
+  --color-brand-950: #3f1505;
 
-  /* Rojo de avisos: stock agotado, errores */
-  --color-alert-50: #fef3f2;
-  --color-alert-100: #fee4e2;
-  --color-alert-200: #fecdcb;
-  --color-alert-300: #fda9a5;
-  --color-alert-400: #f97370;
-  --color-alert-500: #d63031;
-  --color-alert-600: #b02526;
-  --color-alert-700: #8a1d1e;
-  --color-alert-800: #691819;
-  --color-alert-900: #561617;
+  /* Dorado Super Saiyan — acentos que "encienden" la página */
+  --color-ki-50: #fffbea;
+  --color-ki-100: #fff4c2;
+  --color-ki-200: #ffe98a;
+  --color-ki-300: #ffd84d;
+  --color-ki-400: #ffc800;
+  --color-ki-500: #f5b400;
+  --color-ki-600: #d18e00;
+  --color-ki-700: #a66a00;
+  --color-ki-800: #855109;
+  --color-ki-900: #70430d;
+  --color-ki-950: #412303;
 
-  /* Escala de tinta (grises neutros ligeramente fríos) */
-  --color-ink-50: #f6f6f7;
-  --color-ink-100: #e7e7ea;
-  --color-ink-200: #d1d1d6;
-  --color-ink-300: #b0b0b8;
-  --color-ink-400: #86868f;
-  --color-ink-500: #6b6b74;
-  --color-ink-600: #55555d;
-  --color-ink-700: #45454c;
-  --color-ink-800: #2b2b31;
-  --color-ink-900: #131317;
-  --color-ink-950: #08080a;
+  /* Rojo esfera de dragón: stock agotado, errores */
+  --color-alert-50: #fff1f0;
+  --color-alert-100: #ffe0de;
+  --color-alert-200: #ffc3bf;
+  --color-alert-300: #ff9a94;
+  --color-alert-400: #ff665e;
+  --color-alert-500: #e52525;
+  --color-alert-600: #c41a1a;
+  --color-alert-700: #a01616;
+  --color-alert-800: #7c1414;
+  --color-alert-900: #651313;
+
+  /* Tinta de cómic: negros con fondo azulado */
+  --color-ink-50: #f4f6fb;
+  --color-ink-100: #e6e9f3;
+  --color-ink-200: #cfd3e2;
+  --color-ink-300: #aaafc4;
+  --color-ink-400: #8288a0;
+  --color-ink-500: #636984;
+  --color-ink-600: #4e536b;
+  --color-ink-700: #3e4256;
+  --color-ink-800: #272a38;
+  --color-ink-900: #151721;
+  --color-ink-950: #080a12;
+
+  /* Azul del gi — reemplaza la escala azul por defecto de Tailwind para que
+     todos los CTA (botones, foco, enlaces) compartan el mismo tono vivo. */
+  --color-blue-50: #ecf4ff;
+  --color-blue-100: #d6e7ff;
+  --color-blue-200: #b3d2ff;
+  --color-blue-300: #85b5ff;
+  --color-blue-400: #5b98ff;
+  --color-blue-500: #3582ff;
+  --color-blue-600: #0f66f0;
+  --color-blue-700: #0b4fc7;
+  --color-blue-800: #123f98;
+  --color-blue-900: #153977;
+  --color-blue-950: #0e2247;
 
   --radius-card: 0.75rem;
 
@@ -73,6 +103,7 @@
       opacity: 0;
       transform: translateY(8px);
     }
+
     to {
       opacity: 1;
       transform: none;
@@ -89,6 +120,7 @@
     from {
       transform: translateX(0);
     }
+
     to {
       transform: translateX(-50%);
     }
@@ -98,6 +130,7 @@
     from {
       transform: translateX(0);
     }
+
     to {
       transform: translateX(-50%);
     }
@@ -141,6 +174,7 @@
 }
 
 @layer components {
+
   /* Contenedor de página: mismo ancho en toda la tienda */
   .page-container {
     @apply mx-auto w-full max-w-(--breakpoint-2xl) px-4 lg:px-6;
@@ -159,6 +193,21 @@
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* Fundido de los bordes en las tiras en bucle (marquesinas) para que el
+   texto no aparezca cortado en seco contra el borde del contenedor. */
+@utility marquee-fade {
+  -webkit-mask-image: linear-gradient(to right,
+      transparent,
+      #000 48px,
+      #000 calc(100% - 48px),
+      transparent);
+  mask-image: linear-gradient(to right,
+      transparent,
+      #000 48px,
+      #000 calc(100% - 48px),
+      transparent);
 }
 
 /* Foco visible coherente con la paleta de marca */

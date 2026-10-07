@@ -1,5 +1,4 @@
 import Grid from "components/grid";
-import { ThreeItemGrid } from "components/grid/three-items-supabase";
 import HeroCarousel from "components/home/hero-carousel";
 import PromoCarousel from "components/home/promo-carousel";
 import ProductSection from "components/home/product-section";
@@ -37,7 +36,6 @@ export default async function HomePage() {
     <>
       <HeroCarousel />
       <PromoCarousel />
-      <ThreeItemGrid />
 
       <ProductSection
         title={translate(lang, "home.bestSellers.title")}
@@ -65,7 +63,7 @@ export default async function HomePage() {
       />
 
       <section className="page-container pb-8 pt-4">
-        <h2 className="mb-4 text-2xl font-extrabold uppercase tracking-tight">
+        <h2 className="mb-4 text-3xl font-extrabold tracking-tight text-blue-900 uppercase">
           {translate(lang, "home.allProducts")}
         </h2>
         <Grid className="grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">

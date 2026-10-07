@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-const INK_950 = "#08080a";
+const INK_950 = "#080a12";
 
 type MarkProps = SVGProps<SVGSVGElement>;
 

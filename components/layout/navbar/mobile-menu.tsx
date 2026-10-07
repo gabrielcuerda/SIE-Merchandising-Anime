@@ -47,23 +47,23 @@ export default function MobileMenu({
         onClick={() => setIsOpen(true)}
         aria-label={translate(lang, "menu.open")}
         aria-expanded={isOpen}
-        className="flex h-10 w-10 items-center justify-center rounded-md border border-ink-200 text-ink-950 transition hover:border-brand-500 hover:text-brand-600 lg:hidden"
+        className="flex h-10 w-10 items-center justify-center rounded-md border border-blue-500 text-ki-400 transition hover:border-ki-400 hover:text-white lg:hidden"
       >
         <Bars3Icon className="h-5 w-5" aria-hidden="true" />
       </button>
 
       <Dialog open={isOpen} onClose={close} className="relative z-50 lg:hidden">
         <div
-          className="fixed inset-0 bg-ink-950/60 transition-opacity duration-300 ease-out data-closed:opacity-0"
+          className="fixed inset-0 bg-blue-950/60 transition-opacity duration-300 ease-out data-closed:opacity-0"
           aria-hidden="true"
         />
 
         <div className="fixed inset-0 flex">
           <DialogPanel
             transition
-            className="flex h-full w-full max-w-sm flex-col overflow-y-auto bg-ink-950 text-white transition duration-300 ease-out data-closed:-translate-x-full"
+            className="flex h-full w-full max-w-sm flex-col overflow-y-auto bg-blue-950 text-white transition duration-300 ease-out data-closed:-translate-x-full"
           >
-            <div className="flex items-center justify-between border-b border-ink-800 px-4 py-3">
+            <div className="flex items-center justify-between border-b border-blue-900 px-4 py-3">
               <DialogTitle className="text-sm font-extrabold tracking-[0.18em] uppercase">
                 {translate(lang, "menu.title")}
               </DialogTitle>
@@ -71,7 +71,7 @@ export default function MobileMenu({
                 type="button"
                 onClick={close}
                 aria-label={translate(lang, "menu.close")}
-                className="flex h-10 w-10 items-center justify-center rounded-md border border-ink-800 transition hover:border-brand-500 hover:text-brand-400"
+                className="flex h-10 w-10 items-center justify-center rounded-md border border-blue-900 transition hover:border-ki-400 hover:text-ki-400"
               >
                 <XMarkIcon className="h-5 w-5" aria-hidden="true" />
               </button>
@@ -81,9 +81,12 @@ export default function MobileMenu({
               <Search />
             </div>
 
-            <nav aria-label={translate(lang, "menu.ariaMobile")} className="flex-1 px-4 pb-8">
+            <nav
+              aria-label={translate(lang, "menu.ariaMobile")}
+              className="flex-1 px-4 pb-8"
+            >
               {categorias.length ? (
-                <ul className="border-b border-ink-800 pb-4">
+                <ul className="border-b border-blue-900 pb-4">
                   {categorias.map((categoria) => {
                     const isExpanded = expanded === categoria.id;
 
@@ -93,7 +96,7 @@ export default function MobileMenu({
                           <Link
                             href={`/search/${categoria.slug}`}
                             onClick={close}
-                            className="flex-1 py-3 text-base font-bold transition hover:text-brand-400"
+                            className="flex-1 py-3 text-base font-bold transition hover:text-ki-400"
                           >
                             {categoria.nombre}
                           </Link>
@@ -106,8 +109,8 @@ export default function MobileMenu({
                                 setExpanded(isExpanded ? null : categoria.id)
                               }
                               className={clsx(
-                                "flex h-9 w-9 items-center justify-center rounded-md text-ink-400 transition hover:bg-ink-800 hover:text-brand-400",
-                                isExpanded && "rotate-45 text-brand-400",
+                                "flex h-9 w-9 items-center justify-center rounded-md text-ink-300 transition hover:bg-blue-900 hover:text-ki-400",
+                                isExpanded && "rotate-45 text-ki-400",
                               )}
                             >
                               <PlusIcon />
@@ -116,13 +119,13 @@ export default function MobileMenu({
                         </div>
 
                         {isExpanded ? (
-                          <ul className="mb-2 ml-4 border-l border-ink-800 pl-4">
+                          <ul className="mb-2 ml-4 border-l border-blue-900 pl-4">
                             {categoria.hijas.map((hija) => (
                               <li key={hija.id}>
                                 <Link
                                   href={`/search/${hija.slug}`}
                                   onClick={close}
-                                  className="block py-2 text-sm text-ink-300 transition hover:text-brand-400"
+                                  className="block py-2 text-sm text-ink-300 transition hover:text-ki-400"
                                 >
                                   {hija.nombre}
                                 </Link>
@@ -136,13 +139,16 @@ export default function MobileMenu({
                 </ul>
               ) : null}
 
-              <ul className="border-b border-ink-800 py-4">
-                {[{ label: translate(lang, "nav.homeLink"), href: "/" }, ...getMainNav(lang)].map((item) => (
+              <ul className="border-b border-blue-900 py-4">
+                {[
+                  { label: translate(lang, "nav.homeLink"), href: "/" },
+                  ...getMainNav(lang),
+                ].map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
                       onClick={close}
-                      className="block py-3 text-base font-bold transition hover:text-brand-400"
+                      className="block py-3 text-base font-bold transition hover:text-ki-400"
                     >
                       {item.label}
                     </Link>
@@ -156,7 +162,7 @@ export default function MobileMenu({
                     <Link
                       href={item.href}
                       onClick={close}
-                      className="block py-3 text-sm text-ink-300 transition hover:text-brand-400"
+                      className="block py-3 text-sm text-ink-300 transition hover:text-ki-400"
                     >
                       {item.label}
                     </Link>

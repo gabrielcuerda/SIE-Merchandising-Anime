@@ -18,7 +18,7 @@ export default function MobileSearch({
         onClick={() => setOpen((value) => !value)}
         aria-label={open ? "Cerrar búsqueda" : "Buscar productos"}
         aria-expanded={open}
-        className={`flex h-10 w-10 items-center justify-center rounded-md border border-ink-200 text-ink-950 transition hover:border-brand-500 hover:text-brand-600 ${className}`}
+        className={`flex h-10 w-10 items-center justify-center rounded-md border border-blue-500 text-ki-400 transition hover:border-ki-400 hover:text-white ${className}`}
       >
         {open ? (
           <XMarkIcon className="h-5 w-5" aria-hidden="true" />

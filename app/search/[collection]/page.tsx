@@ -92,7 +92,7 @@ export default async function CategoryPage(props: {
 
           <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
             <div className="min-w-0">
-              <h1 className="text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
+              <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
                 {categoria.nombre}
               </h1>
               <p className="mt-2 max-w-2xl text-sm text-blue-100 sm:text-base">{descripcion}</p>

@@ -36,12 +36,12 @@ export default function Search({
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={autoFocus}
         defaultValue={value}
-        className="w-full rounded-md border border-ink-200 bg-ink-50 py-2.5 pr-12 pl-4 text-sm text-ink-950 transition placeholder:text-ink-400 focus:border-brand-500 focus:bg-white focus:outline-hidden"
+        className="w-full rounded-md border border-ink-200 bg-white py-2.5 pr-12 pl-4 text-sm text-ink-950 transition placeholder:text-ink-400 focus:border-ki-400 focus:bg-white focus:outline-hidden"
       />
       <button
         type="submit"
         aria-label={translate(lang, "search.submit")}
-        className="absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-sm bg-ink-950 text-white transition hover:bg-brand-500"
+        className="absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-sm bg-ki-500 text-ink-950 transition hover:bg-blue-900 hover:text-white"
       >
         <MagnifyingGlassIcon className="h-4 w-4" aria-hidden="true" />
       </button>
@@ -52,8 +52,8 @@ export default function Search({
 export function SearchSkeleton({ className = "" }: { className?: string }) {
   return (
     <div className={`relative w-full ${className}`} aria-hidden="true">
-      <div className="w-full animate-pulse rounded-md border border-ink-200 bg-ink-50 py-2.5 pr-12 pl-4 text-sm" />
-      <div className="absolute right-1 top-1/2 h-9 w-9 -translate-y-1/2 animate-pulse rounded-sm bg-ink-200" />
+      <div className="w-full animate-pulse rounded-md border border-ink-200 bg-white py-2.5 pr-12 pl-4 text-sm" />
+      <div className="absolute right-1 top-1/2 h-9 w-9 -translate-y-1/2 animate-pulse rounded-sm bg-ki-200" />
     </div>
   );
 }
