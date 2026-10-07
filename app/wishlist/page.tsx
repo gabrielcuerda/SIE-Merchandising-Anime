@@ -2,11 +2,16 @@ import WishlistList from "@/components/wishlist/wishlist-list";
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { getLang } from "@/lib/i18n/lang";
+import { translate } from "@/lib/i18n/dict";
 
-export const metadata: Metadata = {
-  title: "Lista de deseos",
-  description: "Guarda tus productos favoritos.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLang();
+  return {
+    title: translate(lang, "wishlist.metaTitle"),
+    description: translate(lang, "wishlist.metaDescription"),
+  };
+}
 
 export default async function WishlistPage() {
   const supabase = await createClient();

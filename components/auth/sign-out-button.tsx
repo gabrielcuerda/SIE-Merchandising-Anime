@@ -3,10 +3,15 @@
 import { createClient } from "@/lib/supabase/browser";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { translate } from "@/lib/i18n/dict";
+import { useLanguage } from "@/components/i18n/language-context";
 
 export default function SignOutButton() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { lang } = useLanguage();
+
+  {loading ? translate(lang, "auth.signingOut") : translate(lang, "auth.signOut")}
 
   async function handleSignOut() {
     setLoading(true);
