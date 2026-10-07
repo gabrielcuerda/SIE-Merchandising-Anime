@@ -219,3 +219,43 @@ textarea,
 summary {
   @apply focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white focus-visible:outline-hidden focus-visible:ring-2;
 }
+
+/*
+ * Impresión de la factura (/factura/[pago_id]).
+ *
+ * Va en CSS y no en un componente porque `window.print()` imprime el documento,
+ * no el árbol de React: un bloque `@media print` dentro de un "use client" se
+ * perdería justo al imprimir.
+ *
+ * `.factura-no-imprimir` esconde los controles y `.factura` quita el marco. El
+ * fondo blanco se fuerza a `white` porque el modo oscuro del sistema pondría la
+ * hoja en gris y los navegadores casi no gastan tinta para imprimir sombras.
+ */
+@media print {
+  .factura-no-imprimir {
+    display: none !important;
+  }
+
+  .factura {
+    border: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    color: #000 !important;
+  }
+
+  /* La tabla de líneas es lo único que puede partirse entre dos páginas sin
+     que la factura quede ilegible: la cabecera se repite en cada una. */
+  .factura thead {
+    display: table-header-group;
+  }
+
+  .factura tr,
+  .factura img {
+    break-inside: avoid;
+  }
+
+  @page {
+    margin: 16mm;
+  }
+}

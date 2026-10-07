@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -12,16 +13,19 @@ import {
   Select,
   Textarea,
 } from "@/components/admin/campos";
+import { fechaYhora } from "@/lib/admin/formato";
 import {
   cambiarEstadoPedido,
   guardarNotas,
   guardarSeguimiento,
+  reenviarFactura,
 } from "@/app/admin/pedidos/actions";
 import {
   PEDIDO_STATUS,
   PEDIDO_STATUS_LABEL,
   SECUENCIA_PEDIDO,
   type AdminActionState,
+  type EstadoFactura,
   type PedidoStatus,
 } from "@/lib/admin/tipos";
 
@@ -37,11 +41,20 @@ export default function PedidoGestion({
   estado,
   tracking,
   notas,
+  email,
+  factura,
+  pagoId,
 }: {
   pedidoId: string;
   estado: PedidoStatus;
   tracking: string | null;
   notas: string | null;
+  /** Email guardado en el pedido; null si la compra no lo conservó. */
+  email: string | null;
+  /** Último envío de la factura, según `correo_estado`. */
+  factura: EstadoFactura;
+  /** `cs_...` de Stripe; es lo que identifica la factura en /factura. */
+  pagoId: string | null;
 }) {
   const router = useRouter();
   const [pendiente, iniciarTransicion] = useTransition();
@@ -53,6 +66,7 @@ export default function PedidoGestion({
   const [mensajeEstado, setMensajeEstado] = useState<AdminActionState>({});
   const [mensajeTracking, setMensajeTracking] = useState<AdminActionState>({});
   const [mensajeNotas, setMensajeNotas] = useState<AdminActionState>({});
+  const [mensajeFactura, setMensajeFactura] = useState<AdminActionState>({});
 
   const ejecutar = (
     accion: () => Promise<AdminActionState>,
@@ -199,6 +213,79 @@ export default function PedidoGestion({
             error={mensajeTracking.error}
           />
         </form>
+      </div>
+
+      <div>
+        <h2 className="text-sm font-bold uppercase tracking-[0.18em] text-ink-500">
+          Factura
+        </h2>
+
+        {!email ? (
+          <p className="mt-3 rounded-card border border-ink-200 bg-ink-50 px-4 py-3 text-sm text-ink-600">
+            Este pedido no guardó ningún email, así que no se le puede mandar la
+            factura por correo. Suele ser un pedido anterior a que la factura se
+            enviara desde aquí: el cliente sí recibió la de Stripe.
+          </p>
+        ) : (
+          <>
+            <p className="mt-3 text-sm text-ink-600">
+              Se envía a{" "}
+              <span className="font-medium text-ink-900">{email}</span>.
+            </p>
+
+            {factura ? (
+              <p className="mt-1 text-sm text-ink-500">
+                {factura.estado === "enviado" ? (
+                  <>
+                    Enviada el {fechaYhora(factura.enviado_at)}.{" "}
+                    {factura.intentos > 1
+                      ? `Enviada ${factura.intentos} veces.`
+                      : null}
+                  </>
+                ) : factura.estado === "error" ? (
+                  <>
+                    El último envío falló ({factura.intentos}{" "}
+                    {factura.intentos === 1 ? "intento" : "intentos"}):{" "}
+                    <span className="text-alert-700">{factura.error}</span>
+                  </>
+                ) : (
+                  "Pendiente de enviar."
+                )}
+              </p>
+            ) : (
+              <p className="mt-1 text-sm text-ink-500">
+                Todavía no se ha registrado ningún envío.
+              </p>
+            )}
+
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                disabled={pendiente || cancelado}
+                onClick={() =>
+                  ejecutar(() => reenviarFactura(pedidoId), setMensajeFactura)
+                }
+                className={BOTON_SECUNDARIO}
+              >
+                {pendiente ? "Enviando…" : "Reenviar factura"}
+              </button>
+
+              {pagoId ? (
+                <Link
+                  href={`/factura/${encodeURIComponent(pagoId)}`}
+                  className="text-sm font-medium text-ink-600 underline underline-offset-4 hover:text-ink-950"
+                >
+                  Ver la factura
+                </Link>
+              ) : null}
+            </div>
+
+            <MensajeAccion
+              success={mensajeFactura.success}
+              error={mensajeFactura.error}
+            />
+          </>
+        )}
       </div>
 
       <div>

@@ -161,6 +161,22 @@ export type AdminUsuarioDetalle = {
   }[];
 };
 
+/**
+ * Último envío de la factura de un pedido: fila de `correo_estado()`.
+ *
+ * `estado` refleja el del CORREO, no el del pedido. Son cosas distintas: un
+ * pedido `paid` puede tener la factura en 'error' si DonDominio rechazó el envío,
+ * y ese caso es justo el que el panel tiene que enseñar para que se pueda
+ * reenviar a mano.
+ */
+export type EstadoFactura = {
+  estado: "pendiente" | "enviado" | "error";
+  destinatario: string;
+  intentos: number;
+  enviado_at: string | null;
+  error: string | null;
+} | null;
+
 /** Desglose que `crear_pedido` guarda dentro del jsonb `direccion_pago`. */
 export type DireccionPago = {
   subtotal: number;

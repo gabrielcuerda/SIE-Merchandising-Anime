@@ -221,6 +221,15 @@ export type DireccionEnvio = {
   codigo_postal: string;
   pais: string;
   telefono?: string;
+  /**
+   * Destinatario de la factura. Viaja dentro de `p_direccion`, así que
+   * `crear_pedido` lo guarda en `pedidos.direccion_pedido.email` sin tocar SQL.
+   *
+   * Es el dato que hace posible mandar la factura a un invitado: sin él solo
+   * existe el email que el cliente escribió en la página de Stripe, que no se
+   * conserva en ninguna parte.
+   */
+  email?: string;
 };
 
 /**

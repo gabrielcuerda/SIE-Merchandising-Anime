@@ -24,7 +24,7 @@ export const siteConfig = {
   // provided` con el guion bajo. `lib/admin/formato.ts` la usa en el panel.
   locale: "es-ES",
   currency: "EUR",
-  email: "soporte@animemerchan.onl",
+  email: "ayuda@animemerchan.onl",
   phone: "+34 900 123 456",
   phoneHref: "tel:+34900123456",
   address: "Calle Mayor 1, 28013 Madrid, España",
@@ -63,6 +63,35 @@ export const siteConfig = {
       icon: "facebook",
     },
   ] satisfies SiteSocial[],
+} as const;
+
+/**
+ * Datos fiscales del emisor de las facturas.
+ *
+ * Van aquí y no dentro de la plantilla del correo (`lib/email/plantilla-factura.ts`)
+ * por dos razones: son los mismos datos que aparecen en las páginas legales, que
+ * `lib/commerce/placeholders.ts` compone con `siteConfig`, y a los dos sitios les
+ * interesa que coincidan. Por eso `direccion`, `telefono` y `email` se leen de
+ * `siteConfig` en lugar de repetirse aquí: una sola fuente de verdad.
+ *
+ * `ayuda@animemerchan.onl` es la casilla real del negocio en DonDominio. El
+ * equipo trabaja desde el alias `trabajosie45@gmail.com`, al que DonDominio
+ * entrega todo lo que llega a esa casilla: por eso las respuestas a un cliente
+ * acaban en Gmail sin cambiar nada aquí.
+ */
+export const datosFiscales = {
+  razonSocial: "Animemerchan S.L.",
+  nif: "12341234X",
+  direccion: siteConfig.address,
+  telefono: siteConfig.phone,
+  email: siteConfig.email,
+  /**
+   * Casilla del equipo. No aparece en la factura ni en el correo: es la bandeja
+   * de trabajo. Está en `siteConfig` porque es el único sitio donde se declara
+   * una dirección del negocio, y los dos datos juntos son la única forma de no
+   * perder el rastro de qué es la casilla del cliente y qué la del negocio.
+   */
+  emailEquipo: "trabajosie45@gmail.com",
 } as const;
 
 export const mainNav: SiteLink[] = [
