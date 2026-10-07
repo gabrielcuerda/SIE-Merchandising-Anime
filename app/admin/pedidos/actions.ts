@@ -1,8 +1,10 @@
 "use server";
 
 import { getAdminContext, mensajeError } from "@/lib/admin/auth";
+import { obtenerPedido } from "@/lib/admin/pedidos";
 import { PEDIDO_STATUS } from "@/lib/admin/tipos";
 import type { AdminActionState } from "@/lib/admin/tipos";
+import { enviarFactura } from "@/lib/email/enviar-factura";
 import { revalidatePath } from "next/cache";
 
 function revalidar(pedidoId?: string) {
@@ -74,6 +76,62 @@ export async function guardarSeguimiento(
 
   revalidar(pedidoId);
   return { success: "Seguimiento guardado." };
+}
+
+/**
+ * Reenvía la factura por correo.
+ *
+ * Es el único sitio desde el que se manda dos veces una factura: `forzar: true`
+ * es lo que hace que `correo_reservar` acepte el envío aunque el estado ya sea
+ * 'enviado'. Todo lo demás, incluidos el webhook y la página de confirmación,
+ * pasa por el camino automático y no puede duplicar nada.
+ *
+ * El motivo real de que exista es que los clientes no dicen "no ha llegado el
+ * correo", dicen "no lo veo en el spam", y casi siempre la bandeja está bien: se
+ * ha enviado a una dirección mal escrita.
+ */
+export async function reenviarFactura(
+  pedidoId: string,
+): Promise<AdminActionState> {
+  const ctx = await getAdminContext();
+  if (!ctx.ok) return { error: ctx.error };
+
+  const pedido = await obtenerPedido(pedidoId);
+
+  if (!pedido) return { error: "Ese pedido no existe." };
+
+  if (!pedido.pago_id) {
+    return {
+      error:
+        "Este pedido no tiene identificador de pago, así que no hay forma de " +
+        "saber a qué dirección enviarle la factura.",
+    };
+  }
+
+  if (pedido.status === "cancelled") {
+    return {
+      error:
+        "Este pedido está cancelado. Reenvía la factura solo si el cobro se hizo.",
+    };
+  }
+
+  const resultado = await enviarFactura({
+    pedido,
+    pagoId: pedido.pago_id,
+    forzar: true,
+  });
+
+  revalidar(pedidoId);
+
+  if (resultado.enviado) {
+    return { success: "Factura reenviada por correo." };
+  }
+
+  return {
+    error:
+      resultado.motivo ??
+      "No se ha podido enviar la factura. Revisa el registro de correos.",
+  };
 }
 
 /**

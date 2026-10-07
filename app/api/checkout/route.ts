@@ -23,7 +23,16 @@ const CAMPOS_OBLIGATORIOS = [
   "provincia",
   "codigo_postal",
   "pais",
+  "email",
 ] as const;
+
+/**
+ * Validación deliberadamente laxa: un `input type="email"` del navegador ya
+ * filtra lo habitual y esta es la única defensa de servidor. El objetivo es
+ * descubrir un email mal escrito antes de que Stripe lo acepte y la factura no
+ * llegue a ninguna parte, no ser un validador de RFC 5322.
+ */
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,7 +45,16 @@ export async function POST(req: NextRequest) {
 
     if (faltan.length > 0) {
       return NextResponse.json(
-        { error: "Completa la dirección de envío." },
+        { error: "Completa la dirección de envío y el email." },
+        { status: 400 },
+      );
+    }
+
+    const email = String(direccion.email ?? "").trim();
+
+    if (!EMAIL.test(email)) {
+      return NextResponse.json(
+        { error: "El email no parece válido." },
         { status: 400 },
       );
     }
@@ -51,6 +69,7 @@ export async function POST(req: NextRequest) {
       origin: req.nextUrl.origin,
       userId: user?.id ?? null,
       userEmail: user?.email ?? null,
+      email,
       sessionId: (await getCartSessionId()) ?? null,
     });
 

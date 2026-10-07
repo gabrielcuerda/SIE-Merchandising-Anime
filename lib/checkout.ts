@@ -84,6 +84,12 @@ export async function crearSesionCheckout(params: {
   origin: string;
   userId?: string | null;
   userEmail?: string | null;
+  /**
+   * Email del invitado. Con sesión initiated manda el de la cuenta
+   * (`userEmail`) y este se ignora, para que la factura salga siempre a la
+   * dirección con la que se registró.
+   */
+  email?: string | null;
   sessionId: string | null;
 }) {
   const cart = await getCart();
@@ -91,6 +97,8 @@ export async function crearSesionCheckout(params: {
   if (!cart || cart.items.length === 0) {
     throw new Error("El carrito está vacío.");
   }
+
+  const email = params.userEmail ?? params.email ?? null;
 
   const lineas: Linea[] = cart.items.map((item) => {
     const titulo = item.productos?.titulo ?? "Producto";
@@ -141,8 +149,10 @@ export async function crearSesionCheckout(params: {
     locale: "es",
     line_items: lineas,
     // Con usuario identificado, Stripe rellena el email y la factura sale a su
-    // nombre. Sin sesión, el cliente lo escribe en la página de Stripe.
-    ...(params.userEmail ? { customer_email: params.userEmail } : {}),
+    // nombre. Sin sesión, el cliente lo escribe en la página de Stripe; se le
+    // pasa el que ya escribió en `/checkout` para que no tenga que repetirlo y
+    // para que la factura de Stripe y la nuestra vayan al mismo sitio.
+    ...(email ? { customer_email: email } : {}),
     success_url: `${params.origin}/order-confirmation?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${params.origin}/cart`,
     // Factura + envío por email gestionados por Stripe.
@@ -185,6 +195,11 @@ export async function crearSesionCheckout(params: {
       user_id: params.userId ?? "",
       cart_session_id: params.sessionId ?? "",
       direccion: direccionAMetadata(params.direccion),
+      // El email va en su PROPIA clave y no dentro de la cadena `direccion`:
+      // esa va jointeada con `|` y recortada a 500 caracteres por el límite de
+      // Stripe, y una dirección larga más el correo la reventarían. Aquí no
+      // hay recorte porque un email no llega a 500.
+      email: email ?? "",
       total_eur: cart.total.toFixed(2),
     },
   });

@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import type { ItemPedido, Pedido } from "@/lib/db/types";
 import { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
@@ -123,10 +124,18 @@ export default async function OrdersPage() {
                 ))}
               </div>
 
-              <div className="flex justify-end border-t border-neutral-200 pt-4 text-sm dark:border-neutral-800">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200 pt-4 text-sm dark:border-neutral-800">
                 <span className="font-semibold">
                   Total: {formatCurrency(Number(pedido.total), pedido.moneda)}
                 </span>
+                {pedido.pago_id ? (
+                  <Link
+                    href={`/factura/${encodeURIComponent(pedido.pago_id)}`}
+                    className="font-medium text-blue-600 underline underline-offset-4 hover:text-blue-700 dark:text-blue-400"
+                  >
+                    Ver factura
+                  </Link>
+                ) : null}
               </div>
             </article>
           ))}

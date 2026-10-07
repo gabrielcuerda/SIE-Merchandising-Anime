@@ -1,5 +1,6 @@
 import { direccionDesdeMetadata } from "@/lib/checkout";
 import { createPedido } from "@/lib/cart";
+import { enviarFactura } from "@/lib/email/enviar-factura";
 import { getStripe, getStripeWebhookSecret } from "@/lib/stripe";
 import { NextRequest, NextResponse } from "next/server";
 import type Stripe from "stripe";
@@ -15,6 +16,27 @@ import type Stripe from "stripe";
  * El webhook no recibe cookies, por eso el usuario y la sesión del carrito
  * viajan en `metadata` de la Checkout Session.
  */
+
+/**
+ * A quién va la factura.
+ *
+ * El orden importa. Lo primero es lo que el cliente escribió en la página de
+ * Stripe, que es donde introduce la tarjeta y donde Stripe garantiza que hay un
+ * email (sin él no hay recibo). `customer_email` es el que le pusimos al crear
+ * la sesión, y `metadata.email` el respaldo por si el webhook llegara con una
+ * sesión creada antes de que existiera este campo.
+ */
+function emailDeLaSesion(
+  session: Stripe.Checkout.Session,
+  metadata: Record<string, string>,
+) {
+  return (
+    session.customer_details?.email ??
+    session.customer_email ??
+    metadata.email ??
+    null
+  );
+}
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -51,10 +73,15 @@ export async function POST(req: NextRequest) {
 
       const metadata = session.metadata ?? {};
       const direccion = direccionDesdeMetadata(metadata.direccion);
+      const email = emailDeLaSesion(session, metadata);
 
       try {
         const pedidoId = await createPedido({
-          direccion,
+          // El email va dentro de `direccion` para que `crear_pedido` lo guarde en
+          // `pedidos.direccion_pedido.email`. Sin eso, la factura solo se podría
+          // mandar desde esta petición y no se podría reenviar a mano más
+          // adelante.
+          direccion: email ? { ...direccion, email } : direccion,
           pagoId: session.id,
           metodoPago: "stripe",
           usuarioId: metadata.user_id || null,
@@ -70,6 +97,18 @@ export async function POST(req: NextRequest) {
           { status: 500 },
         );
       }
+
+      // La factura va DESPUÉS de crear el pedido y en su propio try/catch que no
+      // devuelve 500 a propósito: un 500 aquí haría que Stripe reintentara el
+      // webhook entero y, con él, `createPedido`, que ya está hecho. Perder la
+      // factura es malo; perder el pedido, no. El reenvío manual desde el panel
+      // cubre el hueco.
+      try {
+        await enviarFactura({ pagoId: session.id, email });
+      } catch (error) {
+        console.error("[stripe] Error enviando la factura:", error);
+      }
+
       break;
     }
 

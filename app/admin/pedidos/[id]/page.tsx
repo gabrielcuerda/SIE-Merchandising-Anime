@@ -13,6 +13,7 @@ import {
 } from "@/components/ui";
 import { desglose, obtenerPedido } from "@/lib/admin/pedidos";
 import { fecha, fechaYhora, idCorto, importe } from "@/lib/admin/formato";
+import { obtenerEstadoFactura } from "@/lib/email/enviar-factura";
 import {
   PEDIDO_STATUS_LABEL,
   PEDIDO_STATUS_TONE,
@@ -230,6 +231,9 @@ export default async function DetallePedidoPage({
                 estado={estado}
                 tracking={pedido.tracking_numero}
                 notas={pedido.notas}
+                email={direccion?.email ?? null}
+                factura={await obtenerEstadoFactura(pedido.id)}
+                pagoId={pedido.pago_id}
               />
             </CardContent>
           </Card>

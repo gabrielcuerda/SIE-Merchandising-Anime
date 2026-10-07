@@ -6,6 +6,7 @@ import {
 import { IVA_PORCENTAJE } from "@/lib/constants";
 import { createPedido, getPedidoPorPago } from "@/lib/cart";
 import { direccionDesdeMetadata } from "@/lib/checkout";
+import { enviarFactura } from "@/lib/email/enviar-factura";
 import { getStripe } from "@/lib/stripe";
 import type { Pedido } from "@/lib/supabase/types";
 import Link from "next/link";
@@ -14,6 +15,42 @@ import Image from "next/image";
 export const dynamic = "force-dynamic";
 
 type Estado = "confirmado" | "procesando" | "error";
+
+/**
+ * Email del comprador, con la misma precedencia que en el webhook
+ * (`app/api/webhooks/stripe/route.ts`): primero lo que escribió en la página de
+ * Stripe, luego el que le pasamos al crear la sesión.
+ */
+function emailDeLaSesion(
+  session: {
+    customer_details?: { email?: string | null } | null;
+    customer_email?: string | null;
+  },
+  metadata: Record<string, string>,
+) {
+  return (
+    session.customer_details?.email ??
+    session.customer_email ??
+    metadata.email ??
+    null
+  );
+}
+
+/**
+ * La factura nunca puede romper esta página: el pago ya está cobrado y el pedido
+ * ya está en la base de datos. Si el envío falla, se anota en el log y el
+ * cliente ve igualmente su confirmación.
+ */
+async function enviarFacturaSinRomper(params: {
+  pedido: Pedido;
+  pagoId: string;
+}) {
+  try {
+    await enviarFactura(params);
+  } catch (error) {
+    console.error("[confirmación] Error enviando la factura:", error);
+  }
+}
 
 async function resolverPedido(sessionId: string): Promise<{
   estado: Estado;
@@ -34,15 +71,28 @@ async function resolverPedido(sessionId: string): Promise<{
   }
 
   const pedido = await getPedidoPorPago(sessionId);
-  if (pedido) return { estado: "confirmado", pedido };
 
-  // El webhook puede tardar o no haber llegado (en local hace falta
-  // `stripe listen`). Lo creamos aquí como red de seguridad; es idempotente.
+  if (pedido) {
+    // El webhook ya creó el pedido, así que lo normal es que la factura ya haya
+    // salido de su lado. Se vuelve a llamar igualmente porque, si el webhook no
+    // llegó (en local hace falta `stripe listen`), así es como sale igualmente.
+    // `correo_reservar` hace que este segundo intento no duplique nada.
+    await enviarFacturaSinRomper({ pedido, pagoId: sessionId });
+
+    return { estado: "confirmado", pedido };
+  }
+
+  // El webhook puede tardar o no haber llegado. Lo creamos aquí como red de
+  // seguridad; es idempotente por `pago_id`.
   const metadata = session.metadata ?? {};
+  const email = emailDeLaSesion(session, metadata);
 
   try {
     await createPedido({
-      direccion: direccionDesdeMetadata(metadata.direccion),
+      direccion: {
+        ...direccionDesdeMetadata(metadata.direccion),
+        ...(email ? { email } : {}),
+      },
       pagoId: session.id,
       metodoPago: "stripe",
       usuarioId: metadata.user_id || null,
@@ -59,9 +109,16 @@ async function resolverPedido(sessionId: string): Promise<{
 
   const confirmado = await getPedidoPorPago(sessionId);
 
-  return confirmado
-    ? { estado: "confirmado", pedido: confirmado }
-    : { estado: "procesando", mensaje: "Tu pedido se está registering." };
+  if (!confirmado) {
+    return {
+      estado: "procesando",
+      mensaje: "Tu pedido se está registrando.",
+    };
+  }
+
+  await enviarFacturaSinRomper({ pedido: confirmado, pagoId: sessionId });
+
+  return { estado: "confirmado", pedido: confirmado };
 }
 
 export default async function OrderConfirmationPage(props: {
@@ -129,8 +186,20 @@ export default async function OrderConfirmationPage(props: {
         <CheckCircleIcon className="mx-auto h-16 w-16 text-green-500" />
         <h1 className="mt-6 text-3xl font-bold">¡Pedido confirmado!</h1>
         <p className="mt-2 text-neutral-500">
-          Te hemos enviado la factura por email. Gracias por tu compra.
+          Te hemos enviado la factura por email
+          {pedido.direccion_pedido?.email
+            ? ` a ${pedido.direccion_pedido.email}`
+            : ""}
+          . Gracias por tu compra.
         </p>
+        {pedido.pago_id ? (
+          <Link
+            href={`/factura/${encodeURIComponent(pedido.pago_id)}`}
+            className="mt-4 inline-block rounded-full border border-neutral-300 px-5 py-2 text-sm font-medium hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+          >
+            Ver la factura
+          </Link>
+        ) : null}
       </div>
 
       <div className="mt-12 rounded-lg border border-neutral-200 p-6 dark:border-neutral-700">

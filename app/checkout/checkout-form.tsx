@@ -7,10 +7,27 @@ import LoadingDots from "@/components/loading-dots";
 import { IVA_PORCENTAJE } from "@/lib/constants";
 
 /**
- * El pago ocurre en la página alojada de Stripe Checkout: aquí solo se pide la
- * dirección de envío, que viaja a Stripe para la factura y para el pedido.
+ * El pago ocurre en la página alojada de Stripe Checkout: aquí se pide la
+ * dirección de envío y el email, que viajan a Stripe para la factura y para el
+ * pedido.
+ *
+ * El email es obligatorio y va aparte de la dirección a propósito. Stripe lo pide
+ * también en su página, pero lo que el cliente escriba ahí no se guarda en
+ * ninguna parte de nuestra base de datos: es el dato que permite mandar la
+ * factura a un invitado y poder reenviarla a mano desde el panel.
+ *
+ * Con sesión iniciada el campo viene relleno y no se puede tocar: la factura va
+ * a la dirección con la que se registró la cuenta.
  */
-export default function CheckoutForm({ cart }: { cart: Carrito }) {
+export default function CheckoutForm({
+  cart,
+  emailInicial,
+  emailBloqueado,
+}: {
+  cart: Carrito;
+  emailInicial?: string | null;
+  emailBloqueado?: boolean;
+}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,6 +48,7 @@ export default function CheckoutForm({ cart }: { cart: Carrito }) {
       codigo_postal: campo("shipping_postal_code"),
       pais: campo("shipping_country"),
       telefono: campo("shipping_phone") || undefined,
+      email: campo("shipping_email") || undefined,
     };
 
     try {
@@ -60,8 +78,29 @@ export default function CheckoutForm({ cart }: { cart: Carrito }) {
       <div className="flex-1">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <h2 className="mb-4 text-lg font-semibold">Dirección de Envío</h2>
+            <h2 className="mb-1 text-lg font-semibold">Dirección de Envío</h2>
+            <p className="mb-4 text-sm text-neutral-500">
+              Te mandamos la factura a este correo.
+            </p>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="shipping_email"
+                  className="mb-1 block text-sm font-medium"
+                >
+                  Email
+                </label>
+                <input
+                  id="shipping_email"
+                  name="shipping_email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  readOnly={emailBloqueado}
+                  defaultValue={emailInicial ?? ""}
+                  className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm read-only:bg-neutral-100 dark:border-neutral-700 dark:bg-neutral-900 dark:read-only:bg-neutral-800"
+                />
+              </div>
               <div className="sm:col-span-2">
                 <label
                   htmlFor="shipping_name"
@@ -200,7 +239,8 @@ export default function CheckoutForm({ cart }: { cart: Carrito }) {
 
           <p className="text-center text-xs text-neutral-500">
             En el siguiente paso pagarás con tarjeta en la página segura de
-            Stripe. Recibirás la factura por email.
+            Stripe. Recibirás tu factura por email en cuanto se confirme el
+            pago.
           </p>
         </form>
       </div>

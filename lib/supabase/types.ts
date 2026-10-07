@@ -46,6 +46,13 @@ export type Pedido = {
     provincia: string;
     codigo_postal: string;
     pais: string;
+    /**
+     * A quién se manda la factura. Lo escribe `crear_pedido` a partir del
+     * `direccion` que le pasa el webhook: el email de la sesión de Stripe o, en
+     * su defecto, el que se pidió en `/checkout`. Los pedidos anteriores a esto
+     * no lo tienen, y por eso no se les puede facturar por correo.
+     */
+    email?: string;
     telefono?: string;
   } | null;
   /** Desglose del cobro: subtotal sin IVA, IVA, envío y total. */
