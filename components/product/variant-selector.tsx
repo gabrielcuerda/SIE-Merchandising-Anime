@@ -4,6 +4,8 @@ import clsx from "clsx";
 
 import { ProductOption, ProductVariant } from "@/lib/commerce/types";
 import { useRouter, useSearchParams } from "next/navigation";
+import { translate } from "@/lib/i18n/dict";
+import { useLanguage } from "components/i18n/language-context";
 
 type Combination = {
   id: string;
@@ -22,6 +24,7 @@ export function VariantSelector({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { lang } = useLanguage();
   const hasNoOptionsOrJustOneOption =
     !options.length ||
     (options.length === 1 && options[0]?.values.length === 1);
@@ -55,7 +58,13 @@ export function VariantSelector({
   return visibles.map((option) => (
     <form key={option.id}>
       <dl className="mb-8">
-        <dt className="mb-4 text-sm uppercase tracking-wide">{option.name}</dt>
+        <dt className="mb-4 text-sm uppercase tracking-wide">
+          {option.name === "Talla"
+            ? translate(lang, "product.size")
+            : option.name === "Color"
+              ? translate(lang, "product.color")
+              : option.name}
+        </dt>
         <dd className="flex flex-wrap gap-3">
           {option.values.map((value) => {
             const optionNameLowerCase = option.name.toLowerCase();
