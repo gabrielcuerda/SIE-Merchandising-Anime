@@ -1,27 +1,11 @@
 import { HomeIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-
-import { getCategorias } from "@/lib/db/categorias";
-import { getLang } from "@/lib/i18n/lang";
-import { NotFoundEn } from "@/lib/i18n/notfound.en";
 import type { Categoria } from "@/lib/db/types";
 
-async function getEnlaces() {
-  try {
-    return await getCategorias();
-  } catch {
-    return [];
-  }
-}
-
-export default async function NotFound() {
-  const categorias = await getEnlaces();
-  const lang = await getLang();
-  if (lang === "en") return <NotFoundEn categorias={categorias} />;
-  return <NotFoundEs categorias={categorias} />;
-}
-
-function NotFoundEs({ categorias }: { categorias: Categoria[] }) {
+/**
+ * Página 404 — versión EN.
+ */
+export function NotFoundEn({ categorias }: { categorias: Categoria[] }) {
   return (
     <main className="mx-auto flex min-h-[70vh] max-w-(--breakpoint-xl) flex-col items-center justify-center px-4 py-16 text-center">
       <p
@@ -32,35 +16,35 @@ function NotFoundEs({ categorias }: { categorias: Categoria[] }) {
       </p>
 
       <h1 className="-mt-6 text-2xl font-bold sm:text-3xl">
-        Esta página no existe
+        This page doesn&apos;t exist
       </h1>
 
       <p className="mt-3 max-w-lg text-sm text-slate-600 sm:text-base">
-        Puede que la figura se haya agotado y la hayamos retirado del catálogo,
-        o que la dirección esté mal escrita.
+        The figure may have sold out and been removed from the catalogue, or
+        the address may be mistyped.
       </p>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-full bg-blue-700 px-6 py-3 text-sm font-semibold text-white transition hover:bg-ki-400 hover:text-ink-950 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2"
+          className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-6 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
         >
           <HomeIcon className="h-4 w-4" aria-hidden="true" />
-          Volver al inicio
+          Back home
         </Link>
         <Link
           href="/search"
           className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2"
         >
           <MagnifyingGlassIcon className="h-4 w-4" aria-hidden="true" />
-          Ver el catálogo
+          Browse the catalogue
         </Link>
       </div>
 
       {categorias.length > 0 ? (
-        <nav aria-label="Franquicias" className="mt-12">
+        <nav aria-label="Franchises" className="mt-12">
           <p className="text-xs font-semibold tracking-widest text-slate-500 uppercase">
-            O sal directo a una franquicia
+            Or go straight to a franchise
           </p>
           <ul className="mt-3 flex flex-wrap justify-center gap-2">
             {categorias.map((categoria) => (

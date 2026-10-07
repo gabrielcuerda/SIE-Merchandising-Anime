@@ -19,7 +19,7 @@ export default async function AddressesPage() {
   }
 
   const { data: profile } = await supabase
-    .from("profiles")
+    .from("perfiles")
     .select(
       "direccion_calle, direccion_ciudad, direccion_provincia, direccion_codigo_postal, direccion_pais",
     )

@@ -6,17 +6,20 @@ import type { Producto, ProductoImagen } from "@/lib/db/types";
 import Link from "next/link";
 import { getLang } from "@/lib/i18n/lang";
 import { traducirCampo } from "@/lib/i18n/productos.en";
+import { getImagenesLocales } from "@/lib/commerce/products";
 
 export type ProductoConImagen = Producto & {
   producto_imagenes: ProductoImagen[];
 };
 
 export function getMainImage(producto: ProductoConImagen): string | undefined {
-  if (!producto.producto_imagenes?.length) return undefined;
-  const sorted = [...producto.producto_imagenes].sort(
-    (a, b) => a.orden_cat - b.orden_cat,
-  );
-  return sorted[0]?.url;
+  if (producto.producto_imagenes?.length) {
+    const sorted = [...producto.producto_imagenes].sort(
+      (a, b) => a.orden_cat - b.orden_cat,
+    );
+    return sorted[0]?.url;
+  }
+  return getImagenesLocales(producto.slug)[0];
 }
 
 export default async function ProductoGridItems({

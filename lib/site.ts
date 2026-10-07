@@ -24,7 +24,7 @@ export const siteConfig = {
   // provided` con el guion bajo. `lib/admin/formato.ts` la usa en el panel.
   locale: "es-ES",
   currency: "EUR",
-  email: "hola@siemerchandising.es",
+  email: "soporte@animemerchan.onl",
   phone: "+34 900 123 456",
   phoneHref: "tel:+34900123456",
   address: "Calle Mayor 1, 28013 Madrid, España",

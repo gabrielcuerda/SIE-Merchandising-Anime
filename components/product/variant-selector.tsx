@@ -14,9 +14,11 @@ type Combination = {
 export function VariantSelector({
   options,
   variants,
+  ocultar = [],
 }: {
   options: ProductOption[];
   variants: ProductVariant[];
+  ocultar?: string[];
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -46,7 +48,11 @@ export function VariantSelector({
     router.replace(`?${params.toString()}`, { scroll: false });
   };
 
-  return options.map((option) => (
+  const visibles = options.filter(
+    (option) => !ocultar.includes(option.name.toLowerCase()),
+  );
+
+  return visibles.map((option) => (
     <form key={option.id}>
       <dl className="mb-8">
         <dt className="mb-4 text-sm uppercase tracking-wide">{option.name}</dt>

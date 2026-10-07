@@ -11,11 +11,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { getLang } from "@/lib/i18n/lang";
+import { translate, type Lang } from "@/lib/i18n/dict";
 
-function Breadcrumb({ product }: { product: Product }) {
+function Breadcrumb({ product, lang }: { product: Product; lang: Lang }) {
   const migas = [
-    { nombre: "Inicio", href: "/" },
-    { nombre: "Categorías", href: "/search" },
+    { nombre: translate(lang, "crumb.home"), href: "/" },
+    { nombre: translate(lang, "crumb.categories"), href: "/search" },
   ];
 
   if (product.categoria) {
@@ -95,6 +97,8 @@ export default async function ProductPage(props: {
 
   if (!product) return notFound();
 
+  const lang = await getLang();
+
   const supabase = await createClient();
   const { data: authData } = await supabase.auth.getUser();
   let guardado = false;
@@ -139,7 +143,7 @@ export default async function ProductPage(props: {
           enlaces a producto. Ver components/product/view-tracker.tsx. */}
       <ViewTracker productId={product.id} />
       <div className="mx-auto max-w-(--breakpoint-2xl) px-4 pt-6">
-        <Breadcrumb product={product} />
+        <Breadcrumb product={product} lang={lang} />
         <div className="flex flex-col rounded-lg border border-neutral-200 bg-white p-8 md:p-12 lg:flex-row lg:gap-8 dark:border-neutral-800 dark:bg-black">
           <div className="h-full w-full basis-full lg:basis-4/6">
             <Suspense
@@ -158,17 +162,17 @@ export default async function ProductPage(props: {
 
           <div className="basis-full lg:basis-2/6">
             <Suspense fallback={null}>
-              <ProductDescription product={product} saved={guardado} />
+              <ProductDescription product={product} saved={guardado} lang={lang} />
             </Suspense>
           </div>
         </div>
-        <RelatedProducts id={product.id} />
+        <RelatedProducts id={product.id} lang={lang} />
       </div>
     </>
   );
 }
 
-async function RelatedProducts({ id }: { id: string }) {
+async function RelatedProducts({ id, lang }: { id: string; lang: Lang }) {
   const relatedProducts = await getProductRecommendations(id);
 
   if (!relatedProducts.length) return null;
@@ -176,7 +180,7 @@ async function RelatedProducts({ id }: { id: string }) {
   return (
     <div className="py-8">
       <h2 className="mb-4 text-2xl font-extrabold uppercase tracking-tight">
-        Productos relacionados
+        {translate(lang, "product.related")}
       </h2>
       <ul className="flex w-full gap-4 overflow-x-auto pt-1">
         {relatedProducts.map((product) => (
